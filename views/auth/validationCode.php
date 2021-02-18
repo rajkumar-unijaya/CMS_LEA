@@ -72,13 +72,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <span class="input-group-addon">
                                                 <i class="glyphicon glyphicon-envelope"></i> 
                                             </span>
-                                            <input class="form-control"  name="validationCode[]" id="validation1" type="text" />
-                                            <input class="form-control"  name="validationCode[]" id="validation2" type="text" />
-                                            <input class="form-control" name="validationCode[]" id="validation3" type="text" />
-                                            <input class="form-control" name="validationCode[]" id="validation4" type="text" />
-                                            <input class="form-control" name="validationCode[]" id="validation5" type="text" />
-                                            <input class="form-control" name="validationCode[]" id="validation6" type="text" />
-                                            <input class="form-control" name="email" id="email" value="<?= $email;?>" type="hidden" />
+                                            <input class="form-control" onclick="this.select()"  name="validationCode[]" id="validation1" type="text" />
+                                            <input class="form-control" onclick="this.select()"  name="validationCode[]" id="validation2" type="text" />
+                                            <input class="form-control" onclick="this.select()" name="validationCode[]" id="validation3" type="text" />
+                                            <input class="form-control" onclick="this.select()" name="validationCode[]" id="validation4" type="text" />
+                                            <input class="form-control" onclick="this.select()" name="validationCode[]" id="validation5" type="text" />
+                                            <input class="form-control" onclick="this.select()" name="validationCode[]" id="validation6" type="text" />
+                                            <input class="form-control" onclick="this.select()" name="email" id="email" value="<?= $email;?>" type="hidden" />
                                             </div>
                                             
                                             <div class="p-3 mb-2 bg-secondary text-white mt-4 ">  
@@ -167,41 +167,159 @@ var xhttp = new XMLHttpRequest();
   
 });
 
-$("#validation1").on("keypress", function(){ 
-    
-  if($("#validation1").val().length == 0){
+$("#validation1").on("keyup", function(e){ 
+  
+if(document.getElementById("validation1").value.match(/^\d+$/)) {
+  if($("#validation1").val().length == 1){
     $("#validation2").focus();
+  }
+  else{
+    alert("it should be 1 digit only");
+    this.select();
+    $("#validation1").val("");
+  }
+}
+else{
+  alert("enter numbers only");
+  this.select();$("#validation1").val("");
 }
 });
-$("#validation2").on("keypress", function(){ 
-  if($("#validation2").val().length == 0){
+
+
+$("#validation2").on("keyup", function(e){ 
+  if(ShiftTab() === true) { 
+    this.select();
+    $("#validation1").focus();
+}
+else if(document.getElementById("validation2").value.match(/^\d+$/)) {
+  if($("#validation2").val().length == 1){
     $("#validation3").focus();
   }
+  else{ 
+    alert("it should be 1 digit only");
+    this.select();
+    $("#validation2").val("");
+  }
+}
+else{
+  alert("enter numbers only");
+  this.select();$("#validation2").val("");
+}
 });
-$("#validation3").on("keypress", function(){ 
-  if($("#validation3").val().length == 0){
+
+$("#validation3").on("keyup", function(e){ 
+  if(ShiftTab() === true) { 
+    this.select();
+    $("#validation2").focus();
+}
+else if(document.getElementById("validation3").value.match(/^\d+$/)) {
+  if($("#validation3").val().length == 1){
     $("#validation4").focus();
   }
+  else{
+    alert("it should be 1 digit only");
+    this.select();
+    $("#validation3").val("");
+  }
+}
+else{
+  alert("enter numbers only");
+  this.select();$("#validation3").val("");
+}
 });
-$("#validation4").on("keypress", function(){ 
-  if($("#validation4").val().length == 0){
+
+
+$("#validation4").on("keyup", function(){ 
+  if(ShiftTab() === true) { 
+    this.select();
+    $("#validation3").focus();
+}
+else if(document.getElementById("validation4").value.match(/^\d+$/)) {
+  if($("#validation4").val().length == 1){
     $("#validation5").focus();
   }
+  else{
+    alert("it should be 1 digit only");
+    this.select();
+    $("#validation4").val("");
+  }
+}
+else{
+  alert("enter numbers only");
+  this.select();$("#validation4").val("");
+}
 });
-$("#validation5").on("keypress", function(){ 
-  if($("#validation5").val().length == 0){
+
+$("#validation5").on("keyup", function(){ 
+  if(ShiftTab() === true) { 
+    this.select();
+    $("#validation4").focus();
+}
+else if(document.getElementById("validation5").value.match(/^\d+$/)) {
+  if($("#validation5").val().length == 1){
     $("#validation6").focus();
   }
+  else{
+    alert("it should be 1 digit only");
+    this.select();
+    $("#validation5").val("");
+  }
+}
+else{
+  alert("enter numbers only");
+  this.select();$("#validation5").val("");
+}
 });
 
- });
+$("#validation6").on("keyup", function(){ 
+  if(ShiftTab() === true) { 
+    this.select();
+    $("#validation5").focus();
+}
+else if(document.getElementById("validation6").value.match(/^\d+$/)) {
+  if($("#validation6").val().length == 1){
+    $("#validation6").focus();
+  }
+  else{
+    alert("it should be 1 digit only");
+    this.select();
+    $("#validation6").val("");
+  }
+}
+else{
+  alert("enter numbers only");
+  this.select();$("#validation6").val("");
+}
+});
+
+
+});
  function isNumberKey(evt)
       { 
-         var charCode = (evt.which) ? evt.which : event.keyCode
-         if (charCode > 31 && (charCode < 48 || charCode > 57))
-            return false;
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+        {
+          return false;
+        }
+         else{
+          return true;
+         }   
 
-         return true;
+        
+      }
+
+      function ShiftTab(evt) {
+        var e = event || evt; // for trans-browser compatibility
+        var charCode = e.which || e.keyCode; // for trans-browser compatibility
+
+        if (charCode === 9) {
+            if (e.shiftKey) {
+                $('#controlName').focus();
+                return false;
+            } else {
+                   return true;
+              }
+       }
       }
 JS; $this->registerJs($script, \yii\web\View::POS_END);
 

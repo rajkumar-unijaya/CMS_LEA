@@ -82,7 +82,7 @@ class AuthController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
             $data = Yii::$app->request->post();
             $otp = rand(100000, 999999);
-            if(Yii::$app->mailer->compose('verification', ['code' => $otp])
+            /*if(Yii::$app->mailer->compose('verification', ['code' => $otp])
             ->setFrom($data['EmailForm']['email'])
             ->setTo('zoie17@ethereal.email')
             ->setSubject('Email sent from cms project')
@@ -100,6 +100,8 @@ class AuthController extends Controller
                  $this->redirect('index.php?r=auth/validation-code');
                 }*/
                 $client = new Client();
+                $session = Yii::$app->session;
+                $session->set('email', $data['EmailForm']['email']);
                 $response = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('POST')
@@ -108,8 +110,9 @@ class AuthController extends Controller
                 ->setData(["otp" => $otp,"ip" => '12345',"email" => $data['EmailForm']['email']])
                 ->send();
             if ($response->isOk) {
-                return $this->redirect(['index', 'id' => $response->data]);
-            }
+                Yii::$app->session->addFlash('notification','Please check your email address for OTP.');
+                $this->redirect('index.php?r=auth/validation-code');
+            //}
                 
             }
             
