@@ -8,10 +8,12 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\EmailForm;
+use app\models\OtpAuthentication;
 use app\models\ValidationCodeForm;
 use app\models\ContactForm;
 use app\models\SignupForm;
 use app\models\PasswordResetRequestForm;
+use yii\httpclient\Client;
 
 class AuthController extends Controller
 {
@@ -73,26 +75,45 @@ class AuthController extends Controller
      * @return Response|string
      */
     public function actionLogin()
-    {
-        
+    { 
         $this->layout =  'login';
         $model = new EmailForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        $otpAuth = new OtpAuthentication;
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
+            $data = Yii::$app->request->post();
             $otp = rand(100000, 999999);
             if(Yii::$app->mailer->compose('verification', ['code' => $otp])
-            ->setFrom('raj.kumar@zen.com.my')
+            ->setFrom($data['EmailForm']['email'])
             ->setTo('zoie17@ethereal.email')
             ->setSubject('Email sent from cms project')
             ->send())
             {
+                /*$data = Yii::$app->request->post();
+                $session = Yii::$app->session;
+                $session->set('email', $data['EmailForm']['email']);
+                $otpAuth->otp = $otp;
+                $otpAuth->ip = 12345;
+                $otpAuth->email = $data['EmailForm']['email'];
+                if($otpAuth->save())
+                {
                 Yii::$app->session->addFlash('notification','Please check your email address for OTP.');
-                $this->redirect(array('auth/validation-code'));
-
+                 $this->redirect('index.php?r=auth/validation-code');
+                }*/
+                $client = new Client();
+                $response = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('POST')
+                ->setUrl('http://127.0.0.1:8000/api/login')
+                ->setHeaders(['X-DreamFactory-API-Key' => '323326d1fc16ee93ee80df98d023e2caa73aa2b1911bd6ea9b83b311d09982f2'])
+                ->setData(["otp" => $otp,"ip" => '12345',"email" => $data['EmailForm']['email']])
+                ->send();
+            if ($response->isOk) {
+                return $this->redirect(['index', 'id' => $response->data]);
+            }
+                
             }
             
         }
-        //$model->email = '';
-        //echo'<pre>';print_r($model);exit; 
         return $this->render('login', [
             'model' => $model,
         ]);
@@ -215,19 +236,94 @@ class AuthController extends Controller
      * @return Response|string
      */
     public function actionValidationCode()
-    {
-        if (!Yii::$app->user->isGuest) { 
-            return $this->goHome();
-        }
+    {  
         $this->layout =  'login';
-        
+        $session = Yii::$app->session;
         $model = new ValidationCodeForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+        if (Yii::$app->request->post()) {
+            date_default_timezone_set("Asia/Kuala_Lumpur");
+            $lessDate =  date("Y-m-d H:i:s", strtotime("-5 minutes"));
+            $date =  date("Y-m-d H:i:s");
+            
+           $data = Yii::$app->request->post();
+           $otp = implode("",$data['validationCode']);
+           $emailInfo = OtpAuthentication::find()->where(['email' => $data['email']])->orderBy(['id' => SORT_DESC])->one();
+           if($emailInfo)
+           { 
+            $otpInfo = OtpAuthentication::find()->where(['email' => $data['email'],'otp' => $otp])->orderBy(['id' => SORT_DESC])->one();
+           }
+           else{  
+            Yii::$app->session->addFlash('failed','email does not exists.');
+            return  $this->redirect(array('auth/validation-code'));
+           }
+           if($otpInfo)
+           { 
+            $timeInfo = OtpAuthentication::find()->where(['email' => $data['email'],'otp' => $otp])->orderBy(['id' => SORT_DESC])->andWhere(['between', 'generated', $lessDate,$date])->one(); 
+           }
+           else{  
+            Yii::$app->session->addFlash('failed','you entered invalid OTP');
+            return  $this->redirect(array('auth/validation-code'));
+           }
+           if($timeInfo)
+           {  
+            Yii::$app->session->addFlash('notification','Please check your email address for OTP.');
+            $this->redirect(array('dashboard/index'));
+           }
+           else{  
+            Yii::$app->session->addFlash('failed','You entered OTP is timeout');
+            return  $this->redirect(array('auth/validation-code'));
+           }
+        } 
+        elseif(!$session->has('email')){
+            return  $this->redirect(array('auth/login'));
         }
+        else{
+            return $this->render('validationCode', [
+                'model' => $model,'email' => $session->get('email')
+            ]);
+        }
+        
+    }
 
-        return $this->render('validationCode', [
-            'model' => $model,
-        ]);
+
+
+     /**
+     * Resend action.
+     *
+     * @return Response|string
+     */
+    public function actionResend()
+    {  
+        $email =  Yii::$app->request->get('email');
+        $otpAuth = new OtpAuthentication;
+         $otp = rand(100000, 999999);
+            if(Yii::$app->mailer->compose('verification', ['code' => $otp])
+            ->setFrom($email)
+            ->setTo('zoie17@ethereal.email')
+            ->setSubject('Email sent from cms project')
+            ->send())
+            {
+                $otpAuth->otp = $otp;
+                $otpAuth->ip = 12345;
+                $otpAuth->email = $email;
+                if($otpAuth->save())
+                {
+                    $responseInfo['status'] = 200;
+                    $responseInfo['message'] = 'send';
+                    $response = Yii::$app->response;
+                    $response->format = \yii\web\Response::FORMAT_JSON;
+                    $response->data = $responseInfo;
+                    return $response;
+                }
+                else{
+                    $responseInfo['status'] = 422;
+                    $responseInfo['message'] = 'failed';
+                    $response = Yii::$app->response;
+                    $response->format = \yii\web\Response::FORMAT_JSON;
+                    $response->data = $responseInfo;
+                    return $response;   
+                }
+                
+            }
     }
 }
