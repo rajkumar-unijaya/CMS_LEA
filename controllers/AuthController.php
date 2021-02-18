@@ -89,6 +89,13 @@ class AuthController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
             $data = Yii::$app->request->post();
             $otp = rand(100000, 999999);
+
+            if(Yii::$app->mailer->compose('verification', ['code' => $otp])
+            ->setFrom($data['EmailForm']['email'])
+            ->setTo('zoie17@ethereal.email')
+            ->setSubject('Email sent from cms project')
+            ->send())
+            {
                 $client = new Client();
                 $session = Yii::$app->session;
                 $session->set('email', $data['EmailForm']['email']);
@@ -104,9 +111,10 @@ class AuthController extends Controller
                 $this->redirect('index.php?r=auth/validation-code');
             //}
                 
-            }
+            }          
             
         }
+    }
         return $this->render('login', [
             'model' => $model,
         ]);
