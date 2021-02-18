@@ -17,11 +17,18 @@ use yii\httpclient\Client;
 
 class AuthController extends Controller
 {
+    private $_url = null;
+    private $_DFHeaderKey = null;
+    private $_DFHeaderPass = null;
+    
     /**
      * {@inheritdoc}
      */
     public function behaviors()
     {
+        $this->_url = Yii::$app->params['DreamFactoryContextURL'];
+        $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
+        $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -75,38 +82,21 @@ class AuthController extends Controller
      * @return Response|string
      */
     public function actionLogin()
-    { 
+    {   
         $this->layout =  'login';
         $model = new EmailForm();
         $otpAuth = new OtpAuthentication;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
             $data = Yii::$app->request->post();
             $otp = rand(100000, 999999);
-            /*if(Yii::$app->mailer->compose('verification', ['code' => $otp])
-            ->setFrom($data['EmailForm']['email'])
-            ->setTo('zoie17@ethereal.email')
-            ->setSubject('Email sent from cms project')
-            ->send())
-            {
-                /*$data = Yii::$app->request->post();
-                $session = Yii::$app->session;
-                $session->set('email', $data['EmailForm']['email']);
-                $otpAuth->otp = $otp;
-                $otpAuth->ip = 12345;
-                $otpAuth->email = $data['EmailForm']['email'];
-                if($otpAuth->save())
-                {
-                Yii::$app->session->addFlash('notification','Please check your email address for OTP.');
-                 $this->redirect('index.php?r=auth/validation-code');
-                }*/
                 $client = new Client();
                 $session = Yii::$app->session;
                 $session->set('email', $data['EmailForm']['email']);
                 $response = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('POST')
-                ->setUrl('http://127.0.0.1:8000/api/login')
-                ->setHeaders(['X-DreamFactory-API-Key' => '323326d1fc16ee93ee80df98d023e2caa73aa2b1911bd6ea9b83b311d09982f2'])
+                ->setUrl($this->_url.'login')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->setData(["otp" => $otp,"ip" => '12345',"email" => $data['EmailForm']['email']])
                 ->send();
             if ($response->isOk) {
@@ -240,42 +230,50 @@ class AuthController extends Controller
      */
     public function actionValidationCode()
     {  
+        $url = Yii::$app->params['DreamFactoryContextURL'];
         $this->layout =  'login';
         $session = Yii::$app->session;
         $model = new ValidationCodeForm();
         if (Yii::$app->request->post()) {
             date_default_timezone_set("Asia/Kuala_Lumpur");
             $lessDate =  date("Y-m-d H:i:s", strtotime("-5 minutes"));
-            $date =  date("Y-m-d H:i:s");
-            
+             $date =  date("Y-m-d H:i:s");
            $data = Yii::$app->request->post();
            $otp = implode("",$data['validationCode']);
-           $emailInfo = OtpAuthentication::find()->where(['email' => $data['email']])->orderBy(['id' => SORT_DESC])->one();
-           if($emailInfo)
+                $client = new Client();
+                $session = Yii::$app->session;
+                $response = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_url.'login?filter=email,eq,'.$session->get('email').'&order=id,desc&size=1')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
+                if (count($response->data['records']) > 0) {
+                    $dbOTP = $response->data['records'][0]['otp'];
+                    $dbGenerated = $response->data['records'][0]['generated'];                    
+                }
+                else{
+                    return  $this->redirect(array('auth/login'));
+                   
+                }
+
+                if(isset($dbOTP) && $dbOTP == $otp )
            { 
-            $otpInfo = OtpAuthentication::find()->where(['email' => $data['email'],'otp' => $otp])->orderBy(['id' => SORT_DESC])->one();
-           }
-           else{  
-            Yii::$app->session->addFlash('failed','email does not exists.');
-            return  $this->redirect(array('auth/validation-code'));
-           }
-           if($otpInfo)
+            if(isset($dbGenerated) && $dbGenerated >= $lessDate )
            { 
-            $timeInfo = OtpAuthentication::find()->where(['email' => $data['email'],'otp' => $otp])->orderBy(['id' => SORT_DESC])->andWhere(['between', 'generated', $lessDate,$date])->one(); 
-           }
-           else{  
-            Yii::$app->session->addFlash('failed','you entered invalid OTP');
-            return  $this->redirect(array('auth/validation-code'));
-           }
-           if($timeInfo)
-           {  
             Yii::$app->session->addFlash('notification','Please check your email address for OTP.');
             $this->redirect(array('dashboard/index'));
            }
-           else{  
+           else{
             Yii::$app->session->addFlash('failed','You entered OTP is timeout');
             return  $this->redirect(array('auth/validation-code'));
            }
+           }
+           else{
+            Yii::$app->session->addFlash('failed','you entered invalid OTP');
+            return  $this->redirect(array('auth/validation-code'));
+           }
+           
         } 
         elseif(!$session->has('email')){
             return  $this->redirect(array('auth/login'));
@@ -297,6 +295,7 @@ class AuthController extends Controller
      */
     public function actionResend()
     {  
+        $url = Yii::$app->params['DreamFactoryContextURL'];
         $email =  Yii::$app->request->get('email');
         $otpAuth = new OtpAuthentication;
          $otp = rand(100000, 999999);
@@ -306,27 +305,31 @@ class AuthController extends Controller
             ->setSubject('Email sent from cms project')
             ->send())
             {
-                $otpAuth->otp = $otp;
-                $otpAuth->ip = 12345;
-                $otpAuth->email = $email;
-                if($otpAuth->save())
-                {
+                $client = new Client();
+                $response = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('POST')
+                ->setUrl($this->_url.'login')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->setData(["otp" => $otp,"ip" => '12345',"email" => $email])
+                ->send();
+            if (!empty($response->data)) {
                     $responseInfo['status'] = 200;
                     $responseInfo['message'] = 'send';
                     $response = Yii::$app->response;
                     $response->format = \yii\web\Response::FORMAT_JSON;
                     $response->data = $responseInfo;
                     return $response;
-                }
-                else{
-                    $responseInfo['status'] = 422;
-                    $responseInfo['message'] = 'failed';
-                    $response = Yii::$app->response;
-                    $response->format = \yii\web\Response::FORMAT_JSON;
-                    $response->data = $responseInfo;
-                    return $response;   
-                }
                 
             }
+            else{
+                $responseInfo['status'] = 422;
+                $responseInfo['message'] = 'failed';
+                $response = Yii::$app->response;
+                $response->format = \yii\web\Response::FORMAT_JSON;
+                $response->data = $responseInfo;
+                return $response;  
+            }
+        }
     }
 }

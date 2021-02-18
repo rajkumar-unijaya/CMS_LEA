@@ -19,47 +19,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-body">
                                     <div class="float-left mb-2">
-                                    <?php if(Yii::$app->session->hasFlash('notification')):?>
+                                    
 
-                                        <div class="info noticationMsg">
+                                        <div id="success" class="info noticationMsg">
+                                        <?php if(Yii::$app->session->hasFlash('notification')):?>
 
                                             <?php echo Yii::$app->session->getFlash('notification')[0] ?>
-
+                                            <?php endif;?>
                                         </div>
 
-                                    <?php endif;?>
+                                    
+                                    
+
+                                    <div id="failed" class="info failedMsg">
                                     <?php if(Yii::$app->session->hasFlash('failed')):
                                         //echo Yii::$app->session->getFlash('failed')[0];exit;
                                         ?>
 
-                                    <div class="info failedMsg">
-
                                         <?php 
                                         echo Yii::$app->session->getFlash('failed')[0];
                                         ?>
+                                        <?php endif; ?>
 
                                     </div>
 
-                                    <?php endif; ?>
-                                    <?php if(Yii::$app->session->hasFlash('fillOTP')):
-                                        //echo Yii::$app->session->getFlash('failed')[0];exit;
-                                        ?>
-
-                                    <div class="info failedMsg">
-
-                                        <?php 
-                                        echo Yii::$app->session->getFlash('fillOTP')[0];
-                                        ?>
-
-                                    </div>
-
-                                    <?php endif; ?>
-
-                                    <div id="success" class="info noticationMsg">
-
-                                            
-
-                                        </div>
+                                    
                                     
                                         <h3>Validation Code</h3>
                                     </div>
@@ -128,7 +112,7 @@ function timer(remaining) {
   $("#resend").show();
   $("#timer").hide();
 }
-timer(10);
+timer(180);
 
 $('#otpvalidate').submit(function(ev){ 
     var isValid = true;
@@ -154,10 +138,16 @@ var xhttp = new XMLHttpRequest();
             $("#timer").show();
         document.getElementById("success").innerHTML = 'Please check your email for OTP';
         document.getElementById("success").style.color = 'green';
+        $('#failed').hide();
+        $('#success').show();
+        $("#validation1").val("");$("#validation2").val("");$("#validation3").val("");$("#validation4").val("");$("#validation5").val("");$("#validation6").val("");
         }
         else{
             document.getElementById("success").innerHTML = 'OTP send failed';
             document.getElementById("success").style.color = 'red';
+            $('#failed').show();
+            $('#success').hide();
+            $("#validation1").val("");$("#validation2").val("");$("#validation3").val("");$("#validation4").val("");$("#validation5").val("");$("#validation6").val("");
         }
       document.getElementById("demo").innerHTML = this.responseText;
     }
@@ -174,13 +164,13 @@ if(document.getElementById("validation1").value.match(/^\d+$/)) {
     $("#validation2").focus();
   }
   else{
-    alert("it should be 1 digit only");
+    $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation1").val("");
   }
 }
 else{
-  alert("enter numbers only");
+  $('#failed').html("enter numbers only");
   this.select();$("#validation1").val("");
 }
 });
@@ -196,13 +186,13 @@ else if(document.getElementById("validation2").value.match(/^\d+$/)) {
     $("#validation3").focus();
   }
   else{ 
-    alert("it should be 1 digit only");
+    $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation2").val("");
   }
 }
 else{
-  alert("enter numbers only");
+  $('#failed').html("enter numbers only");
   this.select();$("#validation2").val("");
 }
 });
@@ -217,13 +207,13 @@ else if(document.getElementById("validation3").value.match(/^\d+$/)) {
     $("#validation4").focus();
   }
   else{
-    alert("it should be 1 digit only");
+    $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation3").val("");
   }
 }
 else{
-  alert("enter numbers only");
+  $('#failed').html("enter numbers only");
   this.select();$("#validation3").val("");
 }
 });
@@ -239,13 +229,13 @@ else if(document.getElementById("validation4").value.match(/^\d+$/)) {
     $("#validation5").focus();
   }
   else{
-    alert("it should be 1 digit only");
+    $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation4").val("");
   }
 }
 else{
-  alert("enter numbers only");
+  $('#failed').html("enter numbers only");
   this.select();$("#validation4").val("");
 }
 });
@@ -260,13 +250,13 @@ else if(document.getElementById("validation5").value.match(/^\d+$/)) {
     $("#validation6").focus();
   }
   else{
-    alert("it should be 1 digit only");
+    $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation5").val("");
   }
 }
 else{
-  alert("enter numbers only");
+  $('#failed').html("enter numbers only");
   this.select();$("#validation5").val("");
 }
 });
@@ -281,13 +271,13 @@ else if(document.getElementById("validation6").value.match(/^\d+$/)) {
     $("#validation6").focus();
   }
   else{
-    alert("it should be 1 digit only");
+    $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation6").val("");
   }
 }
 else{
-  alert("enter numbers only");
+  $('#failed').html("enter numbers only");
   this.select();$("#validation6").val("");
 }
 });

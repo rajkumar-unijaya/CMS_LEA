@@ -24,6 +24,13 @@ AuthAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <script type="text/javascript" src="<?=Yii::$app->request->baseUrl;?>/js/aja.jquery.min.js"></script>
+    <script type="text/javascript" src="<?=Yii::$app->request->baseUrl;?>/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="<?=Yii::$app->request->baseUrl;?>/js/new-jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="<?=Yii::$app->request->baseUrl;?>/js/new-jquery.min.js"></script>
+ 
+    
+    
 </head>
 <body class="bg-primary">
 <?php $this->beginBody() ?>
