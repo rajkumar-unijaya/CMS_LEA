@@ -49,8 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>
                                     
                                     <?php 
-                                    $action = Url::to(['/auth/validation-code']);
-                                    $form =  ActiveForm::begin(['action' => $action,'options' => ['onsubmit' => 'validateForm()'],  'id' => 'otpvalidate', 'method' => 'post','enableClientValidation' => true])
+                                    //$action = Url::to(['/auth/validation-code']);
+                                    $form =  ActiveForm::begin(['action' => '','options' => ['onsubmit' => 'validateForm()'],  'id' => 'otpvalidate', 'method' => 'post','enableClientValidation' => true])
                                     ?>
                                             <div class="input-group validationspace">
                                             <span class="input-group-addon">
@@ -114,17 +114,43 @@ function timer(remaining) {
 }
 timer(180);
 
-$('#otpvalidate').submit(function(ev){ 
+$('form').submit(function(ev){  
     var isValid = true;
-      $("input[name*='validationCode']").each(function() {
-            if ($(this).val() == "") {
+    var otpCode = "";
+      $("input[name*='validationCode']").each(function() { 
+        otpCode += $(this).val();
+            if ($(this).val() == "") { 
                   isValid = false;
-                  document.getElementById("success").innerHTML = 'Please fill OTP';
-                  document.getElementById("success").style.color = 'red';
-                  
+                  $("#success").hide();
+                  document.getElementById("failed").innerHTML = 'Enter OTP';
             }
       });
-    return isValid;
+      if(isValid)
+      { 
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {  
+        var jsonResponse = JSON.parse(this.responseText);
+        if(jsonResponse.message === "notification"){
+          document.location.href = 'index.php?r=dashboard/index';
+        }
+        else{ 
+            document.getElementById("failed").innerHTML = jsonResponse.info;
+            document.getElementById("failed").style.color = 'red';
+            $('#failed').show();
+            $('#success').hide();
+            $("#validation1").val("");$("#validation2").val("");$("#validation3").val("");$("#validation4").val("");$("#validation5").val("");$("#validation6").val("");
+            return isValid;
+        }
+      document.getElementById("demo").innerHTML = this.responseText;
+    }
+  };
+  var params = "&email="+$('#email').val()+"&otp="+otpCode;
+  xhttp.open("GET", "index.php?r=auth/validation-code"+params, true);
+  
+  xhttp.send();
+      }
+    return false;
 });
 
 $("#resend").click(function(){
@@ -164,13 +190,15 @@ if(document.getElementById("validation1").value.match(/^\d+$/)) {
     $("#validation2").focus();
   }
   else{
-    $('#failed').html("it should be 1 digit only");
+    $('#success').hide();
+    $('#failed').html("Enter one number only");
     this.select();
     $("#validation1").val("");
   }
 }
 else{
-  $('#failed').html("enter numbers only");
+  $('#success').hide();
+  $('#failed').html("Enter number only");
   this.select();$("#validation1").val("");
 }
 });
@@ -186,13 +214,15 @@ else if(document.getElementById("validation2").value.match(/^\d+$/)) {
     $("#validation3").focus();
   }
   else{ 
-    $('#failed').html("it should be 1 digit only");
+    $('#success').hide();
+    $('#failed').html("Enter one number only");
     this.select();
     $("#validation2").val("");
   }
 }
 else{
-  $('#failed').html("enter numbers only");
+  $('#success').hide();
+  $('#failed').html("Enter number only");
   this.select();$("#validation2").val("");
 }
 });
@@ -207,13 +237,15 @@ else if(document.getElementById("validation3").value.match(/^\d+$/)) {
     $("#validation4").focus();
   }
   else{
-    $('#failed').html("it should be 1 digit only");
+    $('#success').hide();
+    $('#failed').html("Enter one number only");
     this.select();
     $("#validation3").val("");
   }
 }
 else{
-  $('#failed').html("enter numbers only");
+  $('#success').hide();
+  $('#failed').html("Enter number only");
   this.select();$("#validation3").val("");
 }
 });
@@ -229,13 +261,15 @@ else if(document.getElementById("validation4").value.match(/^\d+$/)) {
     $("#validation5").focus();
   }
   else{
-    $('#failed').html("it should be 1 digit only");
+    $('#success').hide();
+    $('#failed').html("Enter one number only");
     this.select();
     $("#validation4").val("");
   }
 }
 else{
-  $('#failed').html("enter numbers only");
+  $('#success').hide();
+  $('#failed').html("Enter number only");
   this.select();$("#validation4").val("");
 }
 });
@@ -250,13 +284,15 @@ else if(document.getElementById("validation5").value.match(/^\d+$/)) {
     $("#validation6").focus();
   }
   else{
-    $('#failed').html("it should be 1 digit only");
+    $('#success').hide();
+    $('#failed').html("Enter one number only");
     this.select();
     $("#validation5").val("");
   }
 }
 else{
-  $('#failed').html("enter numbers only");
+  $('#success').hide();
+  $('#failed').html("Enter number only");
   this.select();$("#validation5").val("");
 }
 });
@@ -271,13 +307,15 @@ else if(document.getElementById("validation6").value.match(/^\d+$/)) {
     $("#validation6").focus();
   }
   else{
-    $('#failed').html("it should be 1 digit only");
+    $('#success').hide();
+    $('#failed').html("Enter one number only");
     this.select();
     $("#validation6").val("");
   }
 }
 else{
-  $('#failed').html("enter numbers only");
+  $('#success').hide();
+  $('#failed').html("Enter number only");
   this.select();$("#validation6").val("");
 }
 });
