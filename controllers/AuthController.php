@@ -107,10 +107,8 @@ class AuthController extends Controller
                 ->setData(["otp" => $otp,"ip" => '12345',"email" => $data['EmailForm']['email']])
                 ->send();
             if ($response->isOk) {
-                Yii::$app->session->addFlash('notification','Please check your email address for OTP.');
+                Yii::$app->session->addFlash('notification','Check your email for OTP.');
                 $this->redirect('index.php?r=auth/validation-code');
-            //}
-                
             }          
             
         }
@@ -237,61 +235,60 @@ class AuthController extends Controller
      * @return Response|string
      */
     public function actionValidationCode()
-    {  
+    {   
         $url = Yii::$app->params['DreamFactoryContextURL'];
         $this->layout =  'login';
         $session = Yii::$app->session;
         $model = new ValidationCodeForm();
-        if (Yii::$app->request->post()) {
             date_default_timezone_set("Asia/Kuala_Lumpur");
             $lessDate =  date("Y-m-d H:i:s", strtotime("-5 minutes"));
              $date =  date("Y-m-d H:i:s");
-           $data = Yii::$app->request->post();
-           $otp = implode("",$data['validationCode']);
+            $otp = Yii::$app->request->get('otp');
                 $client = new Client();
                 $session = Yii::$app->session;
                 $response = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('GET')
-                ->setUrl($this->_url.'login?filter=email,eq,'.$session->get('email').'&order=id,desc&size=1')
+                ->setUrl($this->_url.'login?filter=email,eq,'.Yii::$app->request->get('email').'&order=id,desc&size=1')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
-                if (count($response->data['records']) > 0) {
+                if (count($response->data['records']) > 0) { 
                     $dbOTP = $response->data['records'][0]['otp'];
-                    $dbGenerated = $response->data['records'][0]['generated'];                    
+                    $dbGenerated = $response->data['records'][0]['generated']; 
+
+                    if(isset($dbOTP) && $dbOTP == $otp )
+                    { 
+                     if(isset($dbGenerated) && $dbGenerated >= $lessDate )
+                    { 
+                     $responseInfo['status'] = 200;
+                     $responseInfo['message'] = 'notification';
+                     $responseInfo['info'] = 'Entered OTP is correct';
+                     return $this->asJson($responseInfo);
+                    }
+                    else{ 
+                        $responseInfo['status'] = 422;
+                        $responseInfo['message'] = 'failed';
+                        $responseInfo['info'] = 'Timeout';
+                        return $this->asJson($responseInfo);
+                    }
+                    }
+                    else{ 
+                         $responseInfo['status'] = 422;
+                         $responseInfo['message'] = 'failed';
+                         $responseInfo['info'] = 'Invalid OTP entered';
+                         return $this->asJson($responseInfo);
+                    }                   
                 }
-                else{
+                elseif(!$session->has('email')){
                     return  $this->redirect(array('auth/login'));
+                }
+                else{ 
+                    return $this->render('validationCode', [
+                        'model' => $model,'email' => $session->get('email')
+                    ]);
                    
                 }
-
-                if(isset($dbOTP) && $dbOTP == $otp )
-           { 
-            if(isset($dbGenerated) && $dbGenerated >= $lessDate )
-           { 
-            Yii::$app->session->addFlash('notification','Please check your email address for OTP.');
-            $this->redirect(array('dashboard/index'));
-           }
-           else{
-            Yii::$app->session->addFlash('failed','You entered OTP is timeout');
-            return  $this->redirect(array('auth/validation-code'));
-           }
-           }
-           else{
-            Yii::$app->session->addFlash('failed','you entered invalid OTP');
-            return  $this->redirect(array('auth/validation-code'));
-           }
-           
-        } 
-        elseif(!$session->has('email')){
-            return  $this->redirect(array('auth/login'));
-        }
-        else{
-            return $this->render('validationCode', [
-                'model' => $model,'email' => $session->get('email')
-            ]);
-        }
-        
+      
     }
 
 
