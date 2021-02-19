@@ -164,12 +164,14 @@ if(document.getElementById("validation1").value.match(/^\d+$/)) {
     $("#validation2").focus();
   }
   else{
+    $('#success').hide();
     $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation1").val("");
   }
 }
 else{
+  $('#success').hide();
   $('#failed').html("enter numbers only");
   this.select();$("#validation1").val("");
 }
@@ -186,12 +188,14 @@ else if(document.getElementById("validation2").value.match(/^\d+$/)) {
     $("#validation3").focus();
   }
   else{ 
+    $('#success').hide();
     $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation2").val("");
   }
 }
 else{
+  $('#success').hide();
   $('#failed').html("enter numbers only");
   this.select();$("#validation2").val("");
 }
@@ -207,12 +211,14 @@ else if(document.getElementById("validation3").value.match(/^\d+$/)) {
     $("#validation4").focus();
   }
   else{
+    $('#success').hide();
     $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation3").val("");
   }
 }
 else{
+  $('#success').hide();
   $('#failed').html("enter numbers only");
   this.select();$("#validation3").val("");
 }
@@ -229,12 +235,14 @@ else if(document.getElementById("validation4").value.match(/^\d+$/)) {
     $("#validation5").focus();
   }
   else{
+    $('#success').hide();
     $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation4").val("");
   }
 }
 else{
+  $('#success').hide();
   $('#failed').html("enter numbers only");
   this.select();$("#validation4").val("");
 }
@@ -250,12 +258,14 @@ else if(document.getElementById("validation5").value.match(/^\d+$/)) {
     $("#validation6").focus();
   }
   else{
+    $('#success').hide();
     $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation5").val("");
   }
 }
 else{
+  $('#success').hide();
   $('#failed').html("enter numbers only");
   this.select();$("#validation5").val("");
 }
@@ -271,12 +281,14 @@ else if(document.getElementById("validation6").value.match(/^\d+$/)) {
     $("#validation6").focus();
   }
   else{
+    $('#success').hide();
     $('#failed').html("it should be 1 digit only");
     this.select();
     $("#validation6").val("");
   }
 }
 else{
+  $('#success').hide();
   $('#failed').html("enter numbers only");
   this.select();$("#validation6").val("");
 }
