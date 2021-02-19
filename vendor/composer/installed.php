@@ -1,12 +1,12 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => 'fe35e7dee7320ad3d731ffb841355c064292f40c',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -782,12 +782,12 @@
     ),
     'yiisoft/yii2-app-basic' => 
     array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => 'fe35e7dee7320ad3d731ffb841355c064292f40c',
     ),
     'yiisoft/yii2-bootstrap' => 
     array (
@@ -836,6 +836,16 @@
       array (
       ),
       'reference' => 'd879cb186361fbc6f71a2d994d580b5a071a5642',
+    ),
+    'yiisoft/yii2-httpclient' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '2.0.x-dev',
+      ),
+      'reference' => '18413a637b8da984af5b0fe71f565cf7673e6d9e',
     ),
     'yiisoft/yii2-swiftmailer' => 
     array (

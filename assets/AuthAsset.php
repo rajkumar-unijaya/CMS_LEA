@@ -24,7 +24,10 @@ class AuthAsset extends AssetBundle
     ];
     public $js = [
         'js/all.min.js',
+        'js/jquery-3.1.1.min.js',
+        'js/aja.jquery.min.js',
         'js/jquery-3.5.1.slim.min.js',
+        'js/jquery-3.1.1.slim.min.js',
         'js/bootstrap.bundle.min.js',
         'js/scripts.js',
     ];
