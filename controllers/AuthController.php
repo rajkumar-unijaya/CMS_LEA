@@ -104,7 +104,7 @@ class AuthController extends Controller
                 ->setMethod('POST')
                 ->setUrl($this->_url.'login')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->setData(["otp" => $otp,"ip" => '12345',"email" => $data['EmailForm']['email']])
+                ->setData(["otp" => $otp,"email" => $data['EmailForm']['email']])
                 ->send();
             if ($response->isOk) {
                 Yii::$app->session->addFlash('notification','Check your email for OTP.');
@@ -316,24 +316,18 @@ class AuthController extends Controller
                 ->setMethod('POST')
                 ->setUrl($this->_url.'login')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->setData(["otp" => $otp,"ip" => '12345',"email" => $email])
+                ->setData(["otp" => $otp,"email" => $email])
                 ->send();
             if (!empty($response->data)) {
                     $responseInfo['status'] = 200;
                     $responseInfo['message'] = 'send';
-                    $response = Yii::$app->response;
-                    $response->format = \yii\web\Response::FORMAT_JSON;
-                    $response->data = $responseInfo;
-                    return $response;
+                    return $this->asJson($responseInfo);
                 
             }
             else{
                 $responseInfo['status'] = 422;
                 $responseInfo['message'] = 'failed';
-                $response = Yii::$app->response;
-                $response->format = \yii\web\Response::FORMAT_JSON;
-                $response->data = $responseInfo;
-                return $response;  
+                return $this->asJson($responseInfo); 
             }
         }
     }

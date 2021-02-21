@@ -26,8 +26,22 @@ class EmailForm extends Model
             [['email'], 'required'],
             ['email', 'trim'],
             ['email', 'email'],
+            //['email', 'domainCheck'],
             ['email', 'string', 'max' => 255],
             
         ];
     }
+
+    /*public function domainCheck($attribute, $params){ 
+        $allDomains = ["gov.my","irc.org"];
+        $email_irc_org = strrchr($this->email, '@');
+         $domain = substr($email_irc_org,1, );
+         if(!in_array( $domain ,$allDomains ))
+        {
+            $this->addError($attribute,"Email is not valid");
+        }
+        
+    }*/
+
+    
 }
