@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $form =  ActiveForm::begin(['action' => $action, 'method' => 'post','id' => 'emailForm','enableClientValidation' => true])
                                     ?>
 
-                                        <div class="form-group"><?= $form->field($model, 'email')->label(false)->textInput(['placeholder' => "Enter Your Email"]) ?>
+                                        <div class="form-group"><?= $form->field($model, 'email')->label(false)->textInput(['id' => 'email','placeholder' => "Enter Your Email"]) ?>
                                         <!--<div class="input-group input-group-md">
                                             <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fa fa-envelope"></i></span>
@@ -48,3 +48,35 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                         </div>    
 </div>
+<?php
+$script = <<< JS
+$(document).ready(function() {
+    var valid = true;
+    $('form').submit(function(ev){ 
+        if($("#email").val() == "" || $("#email").val().length == 0)
+        { 
+            $(".help-block").html('Enter email address');
+            valid = false;
+            return valid;
+        }
+        /*else if(validateEmail($("#email").val()) === false)
+        { alert("test = "+validateEmail($("#email").val()));
+            $(".help-block").html('Enter valid email address');
+            valid = false;
+            return valid;
+        }*/
+        else{
+            valid = true;
+            return valid;   
+        }
+    return valid;
+});
+    
+  
+});
+function validateEmail(email) {
+  return email.endsWith('@gov.my') || email.endsWith('@irc.org');
+}
+JS; $this->registerJs($script, \yii\web\View::POS_END);
+
+?>
