@@ -102,7 +102,8 @@ class AuthController extends Controller
                 $response = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('POST')
-                ->setUrl($this->_url.'login')
+                //->setUrl($this->_url.'login')
+                ->setUrl($this->_url.'otp_authentication')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->setData(["otp" => $otp,"email" => $data['EmailForm']['email']])
                 ->send();
@@ -249,10 +250,10 @@ class AuthController extends Controller
                 $response = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('GET')
-                ->setUrl($this->_url.'login?filter=email,eq,'.Yii::$app->request->get('email').'&order=id,desc&size=1')
+                ->setUrl($this->_url.'otp_authentication?filter=email,eq,'.Yii::$app->request->get('email').'&order=id,desc&size=1')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
-                if (count($response->data['records']) > 0) { 
+                if (isset($response->data['records']) && count($response->data['records']) > 0) { 
                     $dbOTP = $response->data['records'][0]['otp'];
                     $dbGenerated = $response->data['records'][0]['generated']; 
 
@@ -314,7 +315,7 @@ class AuthController extends Controller
                 $response = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('POST')
-                ->setUrl($this->_url.'login')
+                ->setUrl($this->_url.'otp_authentication')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->setData(["otp" => $otp,"email" => $email])
                 ->send();

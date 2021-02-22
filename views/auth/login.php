@@ -55,7 +55,7 @@ $(document).ready(function() {
     $('form').submit(function(ev){ 
         if($("#email").val() == "" || $("#email").val().length == 0)
         { 
-            $(".help-block").html('Enter email address');
+            $(".help-block").html('Enter your email address');
             valid = false;
             return valid;
         }
