@@ -250,6 +250,7 @@ class AuthController extends Controller
                 $response = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('GET')
+                //->setUrl($this->_url.'login?filter=email,eq,'.Yii::$app->request->get('email').'&order=id,desc&size=1')
                 ->setUrl($this->_url.'otp_authentication?filter=email,eq,'.Yii::$app->request->get('email').'&order=id,desc&size=1')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
