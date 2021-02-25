@@ -15,10 +15,11 @@
             <li class="">
                     <a class="dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">Settings</a>
-                        <a class="dropdown-item" href="#">Activity Log</a>
+                        <a class="dropdown-item" href="#">Tentang CMS</a>
+                        <a class="dropdown-item" href="#">Garis Panduan</a>
+                        <a class="dropdown-item" href="#">Lihat Profil</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="login.html">Log Keluar</a>
                     </div>
                 </li>
             </ul>
@@ -35,6 +36,14 @@
                                 Permohonan
                                 <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" >
+                                        <nav class="sb-sidenav-menu-nested nav">
+                                        <!------------------- update href below ---------------------->
+                                            <a class="nav-link" href="">Melalui Sosial Media</a>
+                                            <a class="nav-link" href="">Melalui MNTL</a>
+                                            <a class="nav-link" href="">Permohonan Baru</a>
+                                        </nav>
+                                    </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fa fa-book-open"></i></div>
                                 Statistik/Laporan
