@@ -90,12 +90,12 @@ class AuthController extends Controller
             $data = Yii::$app->request->post();
             $otp = rand(100000, 999999);
 
-            /*if(Yii::$app->mailer->compose('verification', ['code' => $otp])
+            if(Yii::$app->mailer->compose('verification', ['code' => $otp])
             ->setFrom($data['EmailForm']['email'])
             ->setTo('zoie17@ethereal.email')
             ->setSubject('Email sent from cms project')
             ->send())
-            {*/
+            {
                 $client = new Client();
                 $session = Yii::$app->session;
                 $session->set('email', $data['EmailForm']['email']);
@@ -107,19 +107,12 @@ class AuthController extends Controller
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->setData(["otp" => $otp,"email" => $data['EmailForm']['email']])
                 ->send();
-                echo "url = ".$this->_url.'otp_authentication'.'<br>';
-                echo "key = ".$this->_DFHeaderKey.'<br>';
-                echo "pass = ".$this->_DFHeaderPass.'<br>';
-                echo "otp = ".$otp.'<br>';
-                echo "email = ".$data['EmailForm']['email'].'<br>';
-
-                echo'response data = <pre>';print_r($response->data);exit;
-            if ($response->isOk) {
-                Yii::$app->session->addFlash('notification','Check your email for OTP.');
-                $this->redirect('index.php?r=auth/validation-code');
-            }          
+                if ($response->isOk) {
+                    Yii::$app->session->addFlash('notification','Check your email for OTP.');
+                    $this->redirect('index.php?r=auth/validation-code');
+                }          
             
-        //}
+        }
     }
         return $this->render('login', [
             'model' => $model,
