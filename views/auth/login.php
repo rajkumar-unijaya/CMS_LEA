@@ -59,12 +59,12 @@ $(document).ready(function() {
             valid = false;
             return valid;
         }
-        /*else if(validateEmail($("#email").val()) === false)
-        { alert("test = "+validateEmail($("#email").val()));
+        else if(validateEmail($("#email").val()) === false)
+        { 
             $(".help-block").html('Enter valid email address');
             valid = false;
             return valid;
-        }*/
+        }
         else{
             valid = true;
             return valid;   
@@ -75,7 +75,7 @@ $(document).ready(function() {
   
 });
 function validateEmail(email) {
-  return email.endsWith('@gov.my') || email.endsWith('@irc.org');
+  return email.endsWith('.gov.my');
 }
 JS; $this->registerJs($script, \yii\web\View::POS_END);
 

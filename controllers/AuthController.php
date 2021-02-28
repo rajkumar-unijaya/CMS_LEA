@@ -15,8 +15,11 @@ use app\models\SignupForm;
 use app\models\PasswordResetRequestForm;
 use yii\httpclient\Client;
 
+
+
 class AuthController extends Controller
 {
+    
     private $_url = null;
     private $_DFHeaderKey = null;
     private $_DFHeaderPass = null;
@@ -49,6 +52,7 @@ class AuthController extends Controller
             ],
         ];
     }
+
 
     /**
      * {@inheritdoc}
@@ -84,9 +88,11 @@ class AuthController extends Controller
     public function actionLogin()
     {   
         $this->layout =  'login';
+        //email form for serverside validations
         $model = new EmailForm();
         $otpAuth = new OtpAuthentication;
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
+        // check post data and validate postdata and generate random OTP send it as email notifications
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $data = Yii::$app->request->post();
             $otp = rand(100000, 999999);
 
@@ -102,12 +108,13 @@ class AuthController extends Controller
                 $response = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('POST')
-                //->setUrl($this->_url.'login')
                 ->setUrl($this->_url.'otp_authentication')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->setData(["otp" => $otp,"email" => $data['EmailForm']['email']])
                 ->send();
-                if ($response->isOk) {
+                // once email notifications successfully done then redirect to verifications page
+                if ($response->isOk) { 
+                    $session->open();
                     Yii::$app->session->addFlash('notification','Check your email for OTP.');
                     $this->redirect('index.php?r=auth/validation-code');
                 }          
@@ -241,25 +248,25 @@ class AuthController extends Controller
         $this->layout =  'login';
         $session = Yii::$app->session;
         $model = new ValidationCodeForm();
-            date_default_timezone_set("Asia/Kuala_Lumpur");
-            $lessDate =  date("Y-m-d H:i:s", strtotime("-5 minutes"));
+        //default timezone is UTC it has configured at web.php
+             $lessDate =  date("Y-m-d H:i:s", strtotime("-5 minutes"));
              $date =  date("Y-m-d H:i:s");
-            $otp = Yii::$app->request->get('otp');
+             $otp = Yii::$app->request->get('otp');
                 $client = new Client();
                 $session = Yii::$app->session;
                 $response = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('GET')
-                //->setUrl($this->_url.'login?filter=email,eq,'.Yii::$app->request->get('email').'&order=id,desc&size=1')
                 ->setUrl($this->_url.'otp_authentication?filter=email,eq,'.Yii::$app->request->get('email').'&order=id,desc&size=1')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
+                //business logic for OTP verification
                 if (isset($response->data['records']) && count($response->data['records']) > 0) { 
                     $dbOTP = $response->data['records'][0]['otp'];
                     $dbGenerated = $response->data['records'][0]['generated']; 
-
+                    //check OTP is OTP is equal to database OTP
                     if(isset($dbOTP) && $dbOTP == $otp )
-                    { 
+                    { //check UTC time with DBgenerated timestamp
                      if(isset($dbGenerated) && $dbGenerated >= $lessDate )
                     { 
                      $responseInfo['status'] = 200;
