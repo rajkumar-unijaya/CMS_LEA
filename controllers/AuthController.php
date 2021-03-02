@@ -21,6 +21,7 @@ class AuthController extends Controller
 {
     
     private $_url = null;
+    private $_url_procedure = null;
     private $_DFHeaderKey = null;
     private $_DFHeaderPass = null;
     
@@ -30,6 +31,7 @@ class AuthController extends Controller
     public function behaviors()
     {
         $this->_url = Yii::$app->params['DreamFactoryContextURL'];
+        $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
         $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
         $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
         return [
@@ -90,37 +92,59 @@ class AuthController extends Controller
         $this->layout =  'login';
         //email form for serverside validations
         $model = new EmailForm();
-        $otpAuth = new OtpAuthentication;
         // check post data and validate postdata and generate random OTP send it as email notifications
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $data = Yii::$app->request->post();
-            $otp = rand(100000, 999999);
-
-            if(Yii::$app->mailer->compose('verification', ['code' => $otp])
-            ->setFrom($data['EmailForm']['email'])
-            ->setTo('zoie17@ethereal.email')
-            ->setSubject('Email sent from cms project')
-            ->send())
-            {
-                $client = new Client();
-                $session = Yii::$app->session;
-                $session->set('email', $data['EmailForm']['email']);
-                $response = $client->createRequest()
-                ->setFormat(Client::FORMAT_URLENCODED)
-                ->setMethod('POST')
-                ->setUrl($this->_url.'otp_authentication')
-                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->setData(["otp" => $otp,"email" => $data['EmailForm']['email']])
-                ->send();
-                // once email notifications successfully done then redirect to verifications page
-                if ($response->isOk) { 
-                    $session->open();
-                    Yii::$app->session->addFlash('notification','Check your email for OTP.');
-                    $this->redirect('index.php?r=auth/validation-code');
-                }          
             
+            $data = Yii::$app->request->post();
+            $client = new Client();
+            $response = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('POST')
+            ->setUrl($this->_url_procedure.'crud-api-procedures/check_user_islogged')
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+            ->setData(["type" => $data['EmailForm']['type'],"username" => $data['EmailForm']['email'],"otp" => 0, "resultInfo" => "resultInfo"])
+            ->send();
+            //echo json_encode($response->data);exit;
+            $responseInfo = explode(",",$response->data['records'][0]['resultInfo']);
+            
+            // once email notifications successfully done then redirect to verifications page
+            if ($responseInfo[0] == 422)
+            { echo 11;exit;
+                Yii::$app->session->addFlash('failed','email does not exists');
+                    $this->redirect('index.php?r=auth/login');
+            }
+            else
+            {   
+                $otp = rand(100000, 999999);
+                if(Yii::$app->mailer->compose('verification', ['code' => $otp])
+                ->setFrom($data['EmailForm']['email'])
+                ->setTo('zoie17@ethereal.email')
+                ->setSubject('Email sent from cms project')
+                ->send())
+                {
+                    $client = new Client();
+                    $session = Yii::$app->session;
+                    $session->set('email', $data['EmailForm']['email']);
+                    $session->set('userId', $responseInfo[2]);
+                    $response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url.'otp_authentication')
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                    ->setData(["otp" => $otp,"email" => $data['EmailForm']['email'],"user_id" => $session->get('userId')])
+                    ->send();
+                    // once email notifications successfully done then redirect to verifications page
+                    if ($response->isOk) 
+                    { 
+                        $session->open();
+                        Yii::$app->session->addFlash('notification','Check your email for OTP.');
+                        $this->redirect('index.php?r=auth/validation-code');
+                    }          
+                
+                }
+
+            }
         }
-    }
         return $this->render('login', [
             'model' => $model,
         ]);

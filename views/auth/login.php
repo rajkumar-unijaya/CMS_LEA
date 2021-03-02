@@ -20,13 +20,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">CMS 2.0</h3></div>
                                     <div class="card-body">
                                     <div class="float-left mb-2">
+                                   
+                                        
+                                   
                                         <h4>Log In - LEA</h4>
+                                    </div>
+                                    <div  class="">
+                                        <?php if(Yii::$app->session->hasFlash('failed')):
+                                        echo Yii::$app->session->getFlash('failed')[0];
+                                        ?>
+
+                                       
+                                        <?php endif; ?>  
+
                                     </div>
                                     <?php 
                                     $action = Url::to(['/auth/login']);
                                     $form =  ActiveForm::begin(['action' => $action, 'method' => 'post','id' => 'emailForm','enableClientValidation' => true])
                                     ?>
-
+                                    <input id="model-field" name="EmailForm[type]" type="hidden" value="1">
                                         <div class="form-group"><?= $form->field($model, 'email')->label(false)->textInput(['id' => 'email','placeholder' => "Enter Your Email"]) ?>
                                         <!--<div class="input-group input-group-md">
                                             <div class="input-group-prepend">
@@ -35,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <input type="email" class="form-control" placeholder="E-mail address">
                                         </div>-->
                                         </div>
+                                        
                                         
 
                                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0 float-right">
