@@ -112,7 +112,7 @@ function timer(remaining) {
   $("#resend").show();
   $("#timer").hide();
 }
-timer(180);
+timer(300);
 
 $('form').submit(function(ev){  
     var isValid = true;
@@ -160,7 +160,7 @@ var xhttp = new XMLHttpRequest();
         var jsonResponse = JSON.parse(this.responseText);
         if(jsonResponse.message === "send"){
             $("#resend").hide();
-            timer(10);
+            timer(300);
             $("#timer").show();
         document.getElementById("success").innerHTML = 'Please check your email for OTP';
         document.getElementById("success").style.color = 'green';
