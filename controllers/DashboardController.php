@@ -72,6 +72,7 @@ class DashboardController extends Controller
      */
     public function actionLogout()
     {
+        $this->layout =  'main';
         Yii::$app->user->logout();
 
         return $this->goHome();

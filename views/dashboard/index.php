@@ -24,50 +24,17 @@
             </ul>
         </nav>
 
-        <div id="layoutSidenav">
-        <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
-                        <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Dashboard</div>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fa fa-columns"></i></div>
-                                Permohonan
-                                <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
-                            </a>
-                            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fa fa-book-open"></i></div>
-                                Statistik/Laporan
-                                <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="index.php?r=auth/login">Login</a>
-                                            <a class="nav-link" href="index.php?r=auth/validation-code">Verification Code</a>
-                                            <a class="nav-link" href="index.php?r=auth/signup">Register</a>
-                                            <a class="nav-link" href="index.php?r=auth/request-password-reset">Forgot Password</a>
-                                        </nav>
-                                    </div>
-                                    
-                                </nav>
-                            </div>
-                            
-                    </div>
-                    
-                </nav>
-            </div>
+<?php
 
 
-            <div id="layoutSidenav_content">
-                <main>
-                    <div class="container-fluid">
-                        <h3 class="mt-4">Dashboard</h3>
+/* @var $this yii\web\View */
+
+use yii\helpers\Html;
+
+$this->title = 'Dashboard';
+$this->params['breadcrumbs'][] = $this->title;
+?>
+                        <h3 class="mt-4"><?= Html::encode($this->title) ?></h3>
                         <div class="row">
                             <div class="col-xl-4 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
@@ -1050,9 +1017,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </main>
-                <footer class="py-4 bg-light mt-auto">
+                    <!-- </div> -->
+                <!-- </main> -->
+                <!-- <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
                             <div class="text-muted">Copyright &copy; Your Website 2020</div>
@@ -1063,7 +1030,7 @@
                             </div>
                         </div>
                     </div>
-                </footer>
-            </div>
+                </footer> -->
+            <!-- </div> -->
         
         </div>
