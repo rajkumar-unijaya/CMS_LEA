@@ -152,7 +152,7 @@ class AuthController extends Controller
                 }
                 else
                 {
-                Yii::$app->session->addFlash('failed','Email not exists in database');
+                Yii::$app->session->addFlash('failed','email not exists in database');
                 return $this->refresh();
 
                 }  
@@ -170,12 +170,14 @@ class AuthController extends Controller
      * @return Response|string
      */
     public function actionValidationCode()
-    {   
+    {  
+         
         $url = Yii::$app->params['DreamFactoryContextURL'];
         $this->layout =  'login';
         $session = Yii::$app->session;
         $model = new ValidationCodeForm();
         //default timezone is UTC it has configured at web.php
+        if (Yii::$app->request->get('email') && Yii::$app->request->get('otp')) { 
              $lessDate =  date("Y-m-d H:i:s", strtotime("-5 minutes"));
              $date =  date("Y-m-d H:i:s");
              $otp = Yii::$app->request->get('otp');
@@ -189,9 +191,10 @@ class AuthController extends Controller
              ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
              ->setData(["email" => $email,"otp" => $otp])
              ->send(); 
+             
              //echo $otp_response->data['records']['generatedDate'];exit;
              if($otp_response->statusCode == 200 && count($otp_response->data['records']) > 0)
-                {
+                { 
                     if(isset($otp_response->data['records']['generatedDate']) && $otp_response->data['records']['generatedDate'] >= $lessDate )
                     { 
                      $responseInfo['status'] = 200;
@@ -207,20 +210,28 @@ class AuthController extends Controller
                     }
 
                 }
+                else if($otp_response->statusCode == 200 && count($otp_response->data['records']) == 0)
+                { 
+                   $responseInfo['status'] = 422;
+                   $responseInfo['message'] = 'failed';
+                   $responseInfo['info'] = 'Invalid OTP entered';
+                   return $this->asJson($responseInfo);
+                }     
              else if($otp_response->statusCode != 200)
-             {
+             {  
                 $responseInfo['status'] = 422;
                 $responseInfo['message'] = 'failed';
                 $responseInfo['info'] = 'Invalid OTP entered';
                 return $this->asJson($responseInfo);
-             }   
-            else
-            {
-                return $this->render('validationCode', [
-                    'model' => $model,'email' => $session->get('email')
-                ]);
+             }
+        }   
+        else
+        {
+        return $this->render('validationCode', [
+        'model' => $model,'email' => $session->get('email')
+        ]);
                 
-            }
+        }
              
       
     }
