@@ -18,14 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">CMS 2.0</h3></div>
-                                    <div class="card-body">
-                                    <div class="float-left mb-2">
-                                   
-                                        
-                                   
-                                        <h4>Log In - LEA</h4>
-                                    </div>
-                                    <div  class="">
+                                    <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
                                         echo Yii::$app->session->getFlash('failed')[0];
                                         ?>
@@ -33,6 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                        
                                         <?php endif; ?>  
 
+                                    </div>
+                                    <div class="card-body">
+                                    
+                                    <div class="float-left mb-2">
+                                   
+                                        
+                                   
+                                        <h4>Log In - LEA</h4>
                                     </div>
                                     <?php 
                                     $action = Url::to(['/auth/login']);
