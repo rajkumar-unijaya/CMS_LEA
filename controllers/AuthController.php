@@ -35,23 +35,23 @@ class AuthController extends Controller
         $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
         $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
         return [
-            'access' => [
+            /*'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                //'only' => ['logout'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                        //'actions' => ['logout'],
+                        //'allow' => true,
+                        //'roles' => ['@'],
                     ],
                 ],
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    //'logout' => ['post'],
                 ],
-            ],
+            ],*/
         ];
     }
 
@@ -88,9 +88,8 @@ class AuthController extends Controller
      * @return Response|string
      */
     public function actionLogin()
-    {   
+    {  
         $this->layout =  'login';
-
         //email form for serverside validations
         $model = new EmailForm();
         $otpAuth = new OtpAuthentication;
@@ -276,5 +275,18 @@ class AuthController extends Controller
                 return $this->asJson($responseInfo); 
             }
         }
+    }
+
+    /**
+     * Logout action.
+     *
+     * @return Response
+     */
+    public function actionLogout()
+    { 
+        $session = Yii::$app->session;
+        Yii::$app->user->logout();
+        $session->destroy();
+        return $this->redirect('index.php?r=auth/login');
     }
 }
