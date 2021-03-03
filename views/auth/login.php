@@ -75,6 +75,7 @@ $(document).ready(function() {
         }
         else if(validateEmail($("#email").val()) === false)
         { 
+            $("#failed").hide();
             $(".help-block").html('Enter valid email address');
             valid = false;
             return valid;
