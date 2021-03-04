@@ -22,8 +22,11 @@ class AuthController extends Controller
     
     private $_url = null;
     private $_url_procedure = null;
+    private $_url_crawler = null;
     private $_DFHeaderKey = null;
     private $_DFHeaderPass = null;
+    private $_DFHeaderPasslive = null;
+    
     
     /**
      * {@inheritdoc}
@@ -32,8 +35,10 @@ class AuthController extends Controller
     {
         $this->_url = Yii::$app->params['DreamFactoryContextURL'];
         $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
+        $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
         $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
         $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
+        $this->_DFHeaderPasslive = Yii::$app->params['DreamFactoryHeaderPassLive'];
         return [
             /*'access' => [
                 'class' => AccessControl::className(),
@@ -105,17 +110,33 @@ class AuthController extends Controller
                 ->setUrl($this->_url.'master_status?filter=category,eq,record_status&filter=name,eq,active')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
-
+                
             $emailResponse = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('GET')
                 ->setUrl($this->_url.'user?filter=email,eq,'.$data['EmailForm']['email'].'&filter=master_status_id,eq,'.$statusResponse->data['records'][0]['id'])
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->send();  
-               
+                ->send();
+                if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
+                { 
+                    $telegramResponse = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('GET')
+                    ->setUrl($this->_url_crawler."func.telegram_sendmsg.php?chatid=".$emailResponse->data['records'][0]['telegram_id']."&msg=testing purpose")
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPasslive])
+                    ->send();
+                    
+                      if(empty($telegramResponse['ok']))
+                      {
+                        Yii::$app->session->addFlash('failed','telegram id is not correct');
+                        return $this->refresh();
+                      }
+                    
+                }  
+                
                 if($emailResponse->statusCode == 200 && count($emailResponse->data['records']) > 0)
                 { 
-                    $otp = rand(100000, 999999);
+                      $otp = rand(100000, 999999);
                     if(Yii::$app->mailer->compose('verification', ['code' => $otp])
                     ->setFrom($data['EmailForm']['email'])
                     ->setTo('zoie17@ethereal.email')
