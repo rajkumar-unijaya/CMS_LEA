@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     
                                     <?php 
                                     //$action = Url::to(['/auth/validation-code']);
-                                    $form =  ActiveForm::begin(['action' => '','options' => ['onsubmit' => 'validateForm()'],  'id' => 'otpvalidate', 'method' => 'post','enableClientValidation' => true])
+                                    $form =  ActiveForm::begin(['action' => '',  'id' => 'otpvalidate', 'method' => 'post','enableClientValidation' => true])
                                     ?>
                                             <div class="input-group validationspace">
                                             <span class="input-group-addon">
@@ -132,7 +132,7 @@ $('form').submit(function(ev){
     if (xhttp.readyState == 4 && xhttp.status == 200) {  
         var jsonResponse = JSON.parse(this.responseText);
         if(jsonResponse.message === "notification"){
-          document.location.href = 'index.php?r=dashboard/index';
+          document.location.href = '../dashboard/index';
         }
         else{ 
             document.getElementById("failed").innerHTML = jsonResponse.info;
@@ -145,8 +145,8 @@ $('form').submit(function(ev){
       document.getElementById("demo").innerHTML = this.responseText;
     }
   };
-  var params = "&email="+$('#email').val()+"&otp="+otpCode;
-  xhttp.open("GET", "index.php?r=auth/validation-code"+params, true);
+  var params = "?email="+$('#email').val()+"&otp="+otpCode;
+  xhttp.open("GET", "../auth/validation-code"+params, true);
   
   xhttp.send();
       }
@@ -178,7 +178,7 @@ var xhttp = new XMLHttpRequest();
       document.getElementById("demo").innerHTML = this.responseText;
     }
   };
-  xhttp.open("GET", "index.php?r=auth/resend&email="+$('#email').val(), true);
+  xhttp.open("GET", "../auth/resend&email="+$('#email').val(), true);
   xhttp.send();
   
 });
