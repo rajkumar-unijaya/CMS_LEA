@@ -133,6 +133,26 @@ class AuthController extends Controller
                       }
                     
                 }  
+
+                if(isset($emailResponse->data['records'][0]['mobile']) && !empty($emailResponse->data['records'][0]['mobile']))
+                { 
+                    $mobileNo = "60".$emailResponse->data['records'][0]['mobile'];
+                    $message = "Testing purpose";
+                    $mobileResponse = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_crawler."func.sms.php")
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPasslive])
+                    ->setData(["phone" => $mobileNo,"msg" => $message])
+                    ->send();
+                    
+                      if(empty($mobileResponse['ok']))
+                      {
+                        Yii::$app->session->addFlash('failed','mobile is not correct');
+                        return $this->refresh();
+                      }
+                    
+                }  
                 
                 if($emailResponse->statusCode == 200 && count($emailResponse->data['records']) > 0)
                 { 
