@@ -116,12 +116,12 @@ class AuthController extends Controller
                 if($emailResponse->statusCode == 200 && count($emailResponse->data['records']) > 0)
                 { 
                     $otp = rand(100000, 999999);
-                    /*if(Yii::$app->mailer->compose('verification', ['code' => $otp])
+                    if(Yii::$app->mailer->compose('verification', ['code' => $otp])
                     ->setFrom($data['EmailForm']['email'])
                     ->setTo('zoie17@ethereal.email')
                     ->setSubject('Email sent from cms project')
                     ->send())
-                    {*/
+                    {
                         $client = new Client();
                         $session = Yii::$app->session;
                         $session->set('email', $data['EmailForm']['email']);
@@ -137,7 +137,7 @@ class AuthController extends Controller
                         if ($otpResponse->statusCode == 200) { 
                             $session->open();
                             Yii::$app->session->addFlash('notification','Check your email for OTP.');
-                            $this->redirect('index.php?r=auth/validation-code');
+                            $this->redirect('../auth/validation-code');
                         }
                         else
                         {
@@ -146,7 +146,7 @@ class AuthController extends Controller
 
                         }          
                     
-                    /*}*/
+                    }
 
                 }
                 else
@@ -287,6 +287,6 @@ class AuthController extends Controller
         $session = Yii::$app->session;
         Yii::$app->user->logout();
         $session->destroy();
-        return $this->redirect('index.php?r=auth/login');
+        return $this->redirect('../auth/login');
     }
 }
