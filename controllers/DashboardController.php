@@ -52,18 +52,40 @@ class DashboardController extends Controller
         ];
     }
 
+    
+
     /**
      * Displays homepage.
      *
      * @return string
      */
     public function actionIndex()
-    {
+    { 
         $this->layout =  'main';
         return $this->render('index');
     }
 
-    
+    public function afterAction($action, $result)
+	{ 
+        $session = Yii::$app->session;
+        $timeoutVal = 0;
+        if ($session->has('sessionTimeOut'))
+        {
+            $timeoutVal = $session->get('sessionTimeOut');
+        }
+        if($timeoutVal > 0 && $session->get('sessionTimeOut') < time() && !(Yii::$app->controller->id == 'auth' && Yii::$app->controller->action->id == 'login'))
+        {
+            return $this->redirect('../auth/logout');
+        }
+        if(!empty($session->Id) && !(Yii::$app->controller->id == 'auth' && Yii::$app->controller->action->id == 'login'))
+        { 
+         if(parent::checkSession($action))
+        { 
+             return $result;
+        }
+        }
+        return false;
+	}
 
     /**
      * Logout action.
