@@ -11,6 +11,9 @@ use Yii;
 use yii\base\Exception;
 use yii\base\InlineAction;
 use yii\helpers\Url;
+use yii\httpclient\Client;
+use yii\web\DbSession;
+use yii\web\Session;
 
 /**
  * Controller is the base class of web controllers.
@@ -25,6 +28,13 @@ use yii\helpers\Url;
  */
 class Controller extends \yii\base\Controller
 {
+
+    private $_url = null;
+    private $_url_procedure = null;
+    private $_url_crawler = null;
+    private $_DFHeaderKey = null;
+    private $_DFHeaderPass = null;
+    private $_DFHeaderPasslive = null;
     /**
      * @var bool whether to enable CSRF validation for the actions in this controller.
      * CSRF validation is enabled only when both this property and [[\yii\web\Request::enableCsrfValidation]] are true.
@@ -306,4 +316,114 @@ class Controller extends \yii\base\Controller
     {
         return $this->response->redirect($this->request->getUrl() . $anchor);
     }
+
+
+    /**
+     * checking session
+     */
+    public function checkSession($action)
+    { 
+      /*
+      ** check session with  and then create or update session value
+       */
+       $session = Yii::$app->session;
+       $timeSessionInfo = new Session();
+       $userBrowser = "";
+       $ua=$this->getBrowser();
+       $userBrowser .= $ua['name'] . " " . $ua['version'] . " on " .$ua['platform'];
+       $sessionInfo =  [
+        'user_id' => Yii::$app->session->get('userId'),
+        "last_write" => date('Y-m-d H:i:s'),
+        "expire" => time() + $timeSessionInfo->getTimeout(),
+        "browser_platform" => $userBrowser,
+        "data" =>  "ramstest",
+        "ip" =>  Yii::$app->request->userIP,
+        "is_login" => 16,
+        "id" => Yii::$app->session->Id 
+        ];
+        $session->set('sessionTimeOut',time() + $session->getTimeout());
+        $dbSessionInfo = new DbSession();
+        $checkInfo = $dbSessionInfo->writeSession(Yii::$app->session->Id,$sessionInfo);
+        if($checkInfo)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public function getBrowser() { 
+        $u_agent = $_SERVER['HTTP_USER_AGENT'];
+        $bname = 'Unknown';
+        $platform = 'Unknown';
+        $version= "";
+      
+        //First get the platform?
+        if (preg_match('/linux/i', $u_agent)) {
+          $platform = 'linux';
+        }elseif (preg_match('/macintosh|mac os x/i', $u_agent)) {
+          $platform = 'mac';
+        }elseif (preg_match('/windows|win32/i', $u_agent)) {
+          $platform = 'windows';
+        }
+      
+        // Next get the name of the useragent yes seperately and for good reason
+        if(preg_match('/MSIE/i',$u_agent) && !preg_match('/Opera/i',$u_agent)){
+          $bname = 'Internet Explorer';
+          $ub = "MSIE";
+        }elseif(preg_match('/Firefox/i',$u_agent)){
+          $bname = 'Mozilla Firefox';
+          $ub = "Firefox";
+        }elseif(preg_match('/OPR/i',$u_agent)){
+          $bname = 'Opera';
+          $ub = "Opera";
+        }elseif(preg_match('/Chrome/i',$u_agent) && !preg_match('/Edge/i',$u_agent)){
+          $bname = 'Google Chrome';
+          $ub = "Chrome";
+        }elseif(preg_match('/Safari/i',$u_agent) && !preg_match('/Edge/i',$u_agent)){
+          $bname = 'Apple Safari';
+          $ub = "Safari";
+        }elseif(preg_match('/Netscape/i',$u_agent)){
+          $bname = 'Netscape';
+          $ub = "Netscape";
+        }elseif(preg_match('/Edge/i',$u_agent)){
+          $bname = 'Edge';
+          $ub = "Edge";
+        }elseif(preg_match('/Trident/i',$u_agent)){
+          $bname = 'Internet Explorer';
+          $ub = "MSIE";
+        }
+      
+        // finally get the correct version number
+        $known = array('Version', $ub, 'other');
+        $pattern = '#(?<browser>' . join('|', $known) .
+      ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+        if (!preg_match_all($pattern, $u_agent, $matches)) {
+          // we have no matching number just continue
+        }
+        // see how many we have
+        $i = count($matches['browser']);
+        if ($i != 1) {
+          //we will have two since we are not using 'other' argument yet
+          //see if version is before or after the name
+          if (strripos($u_agent,"Version") < strripos($u_agent,$ub)){
+              $version= $matches['version'][0];
+          }else {
+              $version= $matches['version'][1];
+          }
+        }else {
+          $version= $matches['version'][0];
+        }
+      
+        // check if we have a number
+        if ($version==null || $version=="") {$version="?";}
+      
+        return array(
+          'userAgent' => $u_agent,
+          'name'      => $bname,
+          'version'   => $version,
+          'platform'  => $platform,
+          'pattern'    => $pattern
+        );
+      }
+
 }
