@@ -117,7 +117,7 @@ class AuthController extends Controller
                 ->setUrl($this->_url.'user?filter=email,eq,'.$data['EmailForm']['email'].'&filter=master_status_id,eq,'.$statusResponse->data['records'][0]['id'])
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
-                if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
+                /*if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
                 { 
                     $telegramResponse = $client->createRequest()
                     ->setFormat(Client::FORMAT_URLENCODED)
@@ -152,7 +152,7 @@ class AuthController extends Controller
                         return $this->refresh();
                       }
                     
-                }  
+                }  */
                 
                 if($emailResponse->statusCode == 200 && count($emailResponse->data['records']) > 0)
                 { 
@@ -222,7 +222,6 @@ class AuthController extends Controller
              $date =  date("Y-m-d H:i:s");
              $otp = Yii::$app->request->get('otp');
              $email = Yii::$app->request->get('email');
-
              $client = new Client();
              $otp_response = $client->createRequest()
              ->setFormat(Client::FORMAT_URLENCODED)
@@ -231,8 +230,7 @@ class AuthController extends Controller
              ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
              ->setData(["email" => $email,"otp" => $otp])
              ->send(); 
-             
-             //echo $otp_response->data['records']['generatedDate'];exit;
+             //echo $otp_response->data['records']['generatedDate'] ." >= ". $lessDate;exit;
              if($otp_response->statusCode == 200 && count($otp_response->data['records']) > 0)
                 { 
                     if(isset($otp_response->data['records']['generatedDate']) && $otp_response->data['records']['generatedDate'] >= $lessDate )
