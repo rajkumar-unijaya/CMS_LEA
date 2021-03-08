@@ -100,8 +100,7 @@ class AuthController extends Controller
         $otpAuth = new OtpAuthentication;
         // check post data and validate postdata and generate random OTP send it as email notifications
         if ($model->load(Yii::$app->request->post()) && $model->validate()) 
-        {
-           
+        { 
             $data = Yii::$app->request->post(); 
             $client = new Client();
             $statusResponse = $client->createRequest()
@@ -110,14 +109,18 @@ class AuthController extends Controller
                 ->setUrl($this->_url.'master_status?filter=category,eq,record_status&filter=name,eq,active')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
-                
+            /*
+            ***** check if user entered email address is exists in database or not, If exists then proceed with next business logic
+            */    
             $emailResponse = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('GET')
-                ->setUrl($this->_url.'user?filter=email,eq,'.$data['EmailForm']['email'].'&filter=master_status_id,eq,'.$statusResponse->data['records'][0]['id'])
+                ->setUrl($this->_url.'user?filter=email,eq,'.$data['EmailForm']['email'].'&filter=master_status_id,eq,'.$statusResponse->data['records'][0]['id'].'&filter=is_login,eq,17')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
-                /*if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
+                 //check if user entered telegram id is exists in database or not, If exists then proceed with next business logic
+                
+               /* if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
                 { 
                     $telegramResponse = $client->createRequest()
                     ->setFormat(Client::FORMAT_URLENCODED)
@@ -133,6 +136,7 @@ class AuthController extends Controller
                       }
                     
                 }  
+                // check if user entered mobile number is exists in database or not, If exists then proceed with next business logic
 
                 if(isset($emailResponse->data['records'][0]['mobile']) && !empty($emailResponse->data['records'][0]['mobile']))
                 { 
@@ -153,7 +157,10 @@ class AuthController extends Controller
                       }
                     
                 }  */
-                
+
+                /*
+                *** if email is exists then generate OTP and send it to email & sms & telegram id
+                */
                 if($emailResponse->statusCode == 200 && count($emailResponse->data['records']) > 0)
                 { 
                       $otp = rand(100000, 999999);
@@ -181,7 +188,7 @@ class AuthController extends Controller
                             $this->redirect('../auth/validation-code');
                         }
                         else
-                        {
+                        { 
                             Yii::$app->session->addFlash('failed','OTP not save in database.');
                             return $this->refresh();
 
@@ -191,8 +198,8 @@ class AuthController extends Controller
 
                 }
                 else
-                {
-                Yii::$app->session->addFlash('failed','email not exists in database');
+                { 
+                Yii::$app->session->setFlash('failed','email not exists in database');
                 return $this->refresh();
 
                 }  
@@ -211,30 +218,41 @@ class AuthController extends Controller
      */
     public function actionValidationCode()
     {  
-         
         $url = Yii::$app->params['DreamFactoryContextURL'];
         $this->layout =  'login';
         $session = Yii::$app->session;
         $model = new ValidationCodeForm();
         //default timezone is UTC it has configured at web.php
-        if (Yii::$app->request->get('email') && Yii::$app->request->get('otp')) { 
+        if (Yii::$app->request->get('email') && Yii::$app->request->get('otp')) {
              $lessDate =  date("Y-m-d H:i:s", strtotime("-5 minutes"));
              $date =  date("Y-m-d H:i:s");
              $otp = Yii::$app->request->get('otp');
              $email = Yii::$app->request->get('email');
+
              $client = new Client();
              $otp_response = $client->createRequest()
              ->setFormat(Client::FORMAT_URLENCODED)
              ->setMethod('POST')
-             //->setUrl($this->_url_procedure.'crud-api-procedures/check_user_islogged') //local
+             //->setUrl($this->_url_procedure.'crud-api-procedures/check_user_islogged') local
              ->setUrl($this->_url_procedure.'check_user_islogged')
              ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
              ->setData(["email" => $email,"otp" => $otp])
-             ->send();
+             ->send(); 
+             /*
+             *** check if email & otp is check in table if correct then session will create and redirect to dashboard page
+             */
              if($otp_response->statusCode == 200 && count($otp_response->data['records']) > 0)
                 { 
                     if(isset($otp_response->data['records']['generatedDate']) && $otp_response->data['records']['generatedDate'] >= $lessDate )
                     { 
+                        if ($session->isActive)
+                        { 
+                            $session->set('IC', $otp_response->data['records']['IC']);
+                            $session->set('email', $otp_response->data['records']['email']);
+                            $session->set('mobile', $otp_response->data['records']['mobile']);
+                            $session->set('telegram_id', $otp_response->data['records']['telegram_id']);
+                            $session->set('username', $otp_response->data['records']['username']);
+                        } 
                      $responseInfo['status'] = 200;
                      $responseInfo['message'] = 'notification';
                      $responseInfo['info'] = 'Entered OTP is correct';
@@ -268,10 +286,7 @@ class AuthController extends Controller
         return $this->render('validationCode', [
         'model' => $model,'email' => $session->get('email')
         ]);
-                
         }
-             
-      
     }
 
 
@@ -324,8 +339,18 @@ class AuthController extends Controller
     public function actionLogout()
     { 
         $session = Yii::$app->session;
+        $client = new Client();
+        $sessionResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('PUT')
+                ->setUrl($this->_url.'session/'.$session->Id)
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->setData(["is_login" => 17])
+                ->send();
+                
         Yii::$app->user->logout();
-        $session->destroy();
+        session_destroy();
+        setcookie("PHPSESSID", NULL, time()-1,"/");
         return $this->redirect('../auth/login');
     }
 }

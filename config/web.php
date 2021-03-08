@@ -11,49 +11,27 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'on beforeAction' => function($event)
+    { 
+        $session = Yii::$app->session;
+        $expTime = 0;
+        if(empty($session->get('userId')) && !($event->action->controller->id == 'auth' && $event->action->id == 'login'))
+        { 
+           \yii::$app->response->redirect('../auth/login');
+        }
+        else if(!empty($session->get('userId')) && ($event->action->controller->id == 'auth' && $event->action->id == 'login'))
+            {
+               \yii::$app->response->redirect('../dashboard/index');
+            }                  
+    },
     'components' => [
-        /*'session' => [
-            //'class' => 'app\models\Session',
-            'class' => 'yii\web\DbSession',
-            'db' => [
-                'class' => 'yii\db\Connection',
-                'dsn' => 'mysql:host=localhost;dbname=cms',
-                'username' => 'root',
-                'password' => '',
-                
-            ],  // the application component ID of the DB connection. Defaults to 'db'.
-            'sessionTable' => 'session', // session table name. Defaults to 'session'.
-            
-            'writeCallback' => function($session){
-                //$user_browser = null;
-                       // $browser = new \BrowserDetection();
-                        //$user_browser = "{$browser->getName()}-{$browser->getPlatform()}" . ($browser->is64bitPlatform() ? "(x64)" : "(x86)") . ($browser->isMobile() ? "-Mobile" : "-Desktop");
-                    
-                return [
-                    //'user_id' => Yii::$app->user->id
-                    'user_id' => 11,
-                    'last_write' => new \yii\db\Expression('NOW()'),
-                    //'browser_platform' => $user_browser
-                    'browser_platform' => 'chrome'
-                ];
-            }
-             
-        ],*/
+        'session' => [
+            'timeout' => 900,
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'YXrzug2zomoaVBOSlN5e86XvBwadrFzR',
         ],
-       'session' => [
-            'class' => 'yii\web\Session',
-            'cookieParams' => ['httponly' => true, 'lifetime' => 0],
-            'timeout' => 900,
-        ],
-         /*'session' => [
-            // this is the name of the session cookie used for login on the frontend
-            'class' => 'yii\web\Session',
-            'name' => 'advanced-frontend',
-            'timeout' => 0,
-        ],*/
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

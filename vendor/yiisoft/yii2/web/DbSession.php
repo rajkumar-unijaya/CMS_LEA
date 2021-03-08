@@ -13,6 +13,7 @@ use yii\db\Connection;
 use yii\db\PdoValue;
 use yii\db\Query;
 use yii\di\Instance;
+use yii\httpclient\Client;
 
 /**
  * DbSession extends [[Session]] by using database as session data storage.
@@ -39,6 +40,12 @@ use yii\di\Instance;
  */
 class DbSession extends MultiFieldSession
 {
+    private $_url = null;
+    private $_url_procedure = null;
+    private $_url_crawler = null;
+    private $_DFHeaderKey = null;
+    private $_DFHeaderPass = null;
+    private $_DFHeaderPasslive = null;
     /**
      * @var Connection|array|string the DB connection object or the application component ID of the DB connection.
      * After the DbSession object is created, if you want to change this property, you should only assign it
@@ -199,12 +206,17 @@ class DbSession extends MultiFieldSession
      * @return bool whether session write is successful
      */
     public function writeSession($id, $data)
-    {
-        if ($this->getUseStrictMode() && $id === $this->_forceRegenerateId) {
+    { 
+        $this->_url = Yii::$app->params['DreamFactoryContextURL'];
+        $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
+        $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
+        $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
+        $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
+        $this->_DFHeaderPasslive = Yii::$app->params['DreamFactoryHeaderPassLive'];
+        if ($this->getUseStrictMode() && $id === $this->_forceRegenerateId) { 
             //Ignore write when forceRegenerate is active for this id
             return true;
         }
-
         // exception must be caught in session write handler
         // https://secure.php.net/manual/en/function.session-set-save-handler.php#refsect1-function.session-set-save-handler-notes
         try {
@@ -212,25 +224,42 @@ class DbSession extends MultiFieldSession
             if ($this->writeCallback && !$this->fields) {
                 $this->fields = $this->composeFields();
             }
-            // ensure data consistency
-            if (!isset($this->fields['data'])) {
-                $this->fields['data'] = $data;
-            } else {
-                $_SESSION = $this->fields['data'];
-            }
             // ensure 'id' and 'expire' are never affected by [[writeCallback]]
-            $this->fields = array_merge($this->fields, [
-                'id' => $id,
-                'expire' => time() + $this->getTimeout(),
-            ]);
-            $this->fields = $this->typecastFields($this->fields);
-            $this->db->createCommand()->upsert($this->sessionTable, $this->fields)->execute();
-            $this->fields = [];
+            $client = new Client();
+            $checkSessionValid = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_url.'session?filter=id,eq,'.$id.'&filter=is_login,eq,'.'16'.'&filter=user_id,eq,'.$data['user_id'])
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
+              if(count($checkSessionValid->data['records']) == 0)
+              { 
+                $sessionResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('POST')
+                ->setUrl($this->_url.'session')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                ->setData($data)
+                ->send();
+                return true;
+              } 
+              else
+              { 
+                $sessionResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('PUT')
+                ->setUrl($this->_url.'session/'.$id)
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->setData($data)
+                ->send();
+                return true;
+              } 
+              return false;
         } catch (\Exception $e) {
             Yii::$app->errorHandler->handleException($e);
             return false;
         }
-        return true;
+        
     }
 
     /**
