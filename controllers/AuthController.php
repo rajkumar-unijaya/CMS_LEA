@@ -231,8 +231,6 @@ class AuthController extends Controller
              ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
              ->setData(["email" => $email,"otp" => $otp])
              ->send();
-             echo 'response : <pre>';print_r($otp_response);exit;  
-             //echo $otp_response->data['records']['generatedDate'] ." >= ". $lessDate;exit;
              if($otp_response->statusCode == 200 && count($otp_response->data['records']) > 0)
                 { 
                     if(isset($otp_response->data['records']['generatedDate']) && $otp_response->data['records']['generatedDate'] >= $lessDate )
