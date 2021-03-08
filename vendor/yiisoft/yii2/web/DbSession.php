@@ -206,7 +206,7 @@ class DbSession extends MultiFieldSession
      * @return bool whether session write is successful
      */
     public function writeSession($id, $data)
-    { 
+    { echo 11;
         $this->_url = Yii::$app->params['DreamFactoryContextURL'];
         $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
         $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
@@ -233,7 +233,7 @@ class DbSession extends MultiFieldSession
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
               if(count($checkSessionValid->data['records']) == 0)
-              { 
+              { echo 22;
                 $sessionResponse = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('POST')
@@ -244,7 +244,7 @@ class DbSession extends MultiFieldSession
                 return true;
               } 
               else
-              { 
+              { echo 33;
                 $sessionResponse = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('PUT')
@@ -254,6 +254,7 @@ class DbSession extends MultiFieldSession
                 ->send();
                 return true;
               } 
+              echo 44;exit;
               return false;
         } catch (\Exception $e) {
             Yii::$app->errorHandler->handleException($e);
