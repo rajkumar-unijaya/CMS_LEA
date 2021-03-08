@@ -14,7 +14,5 @@ return [
     "DreamFactoryContextURLProcedures" => 'http://10.5.5.27:8081/api/v2/crud-api/procedure/',
     "DreamFactoryContextURLCrawler" => 'http://10.5.5.27:8081/api/v2/crawler/',
     "DreamFactoryHeaderPassLive" => '7c174ae2f835c0b7fd9e63f65358cdb6958cd4b9a705d652e220b30f007fdb14',
-
-
-    
+    "DreamFactoryHeaderPass" => '7c174ae2f835c0b7fd9e63f65358cdb6958cd4b9a705d652e220b30f007fdb14',
 ];
