@@ -46,7 +46,7 @@ $config = [
        'session' => [
             'class' => 'yii\web\Session',
             'cookieParams' => ['httponly' => true, 'lifetime' => 0],
-            'timeout' => 0,
+            'timeout' => 900,
         ],
          /*'session' => [
             // this is the name of the session cookie used for login on the frontend
