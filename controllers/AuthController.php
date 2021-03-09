@@ -233,11 +233,12 @@ class AuthController extends Controller
              $otp_response = $client->createRequest()
              ->setFormat(Client::FORMAT_URLENCODED)
              ->setMethod('POST')
-             //->setUrl($this->_url_procedure.'crud-api-procedures/check_user_islogged') local
+             //->setUrl($this->_url_procedure.'crud-api-procedures/check_user_islogged')//local
              ->setUrl($this->_url_procedure.'check_user_islogged')
              ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
-             ->setData(["email" => $email,"otp" => $otp])
+             ->setData(["email" => $email,"otp" => $otp,"userId"=>$session->get('userId')])
              ->send(); 
+             //echo'<pre>';print_r($otp_response);exit;
              /*
              *** check if email & otp is check in table if correct then session will create and redirect to dashboard page
              */
