@@ -73,6 +73,12 @@ $config = [
             'rules' => [
             ],
         ],
+
+        'mycomponent' => [
+         
+            'class' => 'app\components\MasterDataComponent',
+
+            ],
         
     ],
     'timeZone' => 'GMT',
