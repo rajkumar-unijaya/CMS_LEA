@@ -8,14 +8,27 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\PermohonanForm;
+use yii\httpclient\Client;
 
 class PermohonanController extends Controller
 {
+    private $_url = null;
+    private $_url_procedure = null;
+    private $_url_crawler = null;
+    private $_DFHeaderKey = null;
+    private $_DFHeaderPass = null;
+    private $_DFHeaderPasslive = null;
     /**
      * {@inheritdoc}
      */
     public function behaviors()
     {
+        $this->_url = Yii::$app->params['DreamFactoryContextURL'];
+        $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
+        $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
+        $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
+        $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
+        $this->_DFHeaderPasslive = Yii::$app->params['DreamFactoryHeaderPassLive'];
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -85,8 +98,26 @@ class PermohonanController extends Controller
         $this->layout =  'main';
         $model = new PermohonanForm();
 		$masterStatusSuspect = Yii::$app->mycomponent->statusSuspect();
-        //echo"<pre>";print_r($masterStatusSuspect);exit;
-		if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
+		$purposeOfApplication = Yii::$app->mycomponent->purposeOfApplication();
+		$newCase = Yii::$app->mycomponent->newCase();
+        $client = new Client();
+        $offenceResponse = array();
+        $filterOffenceResponse = array();
+            $offenceResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_url.'offence?include=id,name')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
+               
+                if(isset($offenceResponse->data['records']) && count($offenceResponse->data['records']) > 0)
+                {
+                    foreach($offenceResponse->data['records'] as $key => $value)
+                {
+                    $filterOffenceResponse[$value['id']] = $value['name'];
+                }
+                }
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
 			$data = Yii::$app->request->post();
 					
 			$url = Yii::$app->params['DreamFactoryContextURL'];
@@ -104,7 +135,7 @@ class PermohonanController extends Controller
 			}
 		}
 		
-		return $this->render('baru',['model'=>$model,"masterStatusSuspect" => $masterStatusSuspect]);
+		return $this->render('baru',['model'=>$model,"masterStatusSuspect" => $masterStatusSuspect,"purposeOfApplication" => $purposeOfApplication,"newCase" => $newCase,"offences" => $filterOffenceResponse]);
         
     }
     // /**
