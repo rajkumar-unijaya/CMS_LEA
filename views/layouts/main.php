@@ -43,7 +43,7 @@ DashboardAsset::register($this);
                         <a class="dropdown-item" href="../misc/guidelines">Garis Panduan</a>
                         <a class="dropdown-item" href="../misc/profile">Lihat Profil</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Log Keluar</a>
+                        <a class="dropdown-item" href="../auth/logout">Log Keluar</a>
                     </div>
                     
             </ul>
@@ -78,6 +78,7 @@ DashboardAsset::register($this);
                                     <a class="nav-link" href="../permohonan/mediasosial">Melalui Media Sosial</a>
                                     <a class="nav-link" href="../permohonan/mntl">Melalui MNTL</a>
                                     <a class="nav-link" href="../permohonan/baru">Permohonan Baru</a>
+                                    <a class="nav-link" href="../permohonan/block-request">Blocking Request</a>
                                 </nav>
                             </nav>
                         </div> 

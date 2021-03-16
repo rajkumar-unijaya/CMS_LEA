@@ -33,8 +33,8 @@ class DashboardAsset extends AssetBundle
 
 
     public $js = [
-        'js/jquery.min.js',
-        'js/jquery-3.5.1.slim.min.js',
+        /*'js/jquery.min.js',
+        'js/jquery-3.5.1.slim.min.js',*/
         'js/bootstrap.bundle.min.js',
         'js/scripts.js',
       //  'js/all.min.js',
@@ -53,8 +53,8 @@ class DashboardAsset extends AssetBundle
         
         
     ];
-    /*public $depends = [
+    public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
-    ];*/
+    ];
 }
