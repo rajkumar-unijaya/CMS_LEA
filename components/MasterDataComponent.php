@@ -33,6 +33,39 @@ class MasterDataComponent extends Component
         7 => "Diri Sendiri"
   ];
  }
+
+ public function suspectOrSaksi()
+ {
+  return [
+        14 => "Suspek",
+        15 => "Saksi"
+  ];
+ }
+
+
+ public function masterSocialMedia()
+ {
+  return [
+        1 => "twitter",
+        2 => "instagram",
+        3 => "tumblr",
+        4 => "facebook",
+        5 => "blog / website",
+  ];
+ }
+
+
+ public function masterCaseInfoType()
+ {
+  return [
+        1 => "Permohonan Baru",
+        2 => "Blocking Request",
+        3 => "Melalui MNTL",
+        4 => "Melalui Media Sosial"
+  ];
+ }
+
+ 
  
 }
 ?>

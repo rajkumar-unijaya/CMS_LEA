@@ -1418,9 +1418,9 @@ abstract class TestCase extends Assert implements SelfDescribing, Test
                 $buffer .= sprintf(' with data set "%s"', $this->dataName);
             }
 
-            if ($includeData) {
-                $exporter = new Exporter;
+            $exporter = new Exporter;
 
+            if ($includeData) {
                 $buffer .= sprintf(' (%s)', $exporter->shortenedRecursiveExport($this->data));
             }
         }

@@ -32,17 +32,11 @@ class Command
     // see https://tldp.org/LDP/abs/html/exitcodes.html
     public const SUCCESS = 0;
     public const FAILURE = 1;
-    public const INVALID = 2;
 
     /**
      * @var string|null The default command name
      */
     protected static $defaultName;
-
-    /**
-     * @var string|null The default command description
-     */
-    protected static $defaultDescription;
 
     private $application;
     private $name;
@@ -71,17 +65,6 @@ class Command
     }
 
     /**
-     * @return string|null The default command description or null when no default description is set
-     */
-    public static function getDefaultDescription(): ?string
-    {
-        $class = static::class;
-        $r = new \ReflectionProperty($class, 'defaultDescription');
-
-        return $class === $r->class ? static::$defaultDescription : null;
-    }
-
-    /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      *
      * @throws LogicException When the command name is empty
@@ -92,10 +75,6 @@ class Command
 
         if (null !== $name || null !== $name = static::getDefaultName()) {
             $this->setName($name);
-        }
-
-        if ('' === $this->description) {
-            $this->setDescription(static::getDefaultDescription() ?? '');
         }
 
         $this->configure();
@@ -325,8 +304,6 @@ class Command
      * This method is not part of public API and should not be used directly.
      *
      * @param bool $mergeArgs Whether to merge or not the Application definition arguments to Command definition arguments
-     *
-     * @internal
      */
     public function mergeApplicationDefinition(bool $mergeArgs = true)
     {
@@ -583,14 +560,11 @@ class Command
      */
     public function setAliases(iterable $aliases)
     {
-        $list = [];
-
         foreach ($aliases as $alias) {
             $this->validateName($alias);
-            $list[] = $alias;
         }
 
-        $this->aliases = \is_array($aliases) ? $aliases : $list;
+        $this->aliases = $aliases;
 
         return $this;
     }
