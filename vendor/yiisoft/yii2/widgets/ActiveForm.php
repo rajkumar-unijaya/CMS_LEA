@@ -131,7 +131,7 @@ class ActiveForm extends Widget
      * any JavaScript.
      * @see registerClientScript
      */
-    public $enableClientScript = false;
+    public $enableClientScript = true;
     /**
      * @var array|string the URL for performing AJAX-based validation. This property will be processed by
      * [[Url::to()]]. Please refer to [[Url::to()]] for more details on how to configure this property.

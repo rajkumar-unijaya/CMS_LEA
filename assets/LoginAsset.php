@@ -29,7 +29,7 @@ class AuthAsset extends AssetBundle
         'js/scripts.js',
     ];
     public $depends = [
-      //  'yii\web\YiiAsset',
-     //   'yii\bootstrap\BootstrapAsset',
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 }
