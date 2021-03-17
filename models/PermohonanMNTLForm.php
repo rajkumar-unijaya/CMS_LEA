@@ -11,7 +11,7 @@ use yii\base\Model;
  * @property-read User|null $user This property is read-only.
  *
  */
-class PermohonanForm extends Model
+class PermohonanMNTLForm extends Model
 {
     public $masterCaseInfoTypeId;
     public $for_self;
@@ -19,24 +19,12 @@ class PermohonanForm extends Model
     public $email;
     public $report_no;
     public $investigation_no;
-    public $offence;
-    public $case_summary;
-    public $master_status_suspect_or_saksi_id;
-    public $master_status_status_suspek_id;
-    public $ic;
-    public $name;
-    public $master_status_status_suspek_id_0;
-    public $master_status_status_suspek_id_1;
-    public $master_status_status_suspek_id_2;
-    public $master_status_status_suspek_id_3;
+    public $tippoff_id;
+    public $phone_number;
+    public $telco_name;
+    public $date1;
+    public $date2;
     
-    public $suspect_ic;
-    public $surat_rasmi;
-    public $laporan_polis;
-    public $master_social_media_id;
-    public $url;
-    public $application_purpose;
-    public $application_purpose_info;
     
     
     
@@ -53,13 +41,13 @@ class PermohonanForm extends Model
            [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
                 return ($model->for_self == 6 ? true : false); 
             }, 'whenClient' => "function (attribute, value) {
-                return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 6;
+                return $('input[type=\"radio\"][name=\"PermohonanMNTLForm[for_self]\"]:checked').val() == 6;
                 }"],
-           [['email'],'domainCheck'],     
+           [['email'],'domainCheck'], 
            [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                 return ($model->for_self == 6 ? true : false);
             }, 'whenClient' => "function (attribute, value) {
-                return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 6;
+                return $('input[type=\"radio\"][name=\"PermohonanMNTLForm[for_self]\"]:checked').val() == 6;
                 }"],     
             [['report_no'], 'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
                 'when' => function($model) { return empty($model->investigation_no); }
@@ -67,27 +55,18 @@ class PermohonanForm extends Model
             [['investigation_no'],'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
                 'when' => function($model) { return empty($model->report_no); }
               ],
-            [['offence'], 'required','message'=>'Pilih kesalahan'],
-            [['case_summary'], 'required','message'=>'Masukkan Ringkasan Kes'],  
-            [['master_status_suspect_or_saksi_id'], 'required','message'=>'Pilih Status Suspek'],
-            [['master_status_suspect_or_saksi_id'], 'required','message'=>'Pilih Status Suspek Option'],
-            [['application_purpose'], 'required','message'=>'Pilih Tujuan Permohanan'],
-            /*[['application_purpose_info'], 'required','message'=>'Masukkan Tujuan Permohanaddfdfn','when' => function ($model) { 
-                if($this->application_purpose[0] == 24 && empty($this->application_purpose_info))
-                {
-                    return true;
-                }
-                
-            }],*/
-            [['surat_rasmi'], 'file','skipOnEmpty' => true, 'extensions' => 'png,jpg,jpeg,pdf','message'=>'valid Surat Rasmi'],
-            //[['url'], 'anyOneURLRequired'],
-            //['url','in', 'range' => [0], 'message'=>'Masukkan URL'] 
-            //[['url'], 'each', 'rule' => ['string'],'message'=>'Masukkan URL'] 
+
+
+            [['tippoff_id'], 'required','message'=>'Pilih No. TippOff'],
+            [['phone_number'], 'required','message'=>'Masukkan Phone No.'],  
+            [['telco_name'], 'required','message'=>'Pilih telco name'],
+            [['date1'], 'required','message'=>'Pilih date1'],
+            [['date2'], 'required','message'=>'Pilih date2'],
+            
             
             
         ];
     }
-
 
     public function find_occurence_from_end($haystack, $needle, $num) {
         $actual = $haystack;
@@ -123,21 +102,5 @@ class PermohonanForm extends Model
        }
        
    }
-
-   public function anyOneURLRequired($attribute, $params){ 
-        $i = 0;
-       foreach($this->url as $key =>$val)
-       { 
-           if(!empty($val))
-           { 
-               $i++;
-           }
-       }
-       if($i == 0)
-       {
-        $this->addError($attribute,"Masukkan URLllllll");
-       }
-    
-}
 
 }
