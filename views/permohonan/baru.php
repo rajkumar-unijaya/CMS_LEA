@@ -243,10 +243,6 @@ $("input:checkbox[name='PermohonanForm[application_purpose][]']").click(function
         }
    });
 
-
-  $('#permohonanform-application_purpose input:checked').each(function(index, item){
-    alert($(ob).val());
-});
     var valid = true;
 
 });

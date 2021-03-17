@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\PermohonanForm;
 use app\models\BlockRequestForm;
+use app\models\PermohonanMNTLForm;
 use yii\httpclient\Client;
 use yii\web\UploadedFile;
 
@@ -76,7 +77,84 @@ class PermohonanController extends Controller
     public function actionMntl()
     {
         $this->layout =  'main';
-        return $this->render('mntl');
+        $model = new PermohonanMNTLForm();
+        $session = Yii::$app->session;
+        $masterCaseInfoTypeId = 3;
+
+        /******
+         * load masterdata from the master component and pass these data into view page
+         */
+		$masterStatusSuspect = Yii::$app->mycomponent->statusSuspect();
+		$newCase = Yii::$app->mycomponent->newCase();
+        $client = new Client();
+        $tipOffNoResponse = array();
+        $filterTipOffNoResponse = array();
+
+        /******
+         * Get offence master data from the offence table using api service.
+         */
+        $tipOffNoResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_url.'tipoff?include=id,tipoff_no')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
+               
+                if(isset($tipOffNoResponse->data['records']) && count($tipOffNoResponse->data['records']) > 0)
+                {
+                    foreach($tipOffNoResponse->data['records'] as $key => $value)
+                {
+                    $filterTipOffNoResponse[$value['id']] = $value['tipoff_no'];
+                }
+                }
+                //echo'<pre>';print_r($filterTipOffNoResponse);exit;
+        /*********
+           * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
+           * 
+           *  */     
+          if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $data = Yii::$app->request->post();
+            $caseInfo = array();
+            $caseInfoMNTL = array();
+            
+            $caseInfo['master_case_info_type_id'] = $data['PermohonanMNTLForm']['masterCaseInfoTypeId'];
+            $caseInfo['requestor_ref'] = $session->get('userId');
+            $caseInfo['bagipihak_dirisendiri'] = $data['PermohonanMNTLForm']['for_self'];
+            $caseInfo['no_telephone'] = $data['PermohonanMNTLForm']['no_telephone'];
+            $caseInfo['email'] = $data['PermohonanMNTLForm']['email'];
+            $caseInfo['report_no'] = $data['PermohonanMNTLForm']['report_no'];
+            $caseInfo['investigation_no'] = $data['PermohonanMNTLForm']['investigation_no'];
+            $caseInfo['created_by'] = 1;
+            
+            $caseInfoMNTL['tippoff_id'] = $data['PermohonanMNTLForm']['tippoff_id'];
+            $caseInfoMNTL['phone_number'] = $data['PermohonanMNTLForm']['phone_number'];
+            $caseInfoMNTL['telco_name'] = $data['PermohonanMNTLForm']['telco_name'];
+            $caseInfoMNTL['date1'] = date("Y-m-d",strtotime($data['PermohonanMNTLForm']['date1']));
+            $caseInfoMNTL['date2'] = date("Y-m-d",strtotime($data['PermohonanMNTLForm']['date2']));
+            
+            
+            $caseInfoResponse = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('POST')
+            //->setUrl($this->_url_procedure.'crud-api-procedures/case_info_mntl')//local
+            ->setUrl($this->_url_procedure.'case_info_mntl')
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+            ->setData(["caseInfo" => json_encode($caseInfo),"mntl" => json_encode($caseInfoMNTL)])
+            ->send(); 
+            if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
+                { 
+                    Yii::$app->session->addFlash('success','Successfully added new case infomation.');
+                    return $this->redirect('../dashboard/index');
+                }
+                else{
+                    Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+            
+		}
+          
+        return $this->render('mntl',['model' => $model,"newCase" => $newCase,"masterCaseInfoTypeId" => $masterCaseInfoTypeId,"tipOff" => $filterTipOffNoResponse]);
+       
     }
 
     /**
@@ -100,6 +178,7 @@ class PermohonanController extends Controller
 
         $this->layout =  'main';
         $model = new PermohonanForm();
+        $session = Yii::$app->session;
         $masterCaseInfoTypeId = 1;
         /******
          * load masterdata from the master component and pass these data into view page
@@ -135,7 +214,7 @@ class PermohonanController extends Controller
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
            * 
            *  */     
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
             $data = Yii::$app->request->post();
 
             //$model->surat_rasmi = UploadedFile::getInstance($model, 'surat_rasmi');
@@ -148,7 +227,7 @@ class PermohonanController extends Controller
             $offences = array();
             
             $caseInfo['master_case_info_type_id'] = $data['PermohonanForm']['masterCaseInfoTypeId'];
-            $caseInfo['requestor_ref'] = 1;
+            $caseInfo['requestor_ref'] = $session->get('userId');
             $caseInfo['bagipihak_dirisendiri'] = $data['PermohonanForm']['for_self'];
             $caseInfo['no_telephone'] = $data['PermohonanForm']['no_telephone'];
             $caseInfo['email'] = $data['PermohonanForm']['email'];
@@ -231,7 +310,7 @@ class PermohonanController extends Controller
     {
         $this->layout =  'main';
         $model = new BlockRequestForm();
-        //echo'<pre>';print_r($model);exit;
+        $session = Yii::$app->session;
         $masterCaseInfoTypeId = 2;
 
         /******
@@ -282,7 +361,7 @@ class PermohonanController extends Controller
             $offences = array();
             
             $caseInfo['master_case_info_type_id'] = $data['BlockRequestForm']['masterCaseInfoTypeId'];
-            $caseInfo['requestor_ref'] = 1;
+            $caseInfo['requestor_ref'] = $session->get('userId');
             $caseInfo['bagipihak_dirisendiri'] = $data['BlockRequestForm']['for_self'];
             $caseInfo['no_telephone'] = $data['BlockRequestForm']['no_telephone'];
             $caseInfo['email'] = $data['BlockRequestForm']['email'];
@@ -310,12 +389,6 @@ class PermohonanController extends Controller
             $offences = $data['BlockRequestForm']['offence'];
 
             
-            //echo'<pre>';print_r($caseStatusSuspek);exit;
-            //echo json_encode($caseInfo).'<br>';//exit;
-            //echo json_encode($caseStatusSuspek).'<br>';
-            //echo json_encode($caseInvolvedURL).'<br>';
-            //echo json_encode($offences).'<br>';exit;
-
             $caseInfoResponse = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('POST')

@@ -43,6 +43,7 @@ class BlockRequestForm extends Model
             }, 'whenClient' => "function (attribute, value) {
                 return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 6;
                 }"],
+           [['email'],'domainCheck'],      
            [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                 return ($model->for_self == 6 ? true : false);
             }, 'whenClient' => "function (attribute, value) {
@@ -63,5 +64,40 @@ class BlockRequestForm extends Model
             
         ];
     }
+
+    public function find_occurence_from_end($haystack, $needle, $num) {
+        $actual = $haystack;
+       
+           for ($i=1; $i <=$num ; $i++) {
+       
+               # first loop return position of needle
+               if($i == 1) {
+                   $pos = strrpos($haystack, $needle);
+               }
+       
+               # subsequent loops trim haystack to pos and return needle's new position
+               if($i != 1) {
+       
+                   $haystack = substr($haystack, 0, $pos);
+                   $pos = strrpos($haystack, $needle);
+                   $realString = substr($actual,$pos);
+       
+               }
+       
+           }
+       
+           return $realString;
+       
+       }
+
+   public function domainCheck($attribute, $params){ 
+       $allDomains = [".gov.my"];
+       $domain = $this->find_occurence_from_end($this->email, ".", 2);
+        if(!in_array( $domain ,$allDomains ))
+       {
+           $this->addError($attribute,"Email is not valid");
+       }
+       
+   }
 
 }
