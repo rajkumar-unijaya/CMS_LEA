@@ -159,6 +159,7 @@ class PermohonanController extends Controller
             //$caseInfo['laporan_polis'] = 'uploads/laporan_polis/' .$data['PermohonanForm']['report_no'].'_'.$model->laporan_polis->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->laporan_polis->extension;
             $caseInfo['surat_rasmi'] = "avtar.jpg";
             $caseInfo['laporan_polis'] = "avtar1.jpg";
+            $caseInfo['created_by'] = 1;
             if(isset($data['PermohonanForm']['application_purpose']) && !empty($data['PermohonanForm']['application_purpose']))
             {
             $caseInfo['master_status_purpose_of_application_id'] = implode(",",$data['PermohonanForm']['application_purpose']);
@@ -172,6 +173,7 @@ class PermohonanController extends Controller
                 $caseStatusSuspek[$i]['master_status_status_suspek_id']  = $data['PermohonanForm']['master_status_status_suspek_id'][$i];
                 $caseStatusSuspek[$i]['ic']  = $data['PermohonanForm']['ic'][$i];
                 $caseStatusSuspek[$i]['name']  = $data['PermohonanForm']['name'][$i];
+                $caseStatusSuspek[$i]['created_by'] = 1;
                 if(isset($data['PermohonanForm']['others'][$i]) && !empty($data['PermohonanForm']['others'][$i]))
                 {
                     $caseStatusSuspek[$i]['others']  = $data['PermohonanForm']['others'][$i];
@@ -184,13 +186,13 @@ class PermohonanController extends Controller
                 {
                     $caseInvolvedURL[$i]["master_social_media_id"]  = $data['PermohonanForm']['master_social_media_id'][$i];
                     $caseInvolvedURL[$i]["url"]  = $data['PermohonanForm']['url'][$i];
+                    $caseInvolvedURL[$i]['created_by'] = 1;
                 }
                 
             }
             $offences = $data['PermohonanForm']['offence'];
 
             
-            //echo'<pre>';print_r($caseStatusSuspek);exit;
             //echo json_encode($caseInfo).'<br>';//exit;
             //echo json_encode($caseStatusSuspek).'<br>';
             //echo json_encode($caseInvolvedURL).'<br>';
