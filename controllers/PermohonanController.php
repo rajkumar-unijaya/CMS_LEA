@@ -138,11 +138,10 @@ class PermohonanController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
             $data = Yii::$app->request->post();
 
-            $model->surat_rasmi = UploadedFile::getInstance($model, 'surat_rasmi');
-            $model->laporan_polis = UploadedFile::getInstance($model, 'laporan_polis');
-            $model->surat_rasmi->saveAs('uploads/surat_rasmi/' . $data['PermohonanForm']['report_no'].'_'.$model->surat_rasmi->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->surat_rasmi->extension);
-
-            $model->laporan_polis->saveAs('uploads/laporan_polis/' . $data['PermohonanForm']['report_no'].'_'.$model->laporan_polis->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->laporan_polis->extension);
+            //$model->surat_rasmi = UploadedFile::getInstance($model, 'surat_rasmi');
+            //$model->laporan_polis = UploadedFile::getInstance($model, 'laporan_polis');
+            //$model->surat_rasmi->saveAs('uploads/surat_rasmi/' . $data['PermohonanForm']['report_no'].'_'.$model->surat_rasmi->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->surat_rasmi->extension);
+            //$model->laporan_polis->saveAs('uploads/laporan_polis/' . $data['PermohonanForm']['report_no'].'_'.$model->laporan_polis->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->laporan_polis->extension);
             $caseInfo = array();
             $caseStatusSuspek = array();
             $caseInvolvedURL = array();
@@ -156,8 +155,10 @@ class PermohonanController extends Controller
             $caseInfo['report_no'] = $data['PermohonanForm']['report_no'];
             $caseInfo['investigation_no'] = $data['PermohonanForm']['investigation_no'];
             $caseInfo['case_summary'] = $data['PermohonanForm']['case_summary'];
-            $caseInfo['surat_rasmi'] = 'uploads/surat_rasmi/' .$data['PermohonanForm']['report_no'].'_'.$model->surat_rasmi->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->surat_rasmi->extension;
-            $caseInfo['laporan_polis'] = 'uploads/laporan_polis/' .$data['PermohonanForm']['report_no'].'_'.$model->laporan_polis->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->laporan_polis->extension;
+            //$caseInfo['surat_rasmi'] = 'uploads/surat_rasmi/' .$data['PermohonanForm']['report_no'].'_'.$model->surat_rasmi->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->surat_rasmi->extension;
+            //$caseInfo['laporan_polis'] = 'uploads/laporan_polis/' .$data['PermohonanForm']['report_no'].'_'.$model->laporan_polis->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->laporan_polis->extension;
+            $caseInfo['surat_rasmi'] = "avtar.jpg";
+            $caseInfo['laporan_polis'] = "avtar1.jpg";
             if(isset($data['PermohonanForm']['application_purpose']) && !empty($data['PermohonanForm']['application_purpose']))
             {
             $caseInfo['master_status_purpose_of_application_id'] = implode(",",$data['PermohonanForm']['application_purpose']);
