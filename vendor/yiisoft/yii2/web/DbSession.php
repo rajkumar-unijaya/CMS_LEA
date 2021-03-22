@@ -262,6 +262,7 @@ class DbSession extends MultiFieldSession
         
     }
 
+    
     /**
      * Session destroy handler.
      * @internal Do not call this method directly.
