@@ -283,7 +283,7 @@ class PermohonanController extends Controller
             $caseInfo['case_summary'] = $data['PermohonanForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
             $caseInfo['laporan_polis'] = $loparaPoliceDFFileName;
-            $caseInfo['created_by'] = 1;
+            $caseInfo['created_by'] = $session->get('userId');
             if(isset($data['PermohonanForm']['application_purpose']) && !empty($data['PermohonanForm']['application_purpose']))
             {
             $caseInfo['master_status_purpose_of_application_id'] = implode(",",$data['PermohonanForm']['application_purpose']);
@@ -297,7 +297,7 @@ class PermohonanController extends Controller
                 $caseStatusSuspek[$i]['master_status_status_suspek_id']  = $data['PermohonanForm']['master_status_status_suspek_id'][$i];
                 $caseStatusSuspek[$i]['ic']  = $data['PermohonanForm']['ic'][$i];
                 $caseStatusSuspek[$i]['name']  = $data['PermohonanForm']['name'][$i];
-                $caseStatusSuspek[$i]['created_by'] = 1;
+                $caseStatusSuspek[$i]['created_by'] = $session->get('userId');
                 if(isset($data['PermohonanForm']['others'][$i]) && !empty($data['PermohonanForm']['others'][$i]))
                 {
                     $caseStatusSuspek[$i]['others']  = $data['PermohonanForm']['others'][$i];
@@ -310,7 +310,7 @@ class PermohonanController extends Controller
                 {
                     $caseInvolvedURL[$i]["master_social_media_id"]  = $data['PermohonanForm']['master_social_media_id'][$i];
                     $caseInvolvedURL[$i]["url"]  = $data['PermohonanForm']['url'][$i];
-                    $caseInvolvedURL[$i]['created_by'] = 1;
+                    $caseInvolvedURL[$i]['created_by'] = $session->get('userId');
                 }
                 
             }
@@ -448,6 +448,7 @@ class PermohonanController extends Controller
             $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
             $caseInfo['surat_rasmi'] = 'uploads/surat_rasmi/' .$data['BlockRequestForm']['report_no'].'_'.$model->surat_rasmi->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->surat_rasmi->extension;
             $caseInfo['laporan_polis'] = 'uploads/laporan_polis/' .$data['BlockRequestForm']['report_no'].'_'.$model->laporan_polis->baseName .'_'.date('Y_m_d_H_i_s'). '.' . $model->laporan_polis->extension;
+            $caseInfo['created_by'] = $session->get('userId');
             if(isset($data['BlockRequestForm']['application_purpose']) && !empty($data['BlockRequestForm']['application_purpose']))
             {
             $caseInfo['master_status_purpose_of_application_id'] = implode(",",$data['BlockRequestForm']['application_purpose']);
@@ -461,6 +462,7 @@ class PermohonanController extends Controller
                 {
                     $caseInvolvedURL[$i]["master_social_media_id"]  = $data['BlockRequestForm']['master_social_media_id'][$i];
                     $caseInvolvedURL[$i]["url"]  = $data['BlockRequestForm']['url'][$i];
+                    $caseInvolvedURL[$i]["created_by"]  = $session->get('userId');
                 }
                 
             }
