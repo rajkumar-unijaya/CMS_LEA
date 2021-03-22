@@ -246,7 +246,7 @@ class AuthController extends Controller
                         { 
                             $session->set('IC', $otp_response->data['records']['IC']);
                             $session->set('email', $otp_response->data['records']['email']);
-                            $session->set('mobile', $otp_response->data['records']['mobile']);
+                            $session->set('mobile', $otp_response->data['records']['mobile_no']);
                             $session->set('telegram_id', $otp_response->data['records']['telegram_id']);
                             $session->set('username', $otp_response->data['records']['username']);
                         } 
