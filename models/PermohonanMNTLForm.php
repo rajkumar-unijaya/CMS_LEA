@@ -55,15 +55,7 @@ class PermohonanMNTLForm extends Model
             [['investigation_no'],'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
                 'when' => function($model) { return empty($model->report_no); }
               ],
-
-
-            [['tippoff_id'], 'required','message'=>'Pilih No. TippOff'],
             [['phone_number'], 'required','message'=>'Masukkan Phone No.'],  
-            [['telco_name'], 'required','message'=>'Pilih telco name'],
-            [['date1'], 'required','message'=>'Pilih date1'],
-            [['date2'], 'required','message'=>'Pilih date2'],
-            
-            
             
         ];
     }
