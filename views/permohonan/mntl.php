@@ -76,7 +76,7 @@ use Yii;
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Telco Name </label>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'telco_name')->textInput(['placeholder' => 'Telco Name'])->label(false) ?>   
+                <?= $form->field($model, 'telco_name')->textInput(['placeholder' => 'Telco Name','readonly'=> true])->label(false) ?>   
                 </div>
             </div>
 

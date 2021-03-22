@@ -208,11 +208,11 @@ class DbSession extends MultiFieldSession
     public function writeSession($id, $data)
     { 
         $this->_url = Yii::$app->params['DreamFactoryContextURL'];
-        $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
+        $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProc'];
         $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
         $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
         $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
-        $this->_DFHeaderPasslive = Yii::$app->params['DreamFactoryHeaderPassLive'];
+        //$this->_DFHeaderPasslive = Yii::$app->params['DreamFactoryHeaderPassLive'];
         if ($this->getUseStrictMode() && $id === $this->_forceRegenerateId) { 
             //Ignore write when forceRegenerate is active for this id
             return true;

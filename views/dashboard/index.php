@@ -34,6 +34,12 @@ use yii\helpers\Html;
 $this->title = 'Dashboard';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+                                    <div id="success" class="info noticationMsg">
+                                        <?php if(Yii::$app->session->hasFlash('success')):?>
+
+                                            <?php echo Yii::$app->session->getFlash('success')[0] ?>
+                                            <?php endif;?>
+                                    </div>
                         <h3 class="mt-4"><?= Html::encode($this->title) ?></h3>
                         <div class="row">
                             <div class="col-xl-4 col-md-6">

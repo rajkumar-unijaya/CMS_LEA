@@ -25,7 +25,6 @@ class AuthController extends Controller
     private $_url_crawler = null;
     private $_DFHeaderKey = null;
     private $_DFHeaderPass = null;
-    private $_DFHeaderPasslive = null;
     
     
     /**
@@ -34,11 +33,10 @@ class AuthController extends Controller
     public function behaviors()
     {
         $this->_url = Yii::$app->params['DreamFactoryContextURL'];
-        $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
+        $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProc'];
         $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
         $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
         $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
-        $this->_DFHeaderPasslive = Yii::$app->params['DreamFactoryHeaderPassLive'];
         return [
             /*'access' => [
                 'class' => AccessControl::className(),
@@ -126,7 +124,7 @@ class AuthController extends Controller
                     ->setFormat(Client::FORMAT_URLENCODED)
                     ->setMethod('GET')
                     ->setUrl($this->_url_crawler."func.telegram_sendmsg.php?chatid=".$emailResponse->data['records'][0]['telegram_id']."&msg=testing purpose")
-                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPasslive])
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                     ->send();
                     
                       if(empty($telegramResponse['ok']))
@@ -146,7 +144,7 @@ class AuthController extends Controller
                     ->setFormat(Client::FORMAT_URLENCODED)
                     ->setMethod('POST')
                     ->setUrl($this->_url_crawler."func.sms.php")
-                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPasslive])
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                     ->setData(["phone" => $mobileNo,"msg" => $message])
                     ->send();
                     
@@ -169,7 +167,7 @@ class AuthController extends Controller
                     ->setTo('zoie17@ethereal.email')
                     ->setSubject('Email sent from cms project')
                     ->send())
-                    {
+                    { 
                         $client = new Client();
                         $session = Yii::$app->session;
                         $session->set('email', $data['EmailForm']['email']);
@@ -228,17 +226,15 @@ class AuthController extends Controller
              $date =  date("Y-m-d H:i:s");
              $otp = Yii::$app->request->get('otp');
              $email = Yii::$app->request->get('email');
-
              $client = new Client();
              $otp_response = $client->createRequest()
              ->setFormat(Client::FORMAT_URLENCODED)
              ->setMethod('POST')
              //->setUrl($this->_url_procedure.'crud-api-procedures/check_user_islogged')//local
-             ->setUrl($this->_url_procedure.'check_user_islogged')
+             ->setUrl($this->_url_procedure.'check_user_islogged')//live
              ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
              ->setData(["email" => $email,"otp" => $otp,"userId"=>$session->get('userId')])
              ->send(); 
-             //echo'<pre>';print_r($otp_response);exit;
              /*
              *** check if email & otp is check in table if correct then session will create and redirect to dashboard page
              */
