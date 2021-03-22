@@ -244,11 +244,11 @@ class AuthController extends Controller
                     { 
                         if ($session->isActive)
                         { 
-                            $session->set('IC', $otp_response->data['records']['IC']);
+                            $session->set('IC', $otp_response->data['records']['ic_no']);
                             $session->set('email', $otp_response->data['records']['email']);
                             $session->set('mobile', $otp_response->data['records']['mobile_no']);
                             $session->set('telegram_id', $otp_response->data['records']['telegram_id']);
-                            $session->set('username', $otp_response->data['records']['username']);
+                            $session->set('username', $otp_response->data['records']['fullname']);
                         } 
                      $responseInfo['status'] = 200;
                      $responseInfo['message'] = 'notification';
