@@ -33,7 +33,7 @@ class AuthController extends Controller
     public function behaviors()
     {
         $this->_url = Yii::$app->params['DreamFactoryContextURL'];
-        $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProc'];
+        $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
         $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
         $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
         $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
