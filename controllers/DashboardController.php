@@ -62,6 +62,10 @@ class DashboardController extends Controller
         $this->layout =  'main';
         return $this->render('index');
     }
+    /*****
+     * 
+     * save session in to db
+     */
 
     public function afterAction($action, $result)
 	{ 
