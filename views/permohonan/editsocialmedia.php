@@ -30,14 +30,17 @@ use Yii;
             <div class="col-lg-5">
 
            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-           <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId]); ?>
+           <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $mediaSocialResponse['master_case_info_type_id']]); ?>
            <div class="row mb-3">
               <label for="inputEmail3" class="col-sm-4 col-form-label">Pilihan Mengisi</label>
               <div class="col-sm-8">
+                    <?php  $model->for_self = $mediaSocialResponse['bagipihak_dirisendiri']; ?>
                     <?= $form->field($model, 'for_self')->radioList($newCase,array('class'=>'for_self'))->label(false); ?>
                     <div id="choose_forself">
+                    <?php  $model->email = $mediaSocialResponse['email']; ?>
                     <?= $form->field($model, 'email')->textInput(['placeholder' => 'email'])
                                     ->label(false) ?>
+                    <?php  $model->no_telephone = $mediaSocialResponse['no_telephone']; ?>
                     <?= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. telephone'])
                                     ->label(false) ?>                
                     </div> 
@@ -48,6 +51,7 @@ use Yii;
            <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">No Laporan Polis </label>
                 <div class="col-sm-8">
+                <?php  $model->report_no = $mediaSocialResponse['report_no']; ?>
                 <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>   
                 </div>
             </div>
@@ -55,6 +59,7 @@ use Yii;
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">No Kertas Siasatan </label>
                 <div class="col-sm-8">
+                <?php  $model->investigation_no = $mediaSocialResponse['investigation_no']; ?>
                 <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No Kertas Siasata'])->label(false) ?> 
                 </div>
             </div>
@@ -62,7 +67,15 @@ use Yii;
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Kesalahan</legend>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'offence')->dropDownList($offences,array('multiple'=>'multiple','prompt' => '--Pilih Kesalahan--'))->label(false); ?>
+                <?php 
+                $offencesList = array();
+                $i = 0;
+                foreach($mediaSocialResponse['case_offence'] as $offenceInfo):
+                  $i++;
+                  $offencesList[$offenceInfo['offence_id']] = array("selected"=>true);
+                endforeach;
+                ?>
+                <?= $form->field($model, 'offence')->dropDownList($offences,array('multiple'=>'multiple','prompt' => '--Pilih Kesalahan--','options' => $offencesList))->label(false); ?>
                 </div>
            </div>
 
@@ -70,6 +83,7 @@ use Yii;
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Ringkasan Kes </label>
                 <div class="col-sm-8">
+                <?php  $model->case_summary = $mediaSocialResponse['case_summary']; ?>
                 <?= $form->field($model, 'case_summary')->textarea()->label(false); ?>
                 </div>
             </div>
@@ -81,39 +95,56 @@ use Yii;
                         </div>
                 
             </div>
-
+            <?php 
+            foreach($mediaSocialResponse['case_info_status_suspek'] as $key => $statusSuspectDbInfo):
+            ?>
             <div class="col-sm-4" ></div>
+            
             <div class="col-sm-8" id="id_name">
                     <div class="row">
-                        <?= $form->field($model, 'master_status_suspect_or_saksi_id[0]')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek or Saksi--'))->label(false); ?>
+                    <?php  $model->master_status_suspect_or_saksi_id[$key] = $statusSuspectDbInfo['master_status_suspect_or_saksi_id']; ?>
+                        <?= $form->field($model, 'master_status_suspect_or_saksi_id['.$key.']')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek or Saksi--'))->label(false); ?>
                         
                     </div>
 
                     <div class="row">
-                    <?= $form->field($model, 'master_status_status_suspek_id[0]')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Option--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
+                    <?php  $model->master_status_status_suspek_id[$key] = $statusSuspectDbInfo['master_status_status_suspek_id']; ?>
+                    <?= $form->field($model, 'master_status_status_suspek_id['.$key.']')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Option--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
                     </div>
                 <div class="row">
                     <div class="col-sm-4">
-                    <?= $form->field($model, 'ic[0]')->textInput(['placeholder' => 'IC'])->label(false);?> 
+                    <?php  $model->ic[$key] = $statusSuspectDbInfo['ic']; ?>
+                    <?= $form->field($model, 'ic['.$key.']')->textInput(['placeholder' => 'IC'])->label(false);?> 
                     </div>
                     <div class="col-sm-4" id="add_text_areabox-0"> 
-                    <?= $form->field($model, 'name[0]')->textInput(['placeholder' => 'Name'])->label(false);?>  
+                    <?php  $model->name[$key] = $statusSuspectDbInfo['name']; ?>
+                    <?= $form->field($model, 'name['.$key.']')->textInput(['placeholder' => 'Name'])->label(false);?>  
                     </div>  
                 </div>
             </div>
+            <?php 
+            endforeach;
+            ?>
 
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Surat Rasmi</legend>
-                <div class="col-sm-8">
-                <?=  $form->field($model, 'surat_rasmi')->fileInput(['accept' => 'image/*'])->label(false); ?>
+                <div class="col-sm-4">
+                <?=  $form->field($model, 'surat_rasmi')->fileInput()->label(false); ?>
+                </div>
+                <div class="col-sm-4 text-right">
+                <?=  Html::a('Download',['surat-download','name' => $mediaSocialResponse['surat_rasmi'] ? $mediaSocialResponse['surat_rasmi']: "#"],['class' => 'btn btn-primary','target'=>"_blank"]) ?>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Laporan Polis</legend>
-                <div class="col-sm-8">
+                <div class="col-sm-4">
                 <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false);?>   
                 </div>
+                <div class="col-sm-4 text-right">
+                <?=  Html::a('Download',['laporan-download','name' => $mediaSocialResponse['laporan_polis'] ? $mediaSocialResponse['laporan_polis']: "#"],['class' => 'btn btn-primary']) ?>
+                </div>
+                
             </div>
 
             <div class="row mb-3">
@@ -123,25 +154,31 @@ use Yii;
             </div>
             <div class="col-sm-8" id="url_input_append">
                 <?php
-                for($i=0;$i<=4;$i++)
-                {
+                //for($i=0;$i<=4;$i++)
+                //{
+                  foreach($mediaSocialResponse['case_info_url_involved'] as $key => $URLDbInfo):
+                  $model->master_social_media_id[$key] = $URLDbInfo['master_social_media_id'];
+                  $model->url[$key] = $URLDbInfo['url'];
                   ?>
                   <div class="row">
                   <?php
-                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--'))->label(false);
-                echo $form->field($model, 'url['.$i.']')->textInput()->label(false); 
+                echo $form->field($model, 'master_social_media_id['.$key.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--'))->label(false);
+                echo $form->field($model, 'url['.$key.']')->textInput()->label(false); 
                 ?>
                 </div>
                 <?php
-                }
+                endforeach;
+                //}
                 ?> 
             </div>
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Tujuan Permohanan</legend>
                 <div class="col-sm-8">
+                <?php  $model->application_purpose = $mediaSocialResponse['master_status_purpose_of_application_id']; ?>
                 <?= $form->field($model, 'application_purpose')->checkboxList($purposeOfApplication)->label(false);?>  
                 <div id="application_purpose_info">
-                <input type="text" name="PermohonanForm[application_purpose_info]" placeholder="Tujuan Permohanan">
+               
+                <input type="text" name="PermohonanForm[application_purpose_info]" placeholder="Tujuan Permohanan" value="<?= $mediaSocialResponse['purpose_of_application_info']?>">
                 </div> 
                 </div>
             </div>

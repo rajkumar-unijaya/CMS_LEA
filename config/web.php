@@ -17,7 +17,7 @@ $config = [
         $expTime = 0;
         if(empty($session->get('userId')) && !($event->action->controller->id == 'auth' && $event->action->id == 'login'))
         { 
-           \yii::$app->response->redirect('../auth/login');
+           \yii::$app->response->redirect('../auth/login')->send();
         }
         else if(!empty($session->get('userId')) && ($event->action->controller->id == 'auth' && $event->action->id == 'login'))
             {
