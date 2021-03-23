@@ -13,5 +13,6 @@ return [
     "DreamFactoryHeaderPass" => '7c174ae2f835c0b7fd9e63f65358cdb6958cd4b9a705d652e220b30f007fdb14',
     "FILE_UPLOAD_SURAT_RASMI" => getenv('FILE-UPLOAD-SURAT-RASMI') ? getenv('FILE-UPLOAD-SURAT-RASMI') : 'uploads/',
     "FILE_UPLOAD_LAPORAN_POLIS" => getenv('FILE-UPLOAD-LAPORAN-POLIS') ? getenv('FILE-UPLOAD-LAPORAN-POLIS') : 'uploads/',
+    "FILE_DOWNLOAD" => getenv('FILE_DOWNLOAD') ? getenv('FILE_DOWNLOAD') : 'http://10.5.5.27:8080/web/',
     
 ];

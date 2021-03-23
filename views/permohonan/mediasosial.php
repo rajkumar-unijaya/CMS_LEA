@@ -7,10 +7,96 @@ use yii\helpers\Html;
 $this->title = 'Media Sosial';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="container-fluid">
+    <h1 style="padding-top: 1.5rem;">Sosial Medi</h1>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Sosial Media Senaraikan</li>
+        </ol>
+    </nav>
+    <div style="text-align: right;padding:10px;">
+        <a href="../permohonan/baru"><button type="button" class="btn btn-primary">Permohonan Baru
+            </button></a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>No. Permohonan</th>
+                        <th>No. Laporan Polis</th>
+                        <th>Ringkasan Kes</th>
+                        <th>Lampiran</th>
+                        <th>Status</th>
+                        <th>Tarikh Permohonan</th>
+                        <th>Tempoh Proses</th>
+                        <th>Tindakan</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-    <p>
-        This is the <?= Html::encode($this->title) ?> page. You may modify the following file to customize its content
-    </p>
+                    <?php //echo"<pre>";print_r($mediaSocialResponse);exit;
+                    $count = 1;
+                    foreach ($mediaSocialResponse as $key => $responseTemp) {
+                    ?>
+                        <tr>
+                            <td><?php echo $count; ?></td>
+                            <td><?php echo $responseTemp['case_no']; ?></td>
+                            <td><?php echo $responseTemp['report_no']; ?></td>
+                            <td><?php echo $responseTemp['case_summary']; ?></td>
+                            <td><?php echo "abc.pdf"; ?></td>
+                            <td><?php echo $responseTemp['case_status']['name'];
+                            echo strcasecmp($responseTemp['case_status']['name'],"Closed") == 0 ? "<br>(Papar)" : "";
+                            echo strcasecmp($responseTemp['case_status']['name'],"Rejected") == 0 ? "<br>(Muat Turun Komen)" : "";
+                            
+                            ?></td>
+                            <td><?php echo $responseTemp['case_start_date'] ? \Yii::$app->formatter->asDate($responseTemp['case_start_date'], 'long') : "N/A"; ?></td>
+                            <td><?php echo 1; ?></td>
+                            <td>
+                            <?php 
+                            if(strcasecmp($responseTemp['case_status']['name'],"Closed") == 0)
+                            {
+                             echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('#'));
+                             echo "&nbsp;&nbsp;&nbsp;";
+                             echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('#'));
+                            }
+                            if(strcasecmp($responseTemp['case_status']['name'],"Rejected") == 0)
+                            {
+                            echo '<a href ="#"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;';
+                            }
+                            if(strcasecmp($responseTemp['case_status']['name'],"Pending") == 0)
+                            {
+                            echo Html::a('<i class="fa fa-pencil" aria-hidden="true"></i>', array('permohonan/edit-social-media', 'id'=>$responseTemp['id']));
+                            echo "&nbsp;&nbsp;&nbsp;";
+                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('#'));
+                            }
+                            ?>
+                            </td>
+                            
+                        </tr>
+                    <?php
+                        $count++;
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
+<?php
+
+use yii\helpers\Url;
+
+$script = <<< JS
+	
+	$(document).ready(function() {
+		$('#btn-create-tagging').click(function(ev){ 
+			document.location.href = '../administration/tagging-form';
+		});
+	});
+	JS;
+$this->registerJs($script, \yii\web\View::POS_END);
+?>
