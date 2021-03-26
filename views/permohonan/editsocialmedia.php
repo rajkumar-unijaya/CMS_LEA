@@ -155,9 +155,8 @@ use Yii;
                 <?= Html::button("Delete",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
                 </div>
                 
-               
                 <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
-                <?= Html::a('View | Download',['surat-download','name' => $mediaSocialResponse['surat_rasmi'] ? $mediaSocialResponse['surat_rasmi']: "#"],['class' => 'btn btn-primary','target'=>"_blank"]);?>
+                <?= Html::button("View | Download",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
                 </div>
               </div>
                 
@@ -180,7 +179,7 @@ use Yii;
                 
                
                 <div class="col-sm-4 text-right" id="laporan_polis_img_download">
-                <?= Html::a('View | Download',['laporan-download','name' => $mediaSocialResponse['laporan_polis'] ? $mediaSocialResponse['laporan_polis']: "#"],['class' => 'btn btn-primary']);?>
+                <?= Html::button("View | Download",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
                 </div>
               </div>
                
@@ -353,6 +352,20 @@ else{
  
     }
   });
+
+  $("#suratRasmiViesDownloadImg").click(function(){ 
+    
+    var params = "?name="+$('#suratRasmiImagePath').val();
+    document.location.href = '../permohonan/surat-download'+params
+    });
+
+
+  $("#laporanPolisViesDownloadImg").click(function(){ 
+    
+  var params = "?name="+$('#loparanImagePath').val();
+  document.location.href = '../permohonan/laporan-download'+params
+  });
+
 
   if($purposeOfApplicationIdValInfo == 24)
   { 
