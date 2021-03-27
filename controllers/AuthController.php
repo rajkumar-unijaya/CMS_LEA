@@ -222,7 +222,7 @@ class AuthController extends Controller
         $model = new ValidationCodeForm();
         //default timezone is UTC it has configured at web.php
         if (Yii::$app->request->get('email') && Yii::$app->request->get('otp')) {
-             $lessDate =  date("Y-m-d H:i:s", strtotime("-5 minutes"));
+             $lessDate =  date("Y-m-d H:i:s", strtotime("-1 minutes"));
              $date =  date("Y-m-d H:i:s");
              $otp = Yii::$app->request->get('otp');
              $email = Yii::$app->request->get('email');

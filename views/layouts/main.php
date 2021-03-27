@@ -75,10 +75,12 @@ DashboardAsset::register($this);
                             <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
 
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="../permohonan/mediasosial">Melalui Media Sosial</a>
-                                    <a class="nav-link" href="../permohonan/mntl">Melalui MNTL</a>
+                                    <!--<a class="nav-link" href="../permohonan/mediasosial">Melalui Media Sosial</a>-->
                                     <a class="nav-link" href="../permohonan/mediasosial">Permohonan Baru</a>
                                     <a class="nav-link" href="../permohonan/block-request">Blocking Request</a>
+                                    <a class="nav-link" href="../permohonan/mntl">MNTL</a>
+                                    
+                                    
                                 </nav>
                             </nav>
                         </div> 
