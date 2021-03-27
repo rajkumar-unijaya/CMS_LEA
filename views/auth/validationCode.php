@@ -53,9 +53,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $form =  ActiveForm::begin(['action' => '',  'id' => 'otpvalidate', 'method' => 'post','enableClientValidation' => true])
                                     ?>
                                             <div class="input-group validationspace">
-                                            <span class="input-group-addon">
-                                                <i class="glyphicon glyphicon-envelope"></i> 
-                                            </span>
                                             <input class="form-control" onclick="this.select()"  name="validationCode[]" id="validation1" type="text" />
                                             <input class="form-control" onclick="this.select()"  name="validationCode[]" id="validation2" type="text" />
                                             <input class="form-control" onclick="this.select()" name="validationCode[]" id="validation3" type="text" />
@@ -71,11 +68,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                            <div class="form-group col text-center mt-5">
                                                 <input type="submit" value = "Sahkan" id="submit" class="btn btn-primary">
                                                 
-                                                <div id="resend" class="btn btn-primary">Resend</div>
+                                                <span id="resend" class="btn btn-primary">Resend</span>
                                             </div>
                                             <?php  ActiveForm::end() ?>
                                             
-                                            <div id="timer">Time left = <span id="timer"></span></div>
+                                            <div id="timer" class="timer">Time left = <span id="timer"></span></div>
                                     </div>
                                     
                                 </div>
@@ -112,7 +109,7 @@ function timer(remaining) {
   $("#resend").show();
   $("#timer").hide();
 }
-timer(300);
+timer(60);
 
 $('form').submit(function(ev){  
     var isValid = true;
@@ -178,7 +175,7 @@ var xhttp = new XMLHttpRequest();
       document.getElementById("demo").innerHTML = this.responseText;
     }
   };
-  xhttp.open("GET", "../auth/resend&email="+$('#email').val(), true);
+  xhttp.open("GET", "../auth/resend?email="+$('#email').val(), true);
   xhttp.send();
   
 });

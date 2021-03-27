@@ -7,8 +7,13 @@ use yii\helpers\Html;
 $this->title = 'Media Sosial';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="success" class="info noticationMsg">
+<?php if(Yii::$app->session->hasFlash('success')):?>
+<?php echo Yii::$app->session->getFlash('success')[0] ?>
+<?php endif;?>
+</div>
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Sosial Medi</h1>
+    <h1 style="padding-top: 1.5rem;">Sosial Media</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
@@ -58,19 +63,25 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php 
                             if(strcasecmp($responseTemp['case_status']['name'],"Closed") == 0)
                             {
-                             echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('#'));
+                             echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('permohonan/reopencase', 'id'=>$responseTemp['id']));
                              echo "&nbsp;&nbsp;&nbsp;";
-                             echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('#'));
+                             echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
                             }
                             if(strcasecmp($responseTemp['case_status']['name'],"Rejected") == 0)
                             {
-                            echo '<a href ="#"><i class="fa fa-eye" aria-hidden="true"></i></a>&nbsp;&nbsp;';
+                             echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
                             }
                             if(strcasecmp($responseTemp['case_status']['name'],"Pending") == 0)
                             {
                             echo Html::a('<i class="fa fa-pencil" aria-hidden="true"></i>', array('permohonan/edit-social-media', 'id'=>$responseTemp['id']));
                             echo "&nbsp;&nbsp;&nbsp;";
-                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('#'));
+                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
+                            }
+                            if(strcasecmp($responseTemp['case_status']['name'],"Reopen") == 0)
+                            {
+                            echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('permohonan/reopencase', 'id'=>$responseTemp['id']));
+                            echo "&nbsp;&nbsp;&nbsp;";
+                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
                             }
                             ?>
                             </td>
