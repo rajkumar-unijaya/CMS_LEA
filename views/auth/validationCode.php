@@ -109,7 +109,7 @@ function timer(remaining) {
   $("#resend").show();
   $("#timer").hide();
 }
-timer(60);
+timer(300);
 
 $('form').submit(function(ev){  
     var isValid = true;
