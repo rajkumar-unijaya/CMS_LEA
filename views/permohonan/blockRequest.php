@@ -10,6 +10,11 @@ use Yii;
 ?>
 
 <div class="container-fluid">
+<div id="success" class="info noticationMsg">
+<?php if(Yii::$app->session->hasFlash('success')):?>
+<?php echo Yii::$app->session->getFlash('success')[0] ?>
+<?php endif;?>
+</div>
     <h1 style="padding-top: 1.5rem;">Blocking Request</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
