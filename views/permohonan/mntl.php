@@ -88,7 +88,7 @@ use Yii;
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Date1 </label>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'date1')->widget(\yii\jui\DatePicker::className(),
+                <?php /* $form->field($model, 'date1')->widget(\yii\jui\DatePicker::className(),
                                                     [ 'dateFormat' => 'php:m/d/Y',
                                                     'clientOptions' => [
                                                         'changeYear' => true,
@@ -96,7 +96,8 @@ use Yii;
                                                         //'yearRange' => '-50:-12',
                                                         'altFormat' => 'yy-mm-dd',
                                                     ]],['placeholder' => 'mm/dd/yyyy'])
-                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?>
+                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false)*/ ?>
+                <?= $form->field($model, 'date1')->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?> 
                 </div>
             </div>
 
@@ -104,7 +105,7 @@ use Yii;
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Date2 </label>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'date2')->widget(\yii\jui\DatePicker::className(),
+                <?php /* $form->field($model, 'date2')->widget(\yii\jui\DatePicker::className(),
                                                     [ 'dateFormat' => 'php:m/d/Y',
                                                     'clientOptions' => [
                                                         'changeYear' => true,
@@ -112,7 +113,8 @@ use Yii;
                                                         //'yearRange' => '-50:-12',
                                                         'altFormat' => 'yy-mm-dd',
                                                     ]],['placeholder' => 'mm/dd/yyyy'])
-                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?>
+                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false)*/ ?>
+                <?= $form->field($model, 'date2')->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?>                                     
                 </div>
             </div>
             

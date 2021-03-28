@@ -89,22 +89,7 @@ DashboardAsset::register($this);
                             Statistik/Laporan
                             <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                         </a>
-                        <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                    Authentication
-                                    <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
-                                </a>
-                                <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-parent="#sidenavAccordionPages">
-                                    <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="index.php?r=auth/login">Login</a>
-                                        <a class="nav-link" href="index.php?r=auth/validation-code">Verification Code</a>
-                                        <a class="nav-link" href="index.php?r=auth/signup">Register</a>
-                                        <a class="nav-link" href="index.php?r=auth/request-password-reset">Forgot Password</a>
-                                    </nav>
-                                </div>
-                            </nav>
-                        </div>
+                        
                     </div>
 
                 </div>
