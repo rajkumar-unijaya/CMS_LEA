@@ -195,8 +195,10 @@ class PermohonanController extends Controller
             ->send(); 
             if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
                 { 
+                    /*Yii::$app->session->addFlash('success','Successfully added new case infomation.');
+                    return $this->redirect('../dashboard/index');*/
                     Yii::$app->session->addFlash('success','Successfully added new case infomation.');
-                    return $this->redirect('../dashboard/index');
+                    return $this->redirect('../permohonan/mntl');
                 }
                 else{
                     Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
@@ -225,7 +227,7 @@ class PermohonanController extends Controller
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('GET')
             //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3')
-            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.'1'.'&filter=case_status,in,1,2,3,33&join=master_status&order=id,desc')
+            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.'1'.'&filter=case_status,in,1,2,3,33&filter=master_case_info_type_id,eq,1&join=master_status&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
         $mediaSocialResponse = $responses->data['records'];
@@ -574,8 +576,10 @@ class PermohonanController extends Controller
                     ->send();
                     //unlink($loparaPoliceDFFileName);
                     }
+                    /*Yii::$app->session->addFlash('success','Successfully added new case infomation.');
+                    return $this->redirect('../dashboard/index');*/
                     Yii::$app->session->addFlash('success','Successfully added new case infomation.');
-                    return $this->redirect('../dashboard/index');
+                    return $this->redirect('../permohonan/block-request');
                 }
                 else{
                     Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');

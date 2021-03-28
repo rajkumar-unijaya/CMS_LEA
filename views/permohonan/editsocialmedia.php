@@ -181,8 +181,10 @@ use Yii;
                 <div class="pull-right">
                 <button type="button" id="add" class="add-item btn btn-success btn-xs">+</button>
             </div>
+            <?php if(count($mediaSocialResponse['case_info_url_involved']) > 0 ){?>
             <div class="col-sm-8" id="url_input_append">
                 <?php
+               
                 //for($i=0;$i<=4;$i++)
                 //{
                   foreach($mediaSocialResponse['case_info_url_involved'] as $key => $URLDbInfo):
@@ -201,6 +203,24 @@ use Yii;
                 //}
                 ?> 
             </div>
+              <?php } else { ?>
+                <div class="col-sm-8" id="url_input_append">
+                <?php
+                for($i=0;$i<=4;$i++)
+                {
+                  ?>
+                  <div class="row">
+                  <?php
+                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--'))->label(false);
+                echo $form->field($model, 'url['.$i.']')->textInput()->label(false); 
+                ?>
+                </div>
+                <?php
+                }
+                ?> 
+            </div>
+            <?php } ?>
+            
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Tujuan Permohanan</legend>
                 <div class="col-sm-8">
