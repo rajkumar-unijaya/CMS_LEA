@@ -26,6 +26,9 @@ class PermohonanController extends Controller
     private $_FileDownload = null;
     private $_FileTrashFolderSuratRasmi = null;
     private $_FileTrashFolderLaporanPolice = null;
+    private $_FileTrashFolderBlockRequestSuratRasmi = null;
+    private $_FileTrashFolderBlockRequestLaporanPolice = null;
+
     /**
      * {@inheritdoc}
      */
@@ -42,6 +45,8 @@ class PermohonanController extends Controller
         $this->_FileDownload = Yii::$app->params['FILE_DOWNLOAD'];
         $this->_FileTrashFolderSuratRasmi = Yii::$app->params['FILE_TRASH_SURAT_RASMI'];
         $this->_FileTrashFolderLaporanPolice = Yii::$app->params['FILE_TRASH_LAPORAN_POLIS'];
+        $this->_FileTrashFolderBlockRequestSuratRasmi = Yii::$app->params['FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI'];;
+        $this->_FileTrashFolderBlockRequestLaporanPolice = Yii::$app->params['FILE_TRASH_BLOCK_REQUEST_LAPORAN_POLIS'];;
         
         return [
             'access' => [
@@ -434,10 +439,7 @@ class PermohonanController extends Controller
         /******
          * load masterdata from the master component and pass these data into view page
          */
-		$masterStatusSuspect = Yii::$app->mycomponent->statusSuspect();
-		$purposeOfApplication = Yii::$app->mycomponent->purposeOfApplication();
 		$newCase = Yii::$app->mycomponent->newCase();
-        $suspectOrSaksi = Yii::$app->mycomponent->suspectOrSaksi();
         $masterSocialMedia = Yii::$app->mycomponent->masterSocialMedia();
         $client = new Client();
         $offenceResponse = array();
@@ -480,7 +482,6 @@ class PermohonanController extends Controller
             $this->_FileUploadSuratRasmi = Yii::$app->params['FILE_UPLOAD_SURAT_RASMI']."block-request/surat_rasmi/";
             $this->_FileUploadLaporanPolice = Yii::$app->params['FILE_UPLOAD_LAPORAN_POLIS']."block-request/laporan_polis/";
 
-            
             $model->surat_rasmi = UploadedFile::getInstance($model, 'surat_rasmi'); 
             if(!empty($model->surat_rasmi))
             {
@@ -503,8 +504,8 @@ class PermohonanController extends Controller
             $offences = array();
             
             $caseInfo['master_case_info_type_id'] = $data['BlockRequestForm']['masterCaseInfoTypeId'];
-            $caseInfo['requestor_ref'] = $session->get('userId');
-            //$caseInfo['requestor_ref'] = 1;
+            //$caseInfo['requestor_ref'] = $session->get('userId');
+            $caseInfo['requestor_ref'] = 1;
             $caseInfo['bagipihak_dirisendiri'] = $data['BlockRequestForm']['for_self'];
             $caseInfo['no_telephone'] = $data['BlockRequestForm']['no_telephone'] ? $data['BlockRequestForm']['no_telephone'] : 0;
             $caseInfo['email'] = $data['BlockRequestForm']['email'] ? $data['BlockRequestForm']['email'] : "NULL";
@@ -514,8 +515,8 @@ class PermohonanController extends Controller
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
             $caseInfo['laporan_polis'] = $loparaPoliceFileName;
             $caseInfo['case_status'] = 1;
-            $caseInfo['created_by'] = $session->get('userId');
-            //$caseInfo['created_by'] = 1;
+            //$caseInfo['created_by'] = $session->get('userId');
+            $caseInfo['created_by'] = 1;
             if(isset($data['BlockRequestForm']['application_purpose']) && !empty($data['BlockRequestForm']['application_purpose']))
             {
             $caseInfo['master_status_purpose_of_application_id'] = implode(",",$data['BlockRequestForm']['application_purpose']);
@@ -529,8 +530,8 @@ class PermohonanController extends Controller
                 {
                     $caseInvolvedURL[$i]["master_social_media_id"]  = $data['BlockRequestForm']['master_social_media_id'][$i];
                     $caseInvolvedURL[$i]["url"]  = $data['BlockRequestForm']['url'][$i];
-                    $caseInvolvedURL[$i]["created_by"]  = $session->get('userId');
-                    //$caseInvolvedURL[$i]["created_by"]  = 1;
+                    //$caseInvolvedURL[$i]["created_by"]  = $session->get('userId');
+                    $caseInvolvedURL[$i]["created_by"]  = 1;
                 }
                 
             }
@@ -588,7 +589,7 @@ class PermohonanController extends Controller
             
 		}
           
-        return $this->render('blockRequest',['model'=>$model,"masterStatusSuspect" => $masterStatusSuspect,"purposeOfApplication" => $purposeOfApplication,"newCase" => $newCase,"offences" => $filterOffenceResponse,"suspectOrSaksi" => $suspectOrSaksi,"masterSocialMedia" => $masterSocialMedia,"masterCaseInfoTypeId" => $masterCaseInfoTypeId]);
+        return $this->render('blockrequest/blockrequest',['model'=>$model,"newCase" => $newCase,"offences" => $filterOffenceResponse,"masterSocialMedia" => $masterSocialMedia,"masterCaseInfoTypeId" => $masterCaseInfoTypeId]);
         
     }
 
@@ -826,7 +827,6 @@ class PermohonanController extends Controller
         header("Content-Type: image/png");
         header("Content-Description: File Transfer");
         header("Content-disposition: attachment; filename='".$this->_FileDownload."".$name); 
-
         return readfile($this->_FileDownload."".$name);
     }
 
@@ -854,13 +854,12 @@ class PermohonanController extends Controller
         $deleteResponse = array();
         if (Yii::$app->request->get('id') && Yii::$app->request->get('path')) {
             $trashPath = "";
-
              $imageName = explode("/",Yii::$app->request->get('path'));
              if(!empty(Yii::$app->request->get('path')) && Yii::$app->request->get('path') != "NULL")
              {
                 $trashPath = \Yii::getAlias('@webroot').$this->_FileTrashFolderSuratRasmi.$imageName[3];
              }
-             
+             echo $trashPath;exit;
             if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')))
             {  
                 $client = new Client();
@@ -1213,6 +1212,553 @@ class PermohonanController extends Controller
         }
         //echo "<pre>";print_r($mediaSocialResponse);exit;
         return $this->render('viewsocialmedia', ["mediaSocialResponse" => $mediaSocialResponse,"id" => $id]);
+       
+        
+    }
+
+    /**
+     * Displays Permohonan Baru page.
+     *
+     * @return string
+     */
+    public function actionBlockRequestList()
+    {
+        
+        $client = new Client();
+        $session = Yii::$app->session;
+        $mediaSocialResponse = array();
+        $session->get('userId');
+        $responses = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('GET')
+            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3')
+            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.'1'.'&filter=case_status,in,1,2,3,33&filter=master_case_info_type_id,eq,2&join=master_status&order=id,desc')
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+            ->send();
+        $mediaSocialResponse = $responses->data['records'];
+        //return $this->render('tplist', ['responses' => $responses]);
+        return $this->render('blockrequest/blockrequestlist', ['mediaSocialResponse' => $mediaSocialResponse]);
+    }
+
+
+
+    /**
+     * Edit social media page
+     *
+     * @return string
+     */
+    public function actionEditBlockRequest($id)
+    { 
+        $this->layout =  'main';
+        //$model = new PermohonanForm();
+        $model = new BlockRequestForm();
+        $model->scenario="editBlockRequest";
+        $session = Yii::$app->session;
+        /******
+         * load masterdata from the master component and pass these data into view page
+         */
+		$newCase = Yii::$app->mycomponent->newCase();
+        $masterSocialMedia = Yii::$app->mycomponent->masterSocialMedia();
+        $mediaSocialResponse = array();
+        $client = new Client();
+        $offenceResponse = array();
+        $filterOffenceResponse = array();
+        $suratRasmiFileName = "";
+        $suratRasmiDFFileName = "";
+        $loparaPoliceFileName = "";
+        $loparaPoliceDFFileName = "";
+        $prevOffences = array();
+        $newOffences = array();
+        $newSelectedOffences = array();
+        $prevDeletedOffences = array();
+
+        /******
+         * Get offence master data from the offence table using api service.
+         */
+        $offenceResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_url.'offence?include=id,name')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
+               
+                if(isset($offenceResponse->data['records']) && count($offenceResponse->data['records']) > 0)
+                {
+                    foreach($offenceResponse->data['records'] as $key => $value)
+                {
+                    $filterOffenceResponse[$value['id']] = $value['name'];
+                }
+                }
+        $client = new Client();
+        $session = Yii::$app->session;
+        $mediaSocialResponse = array();
+        $session->get('userId');
+        $responses = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('GET')
+            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
+            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_url_involved&order=id,desc')
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+            ->send();
+            //echo count($responses->data['records']);exit;
+            //echo"<pre>";print_r($responses->data['records']);exit;
+
+        /*********
+           * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
+           * 
+           *  */     
+          if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
+            $data = Yii::$app->request->post();
+            //echo"<pre>";print_r($data);exit;
+            if(count($responses->data['records']) > 0)
+            {
+               foreach($responses->data['records'][0]['case_offence'] as $offenceVal):
+                $prevOffences[] = $offenceVal['offence_id'];
+               endforeach; 
+            }
+            $newOffences = $data['BlockRequestForm']['offence'];
+            $newSelectedOffences = array_values(array_diff($newOffences,$prevOffences));
+            $prevDeletedOffences = array_values(array_diff($prevOffences,$newOffences));
+            //echo"Previous <pre>";print_r($prevOffences);
+            //echo"New <pre>";print_r($newOffences);
+            //echo"new selected <pre>";print_r($newSelectedOffences);
+            //echo"prev deleted <pre>";print_r($prevDeletedOffences);exit;
+            
+            $this->_FileUploadSuratRasmi = Yii::$app->params['FILE_UPLOAD_SURAT_RASMI']."block-request/surat_rasmi/";
+            $this->_FileUploadLaporanPolice = Yii::$app->params['FILE_UPLOAD_LAPORAN_POLIS']."block-request/laporan_polis/";
+            
+            $model->surat_rasmi = UploadedFile::getInstance($model, 'surat_rasmi');//echo $data['PermohonanForm']['surat_rasmi_last_attachment'];exit; echo "<pre>";print_r($model->surat_rasmi);exit;
+            if(isset($model->surat_rasmi) && !empty($model->surat_rasmi) )
+            {  
+            $suratRasmiFileName =  $this->_FileUploadSuratRasmi."".'_'.$model->surat_rasmi->baseName .'_'.date('YmdHis'). '.' . $model->surat_rasmi->extension;
+            }
+            else if(!isset($model->surat_rasmi) && !empty($data['BlockRequestForm']['surat_rasmi_last_attachment'])){ 
+                $suratRasmiFileName =  $data['BlockRequestForm']['surat_rasmi_last_attachment'];
+            }
+           
+            $suratRasmiDFFileName = \Yii::getAlias('@webroot')."/". $suratRasmiFileName;
+            
+            $model->laporan_polis = UploadedFile::getInstance($model, 'laporan_polis'); 
+            if(isset($model->laporan_polis) && !empty($model->laporan_polis))
+            {
+            $loparaPoliceFileName =  $this->_FileUploadLaporanPolice."".'_'.$model->laporan_polis->baseName .'_'.date('YmdHis'). '.' . $model->laporan_polis->extension;
+            }
+            else if(!isset($model->laporan_polis) && !empty($data['BlockRequestForm']['laporan_polis_last_attachment'])){
+                $loparaPoliceFileName =  $data['BlockRequestForm']['laporan_polis_last_attachment'];
+            }
+            $loparaPoliceDFFileName = \Yii::getAlias('@webroot')."/". $loparaPoliceFileName;
+            
+            $caseInfo = array();
+            $caseStatusSuspek = array();
+            $caseInvolvedURL = array();
+            $offences = array();
+            
+            $caseInfo['master_case_info_type_id'] = $data['BlockRequestForm']['master_case_info_type_id'];
+            //$caseInfo['requestor_ref'] = $session->get('userId');
+            $caseInfo['requestor_ref'] = 1;
+            $caseInfo['id'] = $data['BlockRequestForm']['id'];
+            $caseInfo['investigation_no'] = $data['BlockRequestForm']['investigation_no'];
+            $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
+            $caseInfo['surat_rasmi'] = $suratRasmiFileName;
+            $caseInfo['laporan_polis'] = $loparaPoliceFileName;
+            $caseInfo['case_status'] = 1;
+            
+            //$caseInfo['created_by'] = $session->get('userId');
+            $caseInfo['updated_by'] = 1;
+            for($i=0;$i<=count($data['BlockRequestForm']['url'])-1;$i++)
+            { 
+                if(!empty($data['BlockRequestForm']['master_social_media_id'][$i]))
+                {
+                    $caseInvolvedURL[$i]["case_info_url_involved_id"]  = $data['BlockRequestForm']['caseInfoURLInvolvedId'][$i] ? $data['BlockRequestForm']['caseInfoURLInvolvedId'][$i] : 0;
+                    $caseInvolvedURL[$i]["master_social_media_id"]  = $data['BlockRequestForm']['master_social_media_id'][$i] ? $data['BlockRequestForm']['master_social_media_id'][$i] : 0;
+                    $caseInvolvedURL[$i]["url"]  = $data['BlockRequestForm']['url'][$i] ? $data['BlockRequestForm']['url'][$i] : "NULL";
+                    //$caseInvolvedURL[$i]['created_by'] = $session->get('userId');
+                    $caseInvolvedURL[$i]['updated_by'] = 1;
+                }
+                
+            }
+            //$offences = $data['PermohonanForm']['offence'];
+
+            
+            //echo json_encode($caseInfo).'<br>';
+            //echo json_encode($caseStatusSuspek).'<br>';
+            //echo json_encode($caseInvolvedURL).'<br>';
+            //echo json_encode($newSelectedOffences).'<br>';
+            //echo json_encode($prevDeletedOffences).'<br>';exit;
+            
+            $caseInfoResponse = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('POST')
+            ->setUrl($this->_url_procedure.'case_info_edit')
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
+            ->send(); 
+            if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
+                { 
+                    if(!empty($model->surat_rasmi))
+                    { 
+                    $model->surat_rasmi->saveAs($suratRasmiFileName);
+                    $fileResponse = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_files."".$this->_FileUploadSuratRasmi)
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                    ->addFile('files',$suratRasmiDFFileName)
+                    ->send();
+                    //unlink($suratRasmiDFFileName);
+                    }
+                    if(!empty($model->laporan_polis))
+                    {
+                    $model->laporan_polis->saveAs($loparaPoliceFileName);
+                    $fileResponse = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_files."".$this->_FileUploadLaporanPolice)
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                    ->addFile('files',$loparaPoliceDFFileName)
+                    ->send();
+                   // unlink($loparaPoliceDFFileName);
+                    }
+                    Yii::$app->session->addFlash('success','Successfully updated existing case infomation.');
+                    return $this->redirect('../permohonan/block-request');
+                }
+                else{
+                    Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+            
+		}    
+        if(count($responses->data['records']) > 0)
+        {
+            $mediaSocialResponse = $responses->data['records'][0];
+        }
+        
+        //echo "<pre>";print_r($responses->data['records']);exit;
+        return $this->render('blockrequest/editblockrequest', ['model'=>$model,"mediaSocialResponse" => $mediaSocialResponse,"newCase" => $newCase,"offences" => $filterOffenceResponse,"masterSocialMedia" => $masterSocialMedia]);
+       
+        
+    }
+
+
+
+
+
+
+    /*****
+     * 
+     * delete surath rasmi attachement of block request page fucntion
+     * request value : id,path
+     * @return json response either successfully deltion of failed.
+     */
+    public function actionDeleteBlockRequestSuratRasmi()
+    {
+
+        //$this->_FileTrashFolderBlockRequestSuratRasmi = Yii::$app->params['FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI'];;
+        //$this->__FileTrashFolderBlockRequestLaporanPolice
+        $deleteResponse = array();
+        if (Yii::$app->request->get('id') && Yii::$app->request->get('path')) {
+            $trashPath = "";
+             $imageName = explode("/",Yii::$app->request->get('path'));
+             if(!empty(Yii::$app->request->get('path')) && Yii::$app->request->get('path') != "NULL")
+             {
+                $trashPath = \Yii::getAlias('@webroot').$this->_FileTrashFolderBlockRequestSuratRasmi.$imageName[3];
+             }
+             //echo $trashPath."<br>".\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path');exit;
+            if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')))
+            {  
+                $client = new Client();
+                $fileResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('POST')
+                ->setUrl($this->_url_files."".ltrim($this->_FileTrashFolderBlockRequestSuratRasmi, $this->_FileTrashFolderBlockRequestSuratRasmi[0]))
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->addFile('files',\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path'))
+                ->send();
+                if(count($fileResponse->data) > 0)
+                { 
+                    $client = new Client();
+                    $deleteResponse = $client->createRequest()
+                      ->setFormat(Client::FORMAT_URLENCODED)
+                      ->setMethod('PUT')
+                      ->setUrl($this->_url.'case_info/'.Yii::$app->request->get('id'))
+                      ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                      ->setData(["surat_rasmi" => ""])
+                      ->send();
+                      if($deleteResponse->statusCode == 200 && $deleteResponse->data > 0)
+                      { 
+                          if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')) && rename(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path'), $trashPath))
+                          {
+                          $responseInfo['status'] = 200;
+                           $responseInfo['success'] = 'success';
+                           $responseInfo['info'] = 'Attachment deleted successfully';
+                           return $this->asJson($responseInfo);
+                          }
+                          else
+                          { 
+                                  $responseInfo['status'] = 422;
+                                  $responseInfo['message'] = 'failed';
+                                  $responseInfo['info'] = 'Attachment deleted failed';
+                                  return $this->asJson($responseInfo);
+                          }
+                      }
+                      else
+                      { 
+                              $responseInfo['status'] = 422;
+                              $responseInfo['message'] = 'failed';
+                              $responseInfo['info'] = 'Attachment deleted failed';
+                              return $this->asJson($responseInfo);
+                      }
+
+                }
+                else
+                {
+                $responseInfo['status'] = 422;
+                $responseInfo['message'] = 'failed';
+                $responseInfo['info'] = 'File move to trash failed';
+                return $this->asJson($responseInfo);
+
+                }
+              
+            }
+            else{
+                        $responseInfo['status'] = 422;
+                        $responseInfo['message'] = 'failed';
+                        $responseInfo['info'] = 'File not found';
+                        return $this->asJson($responseInfo);
+
+            }
+               
+        }
+    }
+
+
+
+
+    /*****
+     * 
+     * delete laporan polis attachement of block request page fucntion
+     * request value : id,path
+     * @return json response either successfully deltion of failed.
+     */
+    public function actionDeleteBlockRequestLaporanPolis()
+    {
+        $deleteResponse = array();
+        if (Yii::$app->request->get('id') && Yii::$app->request->get('path')) {
+            $trashPath = "";
+             $imageName = explode("/",Yii::$app->request->get('path'));
+             if(!empty(Yii::$app->request->get('path')) && Yii::$app->request->get('path') != "")
+             {
+                $trashPath = \Yii::getAlias('@webroot').$this->_FileTrashFolderBlockRequestLaporanPolice.$imageName[3];
+             }
+             //echo $trashPath;exit;
+             //echo \Yii::getAlias('@webroot')."/".Yii::$app->request->get('path');exit;
+            if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')))
+            {  
+                $client = new Client();
+                $fileResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('POST')
+                ->setUrl($this->_url_files."".ltrim($this->_FileTrashFolderBlockRequestLaporanPolice, $this->_FileTrashFolderBlockRequestLaporanPolice[0]))
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->addFile('files',\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path'))
+                ->send();
+                if(count($fileResponse->data) > 0)
+                { 
+                    $client = new Client();
+                    $deleteResponse = $client->createRequest()
+                      ->setFormat(Client::FORMAT_URLENCODED)
+                      ->setMethod('PUT')
+                      ->setUrl($this->_url.'case_info/'.Yii::$app->request->get('id'))
+                      ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                      ->setData(["laporan_polis" => ""])
+                      ->send();
+                      if($deleteResponse->statusCode == 200 && $deleteResponse->data > 0)
+                      { 
+                          if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')) && rename(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path'), $trashPath))
+                          {
+                          $responseInfo['status'] = 200;
+                           $responseInfo['success'] = 'success';
+                           $responseInfo['info'] = 'Attachment deleted successfully';
+                           return $this->asJson($responseInfo);
+                          }
+                          else
+                          { 
+                                  $responseInfo['status'] = 422;
+                                  $responseInfo['message'] = 'failed';
+                                  $responseInfo['info'] = 'Attachment deleted failed';
+                                  return $this->asJson($responseInfo);
+                          }
+                      }
+                      else
+                      { 
+                              $responseInfo['status'] = 422;
+                              $responseInfo['message'] = 'failed';
+                              $responseInfo['info'] = 'Attachment deleted failed';
+                              return $this->asJson($responseInfo);
+                      }
+
+                }
+                else
+                {
+                $responseInfo['status'] = 422;
+                $responseInfo['message'] = 'failed';
+                $responseInfo['info'] = 'File move to trash failed';
+                return $this->asJson($responseInfo);
+
+                }
+              
+            }
+            else{
+                        $responseInfo['status'] = 422;
+                        $responseInfo['message'] = 'failed';
+                        $responseInfo['info'] = 'File not found';
+                        return $this->asJson($responseInfo);
+
+            }
+               
+        }
+    }
+
+
+    /**
+     * reopen case
+     *
+     * @return string
+     */
+    public function actionReopenBlockRequest($id)
+    { 
+        $this->layout =  'main';
+        $model = new BlockRequestForm();
+        $model->scenario="reOpenBlockRequest";
+        $session = Yii::$app->session;
+        /******
+         * load masterdata from the master component and pass these data into view page
+         */
+		$newCase = Yii::$app->mycomponent->newCase();
+        $masterSocialMedia = Yii::$app->mycomponent->masterSocialMedia();
+        $mediaSocialResponse = array();
+        $client = new Client();
+        $offenceResponse = array();
+        $filterOffenceResponse = array();
+        $prevOffences = array();
+        $newOffences = array();
+        $newSelectedOffences = array();
+        $prevDeletedOffences = array();
+
+        /******
+         * Get offence master data from the offence table using api service.
+         */
+        $offenceResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_url.'offence?include=id,name')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
+               
+                if(isset($offenceResponse->data['records']) && count($offenceResponse->data['records']) > 0)
+                {
+                    foreach($offenceResponse->data['records'] as $key => $value)
+                {
+                    $filterOffenceResponse[$value['id']] = $value['name'];
+                }
+                }
+        $client = new Client();
+        $session = Yii::$app->session;
+        $mediaSocialResponse = array();
+        $session->get('userId');
+        $responses = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('GET')
+            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
+            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc')
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+            ->send();
+            //echo count($responses->data['records']);exit;
+            //echo"<pre>";print_r($responses->data['records']);exit;
+
+        /*********
+           * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
+           * 
+           *  */     
+          if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
+            $data = Yii::$app->request->post();
+            //echo"<pre>";print_r($data);exit;
+            if(count($responses->data['records']) > 0)
+            {
+               foreach($responses->data['records'][0]['case_offence'] as $offenceVal):
+                $prevOffences[] = $offenceVal['offence_id'];
+               endforeach; 
+            }
+            $newOffences = $data['BlockRequestForm']['offence'];
+            $newSelectedOffences = array_values(array_diff($newOffences,$prevOffences));
+            $prevDeletedOffences = array_values(array_diff($prevOffences,$newOffences));
+            //echo"Previous <pre>";print_r($prevOffences);
+            //echo"New <pre>";print_r($newOffences);
+            //echo"new selected <pre>";print_r($newSelectedOffences);
+            //echo"prev deleted <pre>";print_r($prevDeletedOffences);exit;
+            $caseInfo = array();
+            $caseStatusSuspek = array();
+            $caseInvolvedURL = array();
+            $offences = array();
+            
+            $caseInfo['master_case_info_type_id'] = $data['BlockRequestForm']['master_case_info_type_id'];
+            //$caseInfo['requestor_ref'] = $session->get('userId');
+            $caseInfo['requestor_ref'] = 1;
+            $caseInfo['id'] = $data['BlockRequestForm']['id'];
+            $caseInfo['requestor_ref'] = 1;
+            //$caseInfo['report_no'] = $data['PermohonanForm']['report_no'];
+            $caseInfo['investigation_no'] = $data['BlockRequestForm']['investigation_no'];
+            $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
+            $caseInfo['case_status'] = 33;
+            
+            //$caseInfo['created_by'] = $session->get('userId');
+            $caseInfo['updated_by'] = 1;
+            for($i=0;$i<=count($data['BlockRequestForm']['url'])-1;$i++)
+            { 
+                if(!empty($data['BlockRequestForm']['master_social_media_id'][$i]))
+                {
+                    $caseInvolvedURL[$i]["case_info_url_involved_id"]  = $data['BlockRequestForm']['caseInfoURLInvolvedId'][$i] ? $data['BlockRequestForm']['caseInfoURLInvolvedId'][$i] : 0;
+                    $caseInvolvedURL[$i]["master_social_media_id"]  = $data['BlockRequestForm']['master_social_media_id'][$i] ? $data['BlockRequestForm']['master_social_media_id'][$i] : 0;
+                    $caseInvolvedURL[$i]["url"]  = $data['BlockRequestForm']['url'][$i] ? $data['BlockRequestForm']['url'][$i] : "NULL";
+                    $caseInvolvedURL[$i]['created_by'] = $session->get('userId');
+                    //$caseInvolvedURL[$i]['updated_by'] = 1;
+                }
+                
+            }
+            //$offences = $data['PermohonanForm']['offence'];
+
+            
+            //echo json_encode($caseInfo).'<br>';
+            //echo json_encode($caseStatusSuspek).'<br>';
+            //echo json_encode($caseInvolvedURL).'<br>';
+            //echo json_encode($newSelectedOffences).'<br>';
+            //echo json_encode($prevDeletedOffences).'<br>';exit;
+            
+            $caseInfoResponse = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('POST')
+            ->setUrl($this->_url_procedure.'case_info_edit')
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
+            ->send(); 
+            if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
+                { 
+                    Yii::$app->session->addFlash('success','Successfully updated existing case infomation.');
+                    return $this->redirect('../permohonan/block-request-list');
+                }
+                else{
+                    Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
+                    return $this->redirect(Yii::$app->request->referrer);
+                }
+            
+		}    
+        if(count($responses->data['records']) > 0)
+        {
+            $mediaSocialResponse = $responses->data['records'][0];
+        }
+        
+        //echo "<pre>";print_r($responses->data['records']);exit;
+        return $this->render('blockrequest/reopenblockrequest', ['model'=>$model,"mediaSocialResponse" => $mediaSocialResponse,"newCase" => $newCase,"offences" => $filterOffenceResponse,"masterSocialMedia" => $masterSocialMedia]);
        
         
     }

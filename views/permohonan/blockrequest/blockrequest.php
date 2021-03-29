@@ -18,8 +18,8 @@ use Yii;
     <h1 style="padding-top: 1.5rem;">Blocking Request</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="../crawler/mntl-list">Blocking Request</a></li>
+            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Blocking Request</li>
             
         </ol>
     </nav>
@@ -112,15 +112,6 @@ use Yii;
                 <?php
                 }
                 ?> 
-            </div>
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Tujuan Permohanan</legend>
-                <div class="col-sm-8">
-                <?= $form->field($model, 'application_purpose')->checkboxList($purposeOfApplication)->label(false);?> 
-                <div id="application_purpose_info">
-                <input type="text" name="BlockRequestForm[application_purpose_info]" placeholder="Tujuan Permohanan">
-                </div>   
-                </div>
             </div>
         </div>
 
