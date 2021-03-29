@@ -24,7 +24,7 @@ class BlockRequestForm extends Model
     public $laporan_polis;
     public $master_social_media_id;
     public $url;
-    public $application_purpose;
+    //public $application_purpose;
     
     
     
@@ -57,7 +57,7 @@ class BlockRequestForm extends Model
               ],
             [['offence'], 'required','message'=>'Pilih kesalahan'],
             [['case_summary'], 'required','message'=>'Masukkan Ringkasan Kes'],  
-            [['application_purpose'], 'required','message'=>'Pilih Tujuan Permohanan'],
+            //[['application_purpose'], 'required','message'=>'Pilih Tujuan Permohanan'],
             //[['surat_rasmi'], 'required','message'=>'Pilih Surat Rasmi'],
             [['surat_rasmi'], 'file',  'extensions' => 'png, jpg,jpeg,pdf','message'=>'valid Surat Rasmi'],
             
@@ -65,6 +65,15 @@ class BlockRequestForm extends Model
         ];
     }
 
+    public function scenarios() {
+        $scenarios = parent::scenarios(); 
+        //$scenarios['create'] = ['for_self','email','no_telephone','report_no','investigation_no','offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
+        $scenarios['editBlockRequest'] = ['report_no','investigation_no','offence','case_summary'];
+        $scenarios['reOpenBlockRequest'] = ['report_no','investigation_no','offence','case_summary'];
+        //$scenarios['reopen'] = ['offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
+        return $scenarios;
+    
+    }
     public function find_occurence_from_end($haystack, $needle, $num) {
         $actual = $haystack;
        
