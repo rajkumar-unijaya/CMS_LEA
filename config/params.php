@@ -15,6 +15,8 @@ return [
     "FILE_UPLOAD_LAPORAN_POLIS" => getenv('FILE-UPLOAD-LAPORAN-POLIS') ? getenv('FILE-UPLOAD-LAPORAN-POLIS') : 'uploads/',
     "FILE_TRASH_SURAT_RASMI" => getenv('FILE_TRASH_SURAT_RASMI') ? getenv('FILE_TRASH_SURAT_RASMI') : '/uploads/trash/permohonan/surat_rasmi/',
     "FILE_TRASH_LAPORAN_POLIS" => getenv('FILE_TRASH_LAPORAN_POLIS') ? getenv('FILE_TRASH_LAPORAN_POLIS') : '/uploads/trash/permohonan/laporan_polis/',
+    "FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI" => getenv('FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI') ? getenv('FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI') : '/uploads/trash/block-request/surat_rasmi/',
+    "FILE_TRASH_BLOCK_REQUEST_LAPORAN_POLIS" => getenv('FILE_TRASH_BLOCK_REQUEST_LAPORAN_POLIS') ? getenv('FILE_TRASH_BLOCK_REQUEST_LAPORAN_POLIS') : '/uploads/trash/block-request/laporan_polis/',
     "FILE_DOWNLOAD" => getenv('FILE_DOWNLOAD') ? getenv('FILE_DOWNLOAD') : 'http://10.5.5.27:8080/',
     
 ];
