@@ -1,0 +1,438 @@
+{
+    "master_case_info_type": [
+        {
+            "id": 1,
+            "name": "Social Media"
+        },
+        {
+            "id": 2,
+            "name": "Blocking Request"
+        },
+        {
+            "id": 3,
+            "name": "MNTL"
+        }
+    ],
+    "master_citizenship": [
+        {
+            "id": 1,
+            "name": "Malaysian"
+        },
+        {
+            "id": 2,
+            "name": "Non-Malaysia"
+        }
+    ],
+    "master_country": [
+        {
+            "id": 1,
+            "name": "Malaysia"
+        }
+    ],
+    "master_department": [
+        {
+            "id": 1,
+            "name": "Police Diraja Malaysia"
+        },
+        {
+            "id": 2,
+            "name": "JAIS"
+        },
+        {
+            "id": 3,
+            "name": "SKMIM"
+        },
+        {
+            "id": 4,
+            "name": "JAP"
+        },
+        {
+            "id": 5,
+            "name": "Police Diraja Malaysia"
+        },
+        {
+            "id": 6,
+            "name": "JAIS"
+        },
+        {
+            "id": 7,
+            "name": "SKMIM"
+        },
+        {
+            "id": 8,
+            "name": "JAP"
+        }
+    ],
+    "master_district": [
+        {
+            "id": 1,
+            "name": "Bukit Bintang"
+        },
+        {
+            "id": 2,
+            "name": "Titiwangsa"
+        },
+        {
+            "id": 3,
+            "name": "Kangar"
+        },
+        {
+            "id": 4,
+            "name": "Kuala Perlis"
+        },
+        {
+            "id": 5,
+            "name": "Kangar"
+        },
+        {
+            "id": 6,
+            "name": "Padang Besar"
+        },
+        {
+            "id": 7,
+            "name": "Arau"
+        },
+        {
+            "id": 8,
+            "name": "Simpang Ampat"
+        }
+    ],
+    "master_gender": [
+        {
+            "id": 1,
+            "name": "Male"
+        },
+        {
+            "id": 2,
+            "name": "Female"
+        }
+    ],
+    "master_marital_status": [
+        {
+            "id": 1,
+            "name": "Married"
+        },
+        {
+            "id": 2,
+            "name": "Unmarried"
+        }
+    ],
+    "master_postcode": [
+        {
+            "id": 1,
+            "name": "123456"
+        },
+        {
+            "id": 2,
+            "name": "654321"
+        }
+    ],
+    "master_race": [
+        {
+            "id": 1,
+            "name": "Malay"
+        },
+        {
+            "id": 2,
+            "name": "India"
+        },
+        {
+            "id": 3,
+            "name": "Bangladesh"
+        },
+        {
+            "id": 4,
+            "name": "Pakistan"
+        },
+        {
+            "id": 5,
+            "name": "Indonesia"
+        },
+        {
+            "id": 6,
+            "name": "China"
+        }
+    ],
+    "master_religion": [
+        {
+            "id": 1,
+            "name": "Islam"
+        },
+        {
+            "id": 2,
+            "name": "Christian"
+        },
+        {
+            "id": 3,
+            "name": "Buddha"
+        },
+        {
+            "id": 4,
+            "name": "Sikhism"
+        }
+    ],
+    "master_social_media": [
+        {
+            "id": 1,
+            "name": "twitter"
+        },
+        {
+            "id": 2,
+            "name": "instagram"
+        },
+        {
+            "id": 3,
+            "name": "tumblr"
+        },
+        {
+            "id": 4,
+            "name": "facebook"
+        },
+        {
+            "id": 5,
+            "name": "blog \/ website"
+        }
+    ],
+    "master_state": [
+        {
+            "id": 1,
+            "name": "Kuala Lumpur"
+        },
+        {
+            "id": 2,
+            "name": "Selangor"
+        },
+        {
+            "id": 3,
+            "name": "Negeri Sembilan"
+        },
+        {
+            "id": 4,
+            "name": "Sabah"
+        },
+        {
+            "id": 5,
+            "name": "Sarawak"
+        },
+        {
+            "id": 6,
+            "name": "Johor"
+        },
+        {
+            "id": 7,
+            "name": "Melaka"
+        },
+        {
+            "id": 8,
+            "name": "Pahang"
+        },
+        {
+            "id": 9,
+            "name": "Kelantan"
+        },
+        {
+            "id": 10,
+            "name": "Kedah"
+        },
+        {
+            "id": 11,
+            "name": "Perak"
+        },
+        {
+            "id": 12,
+            "name": "Perlis"
+        },
+        {
+            "id": 13,
+            "name": "Labuan"
+        },
+        {
+            "id": 14,
+            "name": "Putrajaya"
+        },
+        {
+            "id": 15,
+            "name": "Pulau Pinang"
+        },
+        {
+            "id": 16,
+            "name": "Terengganu"
+        }
+    ],
+    "master_status_deadline_achievement": [
+        {
+            "id": 8,
+            "name": "Within DeadLine"
+        },
+        {
+            "id": 9,
+            "name": "Overdue"
+        }
+    ],
+    "master_status_identity": [
+        {
+            "id": 12,
+            "name": "IC"
+        },
+        {
+            "id": 13,
+            "name": "Passport"
+        }
+    ],
+    "master_status_new_case": [
+        {
+            "id": 6,
+            "name": "Bagi Pihak"
+        },
+        {
+            "id": 7,
+            "name": "Diri Sendiri"
+        }
+    ],
+    "master_status_priority": [
+        {
+            "id": 4,
+            "name": "High"
+        },
+        {
+            "id": 5,
+            "name": "Normal"
+        }
+    ],
+    "master_status_purpose_of_application": [
+        {
+            "id": 18,
+            "name": "Mengenalpasti pengendali akaun\/laman social \/ lama"
+        },
+        {
+            "id": 19,
+            "name": "Maklumat lain, sila nyatakan"
+        }
+    ],
+    "master_status_record_status": [
+        {
+            "id": 10,
+            "name": "Active"
+        },
+        {
+            "id": 11,
+            "name": "Delete"
+        }
+    ],
+    "master_status_session": [
+        {
+            "id": 16,
+            "name": "Login"
+        },
+        {
+            "id": 17,
+            "name": "Logout"
+        }
+    ],
+    "master_status_status": [
+        {
+            "id": 1,
+            "name": "Pending"
+        },
+        {
+            "id": 2,
+            "name": "Rejected"
+        },
+        {
+            "id": 3,
+            "name": "Closed"
+        },
+        {
+            "id": 20,
+            "name": "Approved"
+        },
+        {
+            "id": 27,
+            "name": "Reopen"
+        }
+    ],
+    "master_status_suspect_or_witness": [
+        {
+            "id": 14,
+            "name": "Suspect"
+        },
+        {
+            "id": 15,
+            "name": "Witness"
+        }
+    ],
+    "master_status_suspect_relationship_status": [
+        {
+            "id": 21,
+            "name": "Parent"
+        },
+        {
+            "id": 22,
+            "name": "Sibling"
+        },
+        {
+            "id": 23,
+            "name": "Friend"
+        },
+        {
+            "id": 24,
+            "name": "Spouse"
+        },
+        {
+            "id": 25,
+            "name": "Children"
+        },
+        {
+            "id": 26,
+            "name": "Others"
+        }
+    ],
+    "master_suspect": [
+        {
+            "id": 1,
+            "name": "Tiada maklumat mengenai suspek"
+        },
+        {
+            "id": 2,
+            "name": "Identiti suspek(Nama dan KPT) sudah dikenalpasti"
+        },
+        {
+            "id": 3,
+            "name": "Suspek telah ditahan"
+        },
+        {
+            "id": 4,
+            "name": "Suspek dibebaskan dengan jaminan"
+        },
+        {
+            "id": 5,
+            "name": "Lain-lain sila nyatakan"
+        }
+    ],
+    "master_user_type": [
+        {
+            "id": 1,
+            "name": "LEA-User1"
+        },
+        {
+            "id": 2,
+            "name": "LEA-User2"
+        },
+        {
+            "id": 3,
+            "name": "Analyst"
+        },
+        {
+            "id": 4,
+            "name": "HOD"
+        },
+        {
+            "id": 5,
+            "name": "Super User"
+        },
+        {
+            "id": 6,
+            "name": "Admin"
+        }
+    ]
+}
