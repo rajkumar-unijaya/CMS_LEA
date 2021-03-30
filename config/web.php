@@ -10,6 +10,7 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@masterData' => "@app/web/uploads/master-data/",
     ],
     'on beforeAction' => function($event)
     { 
@@ -26,7 +27,7 @@ $config = [
     },
     'components' => [
         'session' => [
-            'timeout' => 900,
+            'timeout' => 1800,
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
