@@ -10,11 +10,6 @@ use Yii;
 ?>
 
 <div class="container-fluid">
-<div id="success" class="info noticationMsg">
-<?php if(Yii::$app->session->hasFlash('success')):?>
-<?php echo Yii::$app->session->getFlash('success')[0] ?>
-<?php endif;?>
-</div>
     <h1 style="padding-top: 1.5rem;">Blocking Request</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -133,10 +128,10 @@ $(document).ready(function() {
   $("#choose_forself").hide();
   $("#application_purpose_info").hide();
   $("input[name='BlockRequestForm[for_self]']").change(function() {  //alert("ramstest = "+$("input[name='BlockRequestForm[for_self]']:checked").val());
-    if (this.value == 6) {
+    if (this.value == 78) {
       $("#choose_forself").show();
     }
-    else if (this.value == 7) {
+    else if (this.value == 79) {
       $("#choose_forself").hide();
     }
 });

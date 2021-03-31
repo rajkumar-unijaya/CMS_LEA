@@ -1,5 +1,4 @@
 <?php
-
 return [
     'adminEmail' => 'admin@example.com',
     'senderEmail' => 'noreply@example.com',
@@ -18,6 +17,6 @@ return [
     "FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI" => getenv('FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI') ? getenv('FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI') : '/uploads/trash/block-request/surat_rasmi/',
     "FILE_TRASH_BLOCK_REQUEST_LAPORAN_POLIS" => getenv('FILE_TRASH_BLOCK_REQUEST_LAPORAN_POLIS') ? getenv('FILE_TRASH_BLOCK_REQUEST_LAPORAN_POLIS') : '/uploads/trash/block-request/laporan_polis/',
     "FILE_DOWNLOAD" => getenv('FILE_DOWNLOAD') ? getenv('FILE_DOWNLOAD') : 'http://10.5.5.27:8080/',
-    "MASTER_DATA_JSON" => getenv('MASTER_DATA_JSON') ? getenv('MASTER_DATA_JSON') : \Yii::$app->baseUrl,
+    "MASTER_DATA_JSON" => getenv('MASTER_DATA_JSON') ? getenv('MASTER_DATA_JSON') : realpath(dirname(__FILE__).'/..'),
     
 ];

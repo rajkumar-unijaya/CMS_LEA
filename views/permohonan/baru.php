@@ -165,11 +165,11 @@ $(document).ready(function() {
   $("#choose_forself").hide();
   $("#application_purpose_info").hide();
 
-  $("input[name='PermohonanForm[for_self]']").change(function() {  //alert("ramstest = "+$("input[name='PermohonanForm[for_self]']:checked").val());
-    if (this.value == 6) {
+  $("input[name='PermohonanForm[for_self]']").change(function() {
+    if (this.value == 78) {
       $("#choose_forself").show();
     }
-    else if (this.value == 7) {
+    else if (this.value == 79) {
       $("#choose_forself").hide();
     }
 });
@@ -198,7 +198,7 @@ else{
 var others_1 = 1;var others_2 = 1;var others_3 = 1;var others_4 = 1;var others_5 = 1;
 
 $('#permohonanform-master_status_status_suspek_id-0').change(function(){  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
-  if(this.value == 22 && others_1 < 2)
+  if(this.value == 64 && others_1 < 2)
   {
     $('#add_text_areabox-0').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others]['+newIdVal+']"></textarea></div><div class="clearfix"></div>');
     ++others_1;
@@ -207,28 +207,28 @@ $('#permohonanform-master_status_status_suspek_id-0').change(function(){  var ne
 });
 
 $('#id_name').on('change','#permohonanform-master_status_status_suspek_id-1', function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
-  if(this.value == 22 && others_2 < 2){
+  if(this.value == 64 && others_2 < 2){
 $('#add_text_areabox-1').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others]['+newIdVal+']"></textarea></div><div class="clearfix"></div>');
 ++others_2;
   }
 });
 
 $('#id_name').on('change','#permohonanform-master_status_status_suspek_id-2', function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
-  if(this.value == 22 && others_3 < 2){
+  if(this.value == 64 && others_3 < 2){
 $('#add_text_areabox-2').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others]['+newIdVal+']"></textarea></div><div class="clearfix"></div>');
 ++others_3;
   }
 });
 
 $('#id_name').on('change','#permohonanform-master_status_status_suspek_id-3', function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
-  if(this.value == 22 && others_4 < 2){
+  if(this.value == 64 && others_4 < 2){
 $('#add_text_areabox-3').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others]['+newIdVal+']"></textarea></div><div class="clearfix"></div>');
 ++others_4;
   }
 });
 
 $('#id_name').on('change','#permohonanform-master_status_status_suspek_id-4', function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
-  if(this.value == 22  && others_5 < 2){
+  if(this.value == 64  && others_5 < 2){
 $('#add_text_areabox-4').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others]['+newIdVal+']"></textarea></div><div class="clearfix"></div>');
 ++others_5;
   }
@@ -236,9 +236,9 @@ $('#add_text_areabox-4').after('<div class="col-lg-8"><textarea class="form-cont
 
 
 $("input:checkbox[name='PermohonanForm[application_purpose][]']").click(function(){ 
-        if (this.checked && $(this).val() == 24) { 
+        if (this.checked && $(this).val() == 91) { 
           $("#application_purpose_info").show();
-        } else if(!this.checked && $(this).val() == 24) { 
+        } else if(!this.checked && $(this).val() == 91) { 
           $("#application_purpose_info").hide();
         }
    });
