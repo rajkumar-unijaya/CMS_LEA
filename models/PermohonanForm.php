@@ -53,15 +53,15 @@ class PermohonanForm extends Model
             [['for_self'], 'required','message'=>'Pilih Pilihan Mengisi'],
             
             [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
-                 return ($model->for_self == 6 ? true : false); 
+                 return ($model->for_self == 78 ? true : false); 
              }, 'whenClient' => "function (attribute, value) {
-                 return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 6;
+                 return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 78;
                  }"],
             [['email'],'domainCheck'],     
             [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
-                 return ($model->for_self == 6 ? true : false);
+                 return ($model->for_self == 78 ? true : false);
              }, 'whenClient' => "function (attribute, value) {
-                 return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 6;
+                 return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 78;
                  }"],     
              [['report_no'], 'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
                  'when' => function($model) { return empty($model->investigation_no); }
@@ -142,7 +142,7 @@ class PermohonanForm extends Model
        }
        if($i == 0)
        {
-        $this->addError($attribute,"Masukkan URLllllll");
+        $this->addError($attribute,"Masukkan URL");
        }
     
 }

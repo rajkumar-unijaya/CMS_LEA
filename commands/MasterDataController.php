@@ -50,15 +50,15 @@ class MasterDataController extends Controller
          $masterDataGroupInfo = $client->createRequest()
          ->setFormat(Client::FORMAT_URLENCODED)
          ->setMethod('GET')
-         ->setUrl($this->_url.'master_data')
+         ->setUrl($this->_url.'master_status')
          ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
          ->send();
          foreach($masterDataGroupValues->data['records'] as $key1 => $masterDataGroup):
                     $i = 0;
                  foreach($masterDataGroupInfo->data['records'] as $key => $masterDataGroupInfoVal):
                     if($masterDataGroup['datagroup'] == $masterDataGroupInfoVal['datagroup'])
-                    {
-                        $masterDataArrangedInfo[$masterDataGroup['datagroup']][$i]['id'] =  $masterDataGroupInfoVal['data_id'];
+                    {  
+                        $masterDataArrangedInfo[$masterDataGroup['datagroup']][$i]['id'] =  $masterDataGroupInfoVal['id'];
                         $masterDataArrangedInfo[$masterDataGroup['datagroup']][$i]['name'] =  $masterDataGroupInfoVal['name'];
                         $i++;
                     }

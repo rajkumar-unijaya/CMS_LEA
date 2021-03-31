@@ -11,6 +11,7 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
         '@masterData' => "@app/web/uploads/master-data/",
+        '@basePath' => "@app",
     ],
     'on beforeAction' => function($event)
     { 
