@@ -75,7 +75,7 @@ use Yii;
             </div>
 
             <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Status Suspek</legend>
+                <legend class="col-form-label col-sm-4 pt-0">Status Suspek / Sakhi</legend>
                 <div class="pull-right">
                         <button type="button" id="add_ic_name" class="add-item btn btn-success btn-xs">+</button>
                         </div>
@@ -105,14 +105,14 @@ use Yii;
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Surat Rasmi</legend>
                 <div class="col-sm-8">
-                <?=  $form->field($model, 'surat_rasmi')->fileInput(['accept' => 'image/*'])->label(false); ?>
+                <?=  $form->field($model, 'surat_rasmi')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf'); ?>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Laporan Polis</legend>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false);?>   
+                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>   
                 </div>
             </div>
 
@@ -128,8 +128,8 @@ use Yii;
                   ?>
                   <div class="row">
                   <?php
-                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--'))->label(false);
-                echo $form->field($model, 'url['.$i.']')->textInput()->label(false); 
+                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$i))->label(false);
+                echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
                 ?>
                 </div>
                 <?php
@@ -160,8 +160,10 @@ use Yii;
 </div>
 
 <?php
+//echo"<pre>";print_r($masterSocialMedia);
 $script = <<< JS
 $(document).ready(function() {
+  var pausecontent=new Array();
   $("#choose_forself").hide();
   $("#application_purpose_info").hide();
 
@@ -188,7 +190,7 @@ else{
 $('#add_ic_name').click(function(){ var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 3); 
   if(newIdVal <= 5)
 {
-  $('#id_name').append('<div class="row"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+newIdVal+' required"><select id="permohonanform-master_status_suspect_or_saksi_id-'+newIdVal+'" class="form-control" name="PermohonanForm[master_status_suspect_or_saksi_id]['+newIdVal+']"><option value="">--Pilih Suspek or Saksi--</option><option value="14">Suspek</option><option value="15">Saksi</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+newIdVal+'"><select id="permohonanform-master_status_status_suspek_id-'+newIdVal+'" class="form-control" name="PermohonanForm[master_status_status_suspek_id]['+newIdVal+']"><option value="">--Pilih Option--</option><option value="18">Tiada maklumat mengenai suspek</option><option value="19">Identiti suspek(Nama dan KPT) sudah dikenalpasti, tetapi belum ditahan</option><option value="20">Suspek telah ditahan</option><option value="21">Suspek dibebaskan dengan jaminan</option><option value="22">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="permohonanform-ic-0" class="form-control" name="PermohonanForm[ic]['+newIdVal+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4" id="add_text_areabox-'+newIdVal+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="permohonanform-name-0" class="form-control" name="PermohonanForm[name]['+newIdVal+']" placeholder="Name"><div class="help-block"></div></div></div></div>');
+  $('#id_name').append('<div class="row"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+newIdVal+' required"><select id="permohonanform-master_status_suspect_or_saksi_id-'+newIdVal+'" class="form-control" name="PermohonanForm[master_status_suspect_or_saksi_id]['+newIdVal+']"><option value="">--Pilih Suspek or Saksi--</option><option value="14">Suspek</option><option value="15">Saksi</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+newIdVal+'"><select id="permohonanform-master_status_status_suspek_id-'+newIdVal+'" class="form-control" name="PermohonanForm[master_status_status_suspek_id]['+newIdVal+']"><option value="">--Pilih Option--</option><option value="18">Tiada maklumat mengenai suspek/sakhi</option><option value="19">Identiti suspek(Nama dan KPT) sudah dikenalpasti, tetapi belum ditahan</option><option value="20">Suspek telah ditahan</option><option value="21">Suspek dibebaskan dengan jaminan</option><option value="22">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="permohonanform-ic-0" class="form-control" name="PermohonanForm[ic]['+newIdVal+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4" id="add_text_areabox-'+newIdVal+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="permohonanform-name-0" class="form-control" name="PermohonanForm[name]['+newIdVal+']" placeholder="Name"><div class="help-block"></div></div></div></div>');
 }
 else{
   alert("Can't create new field");
@@ -234,6 +236,22 @@ $('#add_text_areabox-4').after('<div class="col-lg-8"><textarea class="form-cont
   }
 });
 
+var URL_obj = [{id:39, name:"https://twitter.com/"}, {id:40, name:"https://www.instagram.com/"}, {id:41, name:"https://www.tumblr.com/"}, {id:42, name:"https://www.facebook.com/"}, {id:43, name:"https://www.youtube.com/"}, {id:44, name:"https://www.tiktok.com/"}];
+$('#social_media_0').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_0").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_0").val()); $("#social_media_URL_0").val(item_val.name);}
+});
+$('#social_media_1').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_1").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_1").val()); $("#social_media_URL_1").val(item_val.name);}
+});
+$('#social_media_2').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_2").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_2").val()); $("#social_media_URL_2").val(item_val.name);}
+});
+$('#social_media_3').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_3").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_3").val()); $("#social_media_URL_3").val(item_val.name);}
+});
+$('#social_media_4').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_4").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_4").val()); $("#social_media_URL_4").val(item_val.name);}
+});
 
 $("input:checkbox[name='PermohonanForm[application_purpose][]']").click(function(){ 
         if (this.checked && $(this).val() == 91) { 

@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <?php 
                                         echo Yii::$app->session->getFlash('failed')[0];
                                         ?>
-                                        <?php endif; ?>
+                                        <?php endif;?>
 
                                     </div>
 
@@ -62,9 +62,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <input class="form-control" onclick="this.select()" name="email" id="email" value="<?= $email;?>" type="hidden" />
                                             </div>
                                             
-                                            <div class="p-3 mb-2 bg-secondary text-white mt-4 ">  
-             Sekiranya anda tidak terima kod, sila kik<br/> <strong>(HANTAR SEMULA)</strong> 
-        </div>  
+                                            <div class="p-3 mb-2 bg-secondary text-white mt-4 ">
+                                            <?php if(Yii::$app->session->getFlash('otpDeviceList')):
+                                             echo "OTP telah dihantar ke peranti <b>". implode(" and ",Yii::$app->session->getFlash('otpDeviceList'))."</b> berjaya<br>";
+                                            endif;
+                                            ?> 
+                                        Sekiranya anda tidak terima kod, sila kik<br/> <strong>(HANTAR SEMULA)</strong> 
+                                    </div>  
                                            <div class="form-group col text-center mt-5">
                                                 <input type="submit" value = "Sahkan" id="submit" class="btn btn-primary">
                                                 
