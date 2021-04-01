@@ -227,12 +227,14 @@ class PermohonanController extends Controller
         $session = Yii::$app->session;
         $mediaSocialResponse = array();
         $session->get('userId');
+        $case_status_values = "";
+        $case_status_values .= array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Rejected",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Closed",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
         $responses = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('GET')
             //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3')
             //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.'1'.'&filter=case_status,in,1,2,3,33&filter=master_case_info_type_id,eq,1&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,71,72,73,75&filter=master_case_info_type_id,eq,1&join=master_status&order=id,desc')
+            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,1&join=master_status&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
         $mediaSocialResponse = $responses->data['records'];
@@ -325,13 +327,14 @@ class PermohonanController extends Controller
             //$caseInfo['requestor_ref'] = 1;
             $caseInfo['bagipihak_dirisendiri'] = $data['PermohonanForm']['for_self'];
             $caseInfo['no_telephone'] = $data['PermohonanForm']['no_telephone'] ? $data['PermohonanForm']['no_telephone'] : 0;
+            $caseInfo['self_name'] = $data['PermohonanForm']['selfName'];
             $caseInfo['email'] = $data['PermohonanForm']['email'];
             $caseInfo['report_no'] = $data['PermohonanForm']['report_no'];
             $caseInfo['investigation_no'] = $data['PermohonanForm']['investigation_no'];
             $caseInfo['case_summary'] = $data['PermohonanForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
             $caseInfo['laporan_polis'] = $loparaPoliceFileName;
-            $caseInfo['case_status'] = 71;
+            $caseInfo['case_status'] = array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status'));
             $caseInfo['created_by'] = $session->get('userId');
             //$caseInfo['created_by'] = 1;
             if(isset($data['PermohonanForm']['application_purpose']) && !empty($data['PermohonanForm']['application_purpose']))
@@ -510,13 +513,15 @@ class PermohonanController extends Controller
             //$caseInfo['requestor_ref'] = 1;
             $caseInfo['bagipihak_dirisendiri'] = $data['BlockRequestForm']['for_self'];
             $caseInfo['no_telephone'] = $data['BlockRequestForm']['no_telephone'] ? $data['BlockRequestForm']['no_telephone'] : 0;
+            $caseInfo['self_name'] = $data['BlockRequestForm']['selfName'] ? $data['BlockRequestForm']['selfName'] : "NULL";
             $caseInfo['email'] = $data['BlockRequestForm']['email'] ? $data['BlockRequestForm']['email'] : "NULL";
             $caseInfo['report_no'] = $data['BlockRequestForm']['report_no'];
             $caseInfo['investigation_no'] = $data['BlockRequestForm']['investigation_no'];
             $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
             $caseInfo['laporan_polis'] = $loparaPoliceFileName;
-            $caseInfo['case_status'] = 71;
+            $caseInfo['attachment_url'] = $data['BlockRequestForm']['attachmentURL'] ? $data['BlockRequestForm']['attachmentURL'] : "NULL";
+            $caseInfo['case_status'] = array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status'));
             $caseInfo['created_by'] = $session->get('userId');
             //$caseInfo['created_by'] = 1;
             if(isset($data['BlockRequestForm']['application_purpose']) && !empty($data['BlockRequestForm']['application_purpose']))
@@ -720,7 +725,8 @@ class PermohonanController extends Controller
             $caseInfo['case_summary'] = $data['PermohonanForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
             $caseInfo['laporan_polis'] = $loparaPoliceFileName;
-            $caseInfo['case_status'] = 71;
+            $caseInfo['attachment_url'] = $data['BlockRequestForm']['attachmentURL'];
+            $caseInfo['case_status'] = array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status'));
             
             //$caseInfo['created_by'] = $session->get('userId');
             $caseInfo['updated_by'] =  $session->get('userId');
@@ -1107,7 +1113,7 @@ class PermohonanController extends Controller
             $caseInfo['report_no'] = $data['PermohonanForm']['report_no'];
             $caseInfo['investigation_no'] = $data['PermohonanForm']['investigation_no'];
             $caseInfo['case_summary'] = $data['PermohonanForm']['case_summary'];
-            $caseInfo['case_status'] = 75;
+            $caseInfo['case_status'] = array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
             
             //$caseInfo['created_by'] = $session->get('userId');
             $caseInfo['updated_by'] = $session->get('userId');
@@ -1228,11 +1234,13 @@ class PermohonanController extends Controller
         $session = Yii::$app->session;
         $mediaSocialResponse = array();
         $session->get('userId');
+        $case_status_values = "";
+        $case_status_values .= array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Rejected",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Closed",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
         $responses = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('GET')
             //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3')
-            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,71,72,73,75&filter=master_case_info_type_id,eq,2&join=master_status&order=id,desc')
+            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,2&join=master_status&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
         $mediaSocialResponse = $responses->data['records'];
@@ -1361,7 +1369,8 @@ class PermohonanController extends Controller
             $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
             $caseInfo['laporan_polis'] = $loparaPoliceFileName;
-            $caseInfo['case_status'] = 71;
+            $caseInfo['attachment_url'] = $data['BlockRequestForm']['attachmentURL'] ? $data['BlockRequestForm']['attachmentURL'] : "NULL";
+            $caseInfo['case_status'] = array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status'));
             
             //$caseInfo['created_by'] = $session->get('userId');
             $caseInfo['updated_by'] = $session->get('userId');
@@ -1708,7 +1717,7 @@ class PermohonanController extends Controller
             //$caseInfo['report_no'] = $data['PermohonanForm']['report_no'];
             $caseInfo['investigation_no'] = $data['BlockRequestForm']['investigation_no'];
             $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
-            $caseInfo['case_status'] = 75;
+            $caseInfo['case_status'] = array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
             
             //$caseInfo['created_by'] = $session->get('userId');
             $caseInfo['updated_by'] = $session->get('userId');
