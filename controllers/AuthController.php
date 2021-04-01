@@ -96,6 +96,7 @@ class AuthController extends Controller
         //email form for serverside validations
         $model = new EmailForm();
         $otpAuth = new OtpAuthentication;
+        $otpSendDeviceList = array();
         // check post data and validate postdata and generate random OTP send it as email notifications
         if ($model->load(Yii::$app->request->post()) && $model->validate()) 
         { 
@@ -115,25 +116,26 @@ class AuthController extends Controller
                 ->send();
                  //check if user entered telegram id is exists in database or not, If exists then proceed with next business logic
                 
-               /* if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
+                if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
                 { 
                     $telegramResponse = $client->createRequest()
                     ->setFormat(Client::FORMAT_URLENCODED)
                     ->setMethod('GET')
-                    ->setUrl($this->_url_crawler."func.telegram_sendmsg.php?chatid=".$emailResponse->data['records'][0]['telegram_id']."&msg=testing purpose")
-                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                    ->setUrl($this->_url_crawler."func.telegram_sendmsg.php?chatid=".$emailResponse->data['records'][0]['telegram_id']."&msg=".rawurlencode("Oyi"))
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
                     ->send();
-                    
-                      if(empty($telegramResponse['ok']))
-                      {
+                    if($telegramResponse->data['ok'])
+                    {
+                        array_push($otpSendDeviceList,"telegram");
+                    }
+                    else{
                         Yii::$app->session->addFlash('failed','telegram id is not correct');
                         return $this->refresh();
-                      }
-                    
-                }  
+                    }
+                }
                 // check if user entered mobile number is exists in database or not, If exists then proceed with next business logic
 
-                if(isset($emailResponse->data['records'][0]['mobile']) && !empty($emailResponse->data['records'][0]['mobile']))
+                /*if(isset($emailResponse->data['records'][0]['mobile']) && !empty($emailResponse->data['records'][0]['mobile']))
                 { 
                     $mobileNo = "60".$emailResponse->data['records'][0]['mobile'];
                     $message = "Testing purpose";
@@ -164,7 +166,8 @@ class AuthController extends Controller
                     ->setTo('zoie17@ethereal.email')
                     ->setSubject('Email sent from cms project')
                     ->send())
-                    {
+                    {   
+                        array_push($otpSendDeviceList,"email");
                         $client = new Client();
                         $session = Yii::$app->session;
                         $session->set('email', $data['EmailForm']['email']);
@@ -179,6 +182,7 @@ class AuthController extends Controller
                         // once email notifications successfully done then redirect to verifications page
                         if ($otpResponse->statusCode == 200) { 
                             $session->open();
+                            $session->setFlash('otpDeviceList', $otpSendDeviceList);
                             Yii::$app->session->addFlash('notification','Check your email for OTP.');
                             $this->redirect('../auth/validation-code');
                         }

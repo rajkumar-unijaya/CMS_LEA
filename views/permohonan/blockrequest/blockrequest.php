@@ -77,14 +77,14 @@ use Yii;
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Surat Rasmi</legend>
                 <div class="col-sm-8">
-                <?=  $form->field($model, 'surat_rasmi')->fileInput()->label(false); ?>
+                <?=  $form->field($model, 'surat_rasmi')->fileInput()->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf'); ?>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Laporan Polis</legend>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false);?>   
+                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>   
                 </div>
             </div>
 
@@ -100,8 +100,8 @@ use Yii;
                   ?>
                   <div class="row">
                   <?php
-                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--'))->label(false);
-                echo $form->field($model, 'url['.$i.']')->textInput()->label(false); 
+                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$i))->label(false);
+                echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
                 ?>
                 </div>
                 <?php
@@ -157,6 +157,22 @@ $("input:checkbox[name='BlockRequestForm[application_purpose][]']").click(functi
         }
    });
 
+   var URL_obj = [{id:39, name:"https://twitter.com/"}, {id:40, name:"https://www.instagram.com/"}, {id:41, name:"https://www.tumblr.com/"}, {id:42, name:"https://www.facebook.com/"}, {id:43, name:"https://www.youtube.com/"}, {id:44, name:"https://www.tiktok.com/"}];
+$('#social_media_0').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_0").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_0").val()); $("#social_media_URL_0").val(item_val.name);}
+});
+$('#social_media_1').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_1").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_1").val()); $("#social_media_URL_1").val(item_val.name);}
+});
+$('#social_media_2').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_2").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_2").val()); $("#social_media_URL_2").val(item_val.name);}
+});
+$('#social_media_3').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_3").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_3").val()); $("#social_media_URL_3").val(item_val.name);}
+});
+$('#social_media_4').on('change',function() {   
+  if(URL_obj.find(item => item.id == $("#social_media_4").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_4").val()); $("#social_media_URL_4").val(item_val.name);}
+});
 
     var valid = true;
 
