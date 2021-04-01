@@ -99,21 +99,18 @@ class AuthController extends Controller
         // check post data and validate postdata and generate random OTP send it as email notifications
         if ($model->load(Yii::$app->request->post()) && $model->validate()) 
         { 
+            $masterStatusSession = array_search("Logout",Yii::$app->mycomponent->getMasterData('master_status_session'));
+            $masterStatusRecordStatus = array_search("Active",Yii::$app->mycomponent->getMasterData('master_status_record_status'));
+            
             $data = Yii::$app->request->post(); 
             $client = new Client();
-            $statusResponse = $client->createRequest()
-                ->setFormat(Client::FORMAT_URLENCODED)
-                ->setMethod('GET')
-                ->setUrl($this->_url.'master_status?filter=category,eq,record_status&filter=name,eq,active')
-                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->send();
             /*
             ***** check if user entered email address is exists in database or not, If exists then proceed with next business logic
             */    
             $emailResponse = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('GET')
-                ->setUrl($this->_url.'user?filter=email,eq,'.$data['EmailForm']['email'].'&filter=master_status_id,eq,'.$statusResponse->data['records'][0]['id'].'&filter=is_login,eq,17')
+                ->setUrl($this->_url.'user?filter=email,eq,'.$data['EmailForm']['email'].'&filter=master_status_id,eq,'.$masterStatusRecordStatus.'&filter=is_login,eq,'.$masterStatusSession)
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
                  //check if user entered telegram id is exists in database or not, If exists then proceed with next business logic
@@ -167,7 +164,7 @@ class AuthController extends Controller
                     ->setTo('zoie17@ethereal.email')
                     ->setSubject('Email sent from cms project')
                     ->send())
-                    { 
+                    {
                         $client = new Client();
                         $session = Yii::$app->session;
                         $session->set('email', $data['EmailForm']['email']);
