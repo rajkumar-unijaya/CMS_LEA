@@ -16,6 +16,7 @@ class PermohonanForm extends Model
     public $masterCaseInfoTypeId;
     public $for_self;
     public $no_telephone;
+    public $selfName;
     public $email;
     public $report_no;
     public $investigation_no;
@@ -33,6 +34,7 @@ class PermohonanForm extends Model
     public $suspect_ic;
     public $surat_rasmi;
     public $laporan_polis;
+    public $attachmentURL;
     public $master_social_media_id;
     public $url;
     public $application_purpose;
@@ -52,6 +54,11 @@ class PermohonanForm extends Model
         return [
             [['for_self'], 'required','message'=>'Pilih Pilihan Mengisi'],
             
+            [['selfName'], 'required','message'=>'Masukkan name','when' => function ($model) { 
+                return ($model->for_self == 78 ? true : false); 
+            }, 'whenClient' => "function (attribute, value) {
+                return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 78;
+                }"],
             [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false); 
              }, 'whenClient' => "function (attribute, value) {
@@ -90,7 +97,7 @@ class PermohonanForm extends Model
 
     public function scenarios() {
         $scenarios = parent::scenarios(); 
-        $scenarios['create'] = ['for_self','email','no_telephone','report_no','investigation_no','offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
+        $scenarios['create'] = ['for_self','selfName','email','no_telephone','report_no','investigation_no','offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
         $scenarios['edit'] = ['report_no','investigation_no','offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
         $scenarios['reopen'] = ['offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
         return $scenarios;

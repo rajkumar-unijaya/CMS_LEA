@@ -14,6 +14,7 @@ use yii\base\Model;
 class BlockRequestForm extends Model
 {
     public $for_self;
+    public $selfName;
     public $no_telephone;
     public $email;
     public $report_no;
@@ -22,6 +23,7 @@ class BlockRequestForm extends Model
     public $case_summary;
     public $surat_rasmi;
     public $laporan_polis;
+    public $attachmentURL;
     public $master_social_media_id;
     public $url;
     //public $application_purpose;
@@ -38,7 +40,12 @@ class BlockRequestForm extends Model
         return [
             [['for_self'], 'required','message'=>'Pilih Pilihan Mengisi'],
             
-           [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
+            [['selfName'], 'required','message'=>'Masukkan name','when' => function ($model) { 
+                return ($model->for_self == 78 ? true : false); 
+            }, 'whenClient' => "function (attribute, value) {
+                return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 78;
+                }"],
+            [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
                 return ($model->for_self == 78 ? true : false); 
             }, 'whenClient' => "function (attribute, value) {
                 return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 78;
