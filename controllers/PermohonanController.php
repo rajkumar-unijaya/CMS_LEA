@@ -635,6 +635,11 @@ class PermohonanController extends Controller
         $newSelectedOffences = array();
         $prevDeletedOffences = array();
 
+        $prevSuspekSakhi = array();
+        //$newSuspekSakhi = array();
+        $newSelectedSuspekSakhi = array();
+        //$prevDeletedSuspekSakhi = array();
+
         /******
          * Get offence master data from the offence table using api service.
          */
@@ -714,6 +719,7 @@ class PermohonanController extends Controller
             $caseInfo = array();
             $caseStatusSuspek = array();
             $caseInvolvedURL = array();
+            $newCaseInvolvedURL = array();
             $offences = array();
             
             $caseInfo['master_case_info_type_id'] = $data['PermohonanForm']['master_case_info_type_id'];
@@ -725,7 +731,7 @@ class PermohonanController extends Controller
             $caseInfo['case_summary'] = $data['PermohonanForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
             $caseInfo['laporan_polis'] = $loparaPoliceFileName;
-            $caseInfo['attachment_url'] = $data['BlockRequestForm']['attachmentURL'];
+            $caseInfo['attachment_url'] = $data['PermohonanForm']['attachmentURL'];
             $caseInfo['case_status'] = array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status'));
             
             //$caseInfo['created_by'] = $session->get('userId');
@@ -735,22 +741,53 @@ class PermohonanController extends Controller
             $caseInfo['master_status_purpose_of_application_id'] = implode(",",$data['PermohonanForm']['application_purpose']);
             $caseInfo['purpose_of_application_info'] = $data['PermohonanForm']['application_purpose_info'];
             }
-            
-            for($i=0;$i<=count($data['PermohonanForm']['master_status_status_suspek_id'])-1;$i++)
-            {
-                $caseStatusSuspek[$i]['case_info_status_suspek_id']  = $data['PermohonanForm']['caseInfoStatusSuspekID'][$i] ? $data['PermohonanForm']['caseInfoStatusSuspekID'][$i]: 0;
-                $caseStatusSuspek[$i]['master_status_suspect_or_saksi_id']  = $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i] ? $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i]: 0;
-                $caseStatusSuspek[$i]['master_status_status_suspek_id']  = $data['PermohonanForm']['master_status_status_suspek_id'][$i] ? $data['PermohonanForm']['master_status_status_suspek_id'][$i] : 0;
-                $caseStatusSuspek[$i]['ic']  = $data['PermohonanForm']['ic'][$i] ? $data['PermohonanForm']['ic'][$i] : 0;
-                $caseStatusSuspek[$i]['name']  = $data['PermohonanForm']['name'][$i] ? $data['PermohonanForm']['name'][$i] : "NULL";
-                //$caseStatusSuspek[$i]['created_by'] = $session->get('userId');
-                $caseStatusSuspek[$i]['updated_by'] = $session->get('userId');
-                if(isset($data['PermohonanForm']['others'][$i]) && !empty($data['PermohonanForm']['others'][$i]))
+            if(isset($data['PermohonanForm']['master_status_status_suspek_id']) && count($data['PermohonanForm']['master_status_status_suspek_id']) > 0)
+            { 
+                for($i=0;$i<=count($data['PermohonanForm']['master_status_status_suspek_id'])-1;$i++)
                 {
-                    $caseStatusSuspek[$i]['others']  = $data['PermohonanForm']['others'][$i];
-                }
+                    $caseStatusSuspek[$i]['case_info_id']  = $data['PermohonanForm']['caseInfoID'] ? $data['PermohonanForm']['caseInfoID']: 0;
+                    $caseStatusSuspek[$i]['case_info_status_suspek_id']  = $data['PermohonanForm']['caseInfoStatusSuspekID'][$i] ? $data['PermohonanForm']['caseInfoStatusSuspekID'][$i]: 0;
+                    $caseStatusSuspek[$i]['master_status_suspect_or_saksi_id']  = $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i] ? $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i]: 0;
+                    $caseStatusSuspek[$i]['master_status_status_suspek_id']  = $data['PermohonanForm']['master_status_status_suspek_id'][$i] ? $data['PermohonanForm']['master_status_status_suspek_id'][$i] : 0;
+                    $caseStatusSuspek[$i]['ic']  = $data['PermohonanForm']['ic'][$i] ? $data['PermohonanForm']['ic'][$i] : 0;
+                    $caseStatusSuspek[$i]['name']  = $data['PermohonanForm']['name'][$i] ? $data['PermohonanForm']['name'][$i] : "NULL";
+                    //$caseStatusSuspek[$i]['created_by'] = $session->get('userId');
+                    $caseStatusSuspek[$i]['updated_by'] = $session->get('userId');
+                    $caseStatusSuspek[$i]['others']  = "NULL";
+                    if(isset($data['PermohonanForm']['others'][$i]) && !empty($data['PermohonanForm']['others'][$i]))
+                    {
+                        $caseStatusSuspek[$i]['others']  = $data['PermohonanForm']['others'][$i];
+                    }
                 
+                }
+                //echo"<pre>";print_r($caseStatusSuspek);exit;
             }
+            
+            if(isset($data['PermohonanForm']['new_master_status_status_suspek_id']) && count($data['PermohonanForm']['new_master_status_status_suspek_id']) > 0)
+            { //echo"<pre>";print_r($data);exit;
+                for($i=0;$i<=count($data['PermohonanForm']['new_master_status_status_suspek_id'])-1;$i++)
+                { 
+                    $newSelectedSuspekSakhi[$i]['case_info_id']  = $data['PermohonanForm']['caseInfoID'] ? $data['PermohonanForm']['caseInfoID']: 0;
+                    $newSelectedSuspekSakhi[$i]['master_status_suspect_or_saksi_id']  = $data['PermohonanForm']['new_master_status_suspect_or_saksi_id'][$i] ? $data['PermohonanForm']['new_master_status_suspect_or_saksi_id'][$i]: 0;
+                    $newSelectedSuspekSakhi[$i]['master_status_status_suspek_id']  = $data['PermohonanForm']['new_master_status_status_suspek_id'][$i] ? $data['PermohonanForm']['new_master_status_status_suspek_id'][$i] : 0;
+                    $newSelectedSuspekSakhi[$i]['ic']  = $data['PermohonanForm']['new_ic'][$i] ? $data['PermohonanForm']['new_ic'][$i] : "";
+                    $newSelectedSuspekSakhi[$i]['name']  = $data['PermohonanForm']['new_name'][$i] ? $data['PermohonanForm']['new_name'][$i] : "NULL";
+                    $newSelectedSuspekSakhi[$i]['others']  = "NULL";
+                    $newSelectedSuspekSakhi[$i]['created_by'] = $session->get('userId');
+                    $newSelectedSuspekSakhi[$i]['updated_by'] = $session->get('userId');
+                    if(isset($data['PermohonanForm']['new_others'][$i]) && !empty($data['PermohonanForm']['new_others'][$i]))
+                    {
+                        $newSelectedSuspekSakhi[$i]['others']  = $data['PermohonanForm']['new_others'][$i] ? $data['PermohonanForm']['new_others'][$i] : "NULL";
+                        
+                    }
+                
+                }
+                //echo"<pre>";print_r($newSelectedSuspekSakhi);exit;
+            }
+            //echo"123<pre>";print_r($caseStatusSuspek);
+            //echo"345<pre>";print_r($newSelectedSuspekSakhi);exit;
+            
+//echo"<pre>";print_r($data);exit;
             for($i=0;$i<=count($data['PermohonanForm']['url'])-1;$i++)
             { 
                 if(!empty($data['PermohonanForm']['master_social_media_id'][$i]))
@@ -763,21 +800,43 @@ class PermohonanController extends Controller
                 }
                 
             }
+
+            for($i=0;$i<=count($data['PermohonanForm']['new_master_social_media_id'])-1;$i++)
+            { //echo"<pre>";print_r($data['PermohonanForm']['new_master_social_media_id']);exit;
+                if(!empty($data['PermohonanForm']['new_master_social_media_id'][$i]) && !empty($data['PermohonanForm']['new_url'][$i]))
+                { 
+                    $newCaseInvolvedURL[$i]["case_info_id"]  = $data['PermohonanForm']['caseInfoID'] ? $data['PermohonanForm']['caseInfoID'] : 0;
+                    $newCaseInvolvedURL[$i]["master_social_media_id"]  = $data['PermohonanForm']['new_master_social_media_id'][$i] ? $data['PermohonanForm']['new_master_social_media_id'][$i] : 0;
+                    $newCaseInvolvedURL[$i]["url"]  = $data['PermohonanForm']['new_url'][$i] ? $data['PermohonanForm']['new_url'][$i] : "NULL";
+                    $newCaseInvolvedURL[$i]['created_by'] = $session->get('userId');
+                    $newCaseInvolvedURL[$i]['updated_by'] = $session->get('userId');
+                }
+                
+            }
+
+
+            
             //$offences = $data['PermohonanForm']['offence'];
 
             
             //echo json_encode($caseInfo).'<br>';
             //echo json_encode($caseStatusSuspek).'<br>';
+            //echo json_encode($newSelectedSuspekSakhi).'<br>';
             //echo json_encode($caseInvolvedURL).'<br>';
+            //echo json_encode($newCaseInvolvedURL).'<br>';
             //echo json_encode($newSelectedOffences).'<br>';
-            //echo json_encode($prevDeletedOffences).'<br>';exit;
+            //echo json_encode($prevDeletedOffences).'<br>';
+            
+            
+            //exit;
+            
             
             $caseInfoResponse = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('POST')
             ->setUrl($this->_url_procedure.'case_info_edit')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
-            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
+            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"newCaseStatusSuspek" => json_encode($newSelectedSuspekSakhi),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newCaseInvolvedURL" => json_encode($newCaseInvolvedURL),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
             ->send(); 
             if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
                 { 
