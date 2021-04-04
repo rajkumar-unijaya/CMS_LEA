@@ -100,7 +100,7 @@ class PermohonanForm extends Model
         $scenarios['create'] = ['for_self','selfName','email','no_telephone','report_no','investigation_no','offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
         //$scenarios['edit'] = ['report_no','investigation_no','offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
         $scenarios['edit'] = ['report_no','investigation_no','offence','case_summary','application_purpose'];
-        $scenarios['reopen'] = ['offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
+        $scenarios['reopen'] = ['offence','case_summary','application_purpose'];
         return $scenarios;
     
     }
