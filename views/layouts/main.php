@@ -78,7 +78,19 @@ DashboardAsset::register($this);
                                     <!--<a class="nav-link" href="../permohonan/mediasosial">Melalui Media Sosial</a>-->
                                     <a class="nav-link" href="../permohonan/mediasosial">Social Media</a>
                                     <a class="nav-link" href="../permohonan/block-request-list">Blocking Request</a>
-                                    <a class="nav-link" href="../permohonan/mntl">MNTL</a>
+                                    <!--<a class="nav-link" href="../permohonan/mntl">MNTL</a>-->
+
+                                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseMNTL" aria-expanded="false" aria-controls="pagesCollapseMNTL">
+                                    MNTL
+                                    <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                                    </a>
+                                    <div class="collapse" id="pagesCollapseMNTL" aria-labelledby="headingOne"
+                                    data-parent="#sidenavAccordionPages">
+                                    <nav class="sb-sidenav-menu-nested nav">
+                                        <a class="nav-link" href="../permohonan/mntl-list">List</a>
+                                        <a class="nav-link" href="../permohonan/search">MNP Search</a>
+                                    </nav>
+                                    </div>
                                     
                                     
                                 </nav>

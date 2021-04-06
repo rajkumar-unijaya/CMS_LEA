@@ -10,6 +10,9 @@ use yii\filters\VerbFilter;
 use app\models\PermohonanForm;
 use app\models\BlockRequestForm;
 use app\models\PermohonanMNTLForm;
+use app\models\SearchForm;
+
+
 use yii\httpclient\Client;
 use yii\web\UploadedFile;
 
@@ -28,6 +31,7 @@ class PermohonanController extends Controller
     private $_FileTrashFolderLaporanPolice = null;
     private $_FileTrashFolderBlockRequestSuratRasmi = null;
     private $_FileTrashFolderBlockRequestLaporanPolice = null;
+    private $_urlCrawler = null;
 
     /**
      * {@inheritdoc}
@@ -35,6 +39,7 @@ class PermohonanController extends Controller
     public function behaviors()
     {
         $this->_url = Yii::$app->params['DreamFactoryContextURL'];
+        $this->_urlCrawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
         $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
         $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
         $this->_url_files = Yii::$app->params['DreamFactoryContextURLFiles'];
@@ -126,8 +131,8 @@ class PermohonanController extends Controller
         /******
          * load masterdata from the master component and pass these data into view page
          */
-		$masterStatusSuspect = Yii::$app->mycomponent->statusSuspect();
-		$newCase = Yii::$app->mycomponent->newCase();
+		$masterStatusSuspect = Yii::$app->mycomponent->getMasterData('master_suspect');
+        $newCase = Yii::$app->mycomponent->getMasterData('master_status_new_case');
         $client = new Client();
         $tipOffNoResponse = array();
         $filterTipOffNoResponse = array();
@@ -150,6 +155,28 @@ class PermohonanController extends Controller
                 {
                     $filterTipOffNoResponse[$value['id']] = $value['tipoff_no'];
                 }
+                }
+
+                if (Yii::$app->request->isAjax)
+                {
+                    $telcoResponse = array();
+                    $returnResponse = array();
+                    $returnResponse['success'] = "failed";
+                    $client = new Client();
+                    $data = Yii::$app->request->post();
+                    $telcoResponse = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('GET')
+                    ->setUrl($this->_urlCrawler . 'func.telco.php?search=' . $data['phone_number'] . '&mnp=nomnp')
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                    ->send();
+                    if(isset($telcoResponse->data) && count($telcoResponse->data) > 0)
+                    {
+                        $returnResponse['success'] = "success";
+                        $returnResponse['telco'] = $telcoResponse->data[0]['ported-to'];
+                        return $this->asJson($returnResponse);
+                    }
+                    return $this->asJson($returnResponse);
                 }
                 //echo'<pre>';print_r($filterTipOffNoResponse);exit;
         /*********
@@ -200,10 +227,8 @@ class PermohonanController extends Controller
             ->send(); 
             if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
                 { 
-                    /*Yii::$app->session->addFlash('success','Successfully added new case infomation.');
-                    return $this->redirect('../dashboard/index');*/
                     Yii::$app->session->addFlash('success','Successfully added new case infomation.');
-                    return $this->redirect('../permohonan/mntl');
+                    return $this->redirect('../permohonan/mntl-list');
                 }
                 else{
                     Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
@@ -212,7 +237,7 @@ class PermohonanController extends Controller
             
 		}
           
-        return $this->render('mntl',['model' => $model,"newCase" => $newCase,"masterCaseInfoTypeId" => $masterCaseInfoTypeId,"tipOff" => $filterTipOffNoResponse]);
+        return $this->render('mntl/mntl',['model' => $model,"newCase" => $newCase,"masterCaseInfoTypeId" => $masterCaseInfoTypeId,"tipOff" => $filterTipOffNoResponse]);
        
     }
 
@@ -1314,7 +1339,7 @@ class PermohonanController extends Controller
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('GET')
             //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc')
+            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek,master_status&join=case_info_url_involved,master_status&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
             
@@ -1926,6 +1951,82 @@ class PermohonanController extends Controller
         return $this->render('blockrequest/reopenblockrequest', ['model'=>$model,"mediaSocialResponse" => $mediaSocialResponse,"offences" => $filterOffenceResponse,"masterSocialMedia" => $masterSocialMedia]);
        
         
+    }
+
+    /**
+     * Displays MNTL - MNP search page.
+     *
+     * @return string
+     */
+    public function actionSearch()
+    {
+        $client = new Client();
+        $model = new SearchForm();
+        $telcoResponse = array();
+        $MntlResponse = array();
+        $returnResponse = array();
+        $returnResponse['success'] = "false";
+        
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post()) && $model->validate()) { 
+            $client = new Client();
+            $data = Yii::$app->request->post();
+            $telcoResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_urlCrawler . 'func.telco.php?search=' . $data['SearchForm']['phone_number'] . '&mnp=nomnp')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
+            if(isset($telcoResponse->data) && count($telcoResponse->data) > 0)
+            {
+                $MntlResponse = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_urlCrawler . 'func.mntl.php?search=auto&value=CMS12345')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
+               
+            } 
+            if(isset($telcoResponse->data) && count($telcoResponse->data) > 0) 
+            {   $returnResponse['success'] = "true";
+                $returnResponse['telco_info']  =  $telcoResponse->data[0];
+                $returnResponse['telco_info']['ported_to']  =  $telcoResponse->data[0]['ported-to'];
+                $returnResponse['telco_info']['telco_info']  =  $telcoResponse->data[0]['telco-info'];
+            } 
+            if(isset($MntlResponse->data) && count($MntlResponse->data) > 0) 
+            { 
+                $days = (strtotime(date('Y-m-d')) - strtotime($MntlResponse->data[0]['active_date'])) / (60 * 60 * 24);
+                $returnResponse['mntl_info']  =  $MntlResponse->data[0];
+                $returnResponse['mntl_info']['days_count_filter'] = "false";
+                if(isset($days) && !empty($days) && $days <= 90)
+                {
+                    $returnResponse['mntl_info']['days_count_filter'] = "true";
+                }
+            } 
+            return $this->asJson($returnResponse);
+           
+        }
+    //echo"<pre>";print_r($model);exit;
+        return $this->render('mntl/search', ['model' => $model]);
+    }
+
+
+    /**
+     * Displays MNTL list page.
+     *
+     * @return string
+     */
+    public function actionMntlList()
+    {
+        $client = new Client();
+        $thisyear = date("Y");
+        $responses = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('GET')
+            ->setUrl($this->_urlCrawler . 'func.mntl.php?search=list&max=10&page=1&order=DESC&year=' . $thisyear)
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+            ->send();
+
+        return $this->render('mntl/mntlList', ['responses' => $responses, 'crawlerUrl' => $this->_urlCrawler]);
     }
     
 
