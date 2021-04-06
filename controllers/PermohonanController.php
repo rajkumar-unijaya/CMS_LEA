@@ -2016,17 +2016,20 @@ class PermohonanController extends Controller
      * @return string
      */
     public function actionMntlList()
-    {
+    { 
+        $session = Yii::$app->session;
+        $case_status_values = "";
+        $case_status_values .= array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Rejected",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Closed",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
         $client = new Client();
         $thisyear = date("Y");
         $responses = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('GET')
-            ->setUrl($this->_urlCrawler . 'func.mntl.php?search=list&max=10&page=1&order=DESC&year=' . $thisyear)
+            //->setUrl($this->_urlCrawler . 'func.mntl.php?search=list&max=10&page=1&order=DESC&year=' . $thisyear)
+            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,3&join=case_info_mntl,tipoff&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
-
-        return $this->render('mntl/mntlList', ['responses' => $responses, 'crawlerUrl' => $this->_urlCrawler]);
+        return $this->render('mntl/mntlList', ['responses' => $responses]);
     }
     
 
