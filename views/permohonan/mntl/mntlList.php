@@ -31,10 +31,6 @@ $responses = $responses->data;
 <?php endif;?>
 </div>
     <div class="card-body">
-        <!-- <div style="display: inline-flex; margin-bottom: 10px;">
-            <div style="display: inline-block;padding-right: 20px;">Start Date: <input type="date" class="form-control"> </div>
-            <div style="display: inline-block;">End Date: <input type="date" class="form-control"> </div>
-        </div> -->
         <div style="float:right;margin-bottom: 10px;">
             <a href="../permohonan/mntl">
                 <button type="button" class="btn btn-primary">New Request</button>
@@ -45,40 +41,31 @@ $responses = $responses->data;
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Date Created</th>
-                        <th>Date Finished</th>
-                        <th>Report No.</th>
-                        <th>CMS No.</th>
-                        <th>Phone No.</th>
-                        <th>Telco</th>
-                        <th>Created By</th>
-                        <th>Days Taken</th>
-                        <th>Star Rating</th>
+                        <th>No Laporan Polis</th>
+                        <th>No Kertas Siasatan</th>
+                        <th>No. TP</th>
+                        <th>Phone Number</th>
+                        <th>Telco Name</th>
+                        <th>Date1</th>
+                        <th>Date2</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     $count = 1;
-                    foreach ($responses as $key => $responseTemp) {
+                    foreach ($responses['records'] as $key => $responseTemp) { 
                     ?>
                         <tr>
                             <td><?php echo $count; ?></td>
-                            <td><?php echo $responseTemp['date_created']; ?></td>
-                            <td><?php echo $responseTemp['date_finish']; ?></td>
-                            <td>
-                                <?php
-                                echo $responseTemp['report_number'];
-                                ?>
-                            </td>
-                            <td>
-                            <!-- remember to change 'reportNo' => $responseTemp['cms_number'] -->
-                                <?= Html::a($responseTemp['cms_number'], ['../crawler/mntl-preview-detail', 'reportNo' => 'CMS12345' ? 'CMS12345' : '#']) ?>
-                            </td>
-                            <td><?php echo $responseTemp['number']; ?></td>
-                            <td><?php echo $responseTemp['telco']; ?></td>
-                            <td><?php echo $responseTemp['name']; ?></td>
-                            <td><?php echo $responseTemp['days']; ?></td>
-                            <td><?php echo $responseTemp['star']; ?></td>
+                            <td><?php echo $responseTemp['report_no']; ?></td>
+                            <td><?php echo $responseTemp['investigation_no']; ?></td>
+                            <td><?php echo $responseTemp['case_info_mntl'][0]['tippoff_id']['tipoff_no'];?></td>
+                            <td><?php echo $responseTemp['case_info_mntl'][0]['phone_number']; ?></td>
+                            <td><?php echo $responseTemp['case_info_mntl'][0]['telco_name']; ?></td>
+                            <td><?php echo $responseTemp['case_info_mntl'][0]['date1']; ?></td>
+                            <td><?php echo $responseTemp['case_info_mntl'][0]['date2']; ?></td>
+                            
                         </tr>
                     <?php
                         $count++;
