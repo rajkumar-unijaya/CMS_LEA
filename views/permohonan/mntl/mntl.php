@@ -10,11 +10,6 @@ use Yii;
 ?>
 
 <div class="container-fluid">
-<div id="success" class="info noticationMsg">
-<?php if(Yii::$app->session->hasFlash('success')):?>
-<?php echo Yii::$app->session->getFlash('success')[0] ?>
-<?php endif;?>
-</div>
     <h1 style="padding-top: 1.5rem;">Permohonan Baru MNTL</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -35,7 +30,7 @@ use Yii;
             <div class="col-lg-5">
 
            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-           <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId]); ?>
+           <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId])->label(false); ?>
            <div class="row mb-3">
               <label for="inputEmail3" class="col-sm-4 col-form-label">Pilihan Mengisi</label>
               <div class="col-sm-8">
@@ -88,7 +83,8 @@ use Yii;
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Date1 </label>
                 <div class="col-sm-8">
-                <?php /* $form->field($model, 'date1')->widget(\yii\jui\DatePicker::className(),
+                <?=  $form->field($model, 'date1',['inputOptions' => [
+'autocomplete' => 'off']])->widget(\yii\jui\DatePicker::className(),
                                                     [ 'dateFormat' => 'php:m/d/Y',
                                                     'clientOptions' => [
                                                         'changeYear' => true,
@@ -96,8 +92,8 @@ use Yii;
                                                         //'yearRange' => '-50:-12',
                                                         'altFormat' => 'yy-mm-dd',
                                                     ]],['placeholder' => 'mm/dd/yyyy'])
-                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false)*/ ?>
-                <?= $form->field($model, 'date1')->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?> 
+                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?>
+                <?php //= $form->field($model, 'date1')->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?> 
                 </div>
             </div>
 
@@ -105,7 +101,8 @@ use Yii;
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Date2 </label>
                 <div class="col-sm-8">
-                <?php /* $form->field($model, 'date2')->widget(\yii\jui\DatePicker::className(),
+                <?=  $form->field($model, 'date2',['inputOptions' => [
+'autocomplete' => 'off']])->widget(\yii\jui\DatePicker::className(),
                                                     [ 'dateFormat' => 'php:m/d/Y',
                                                     'clientOptions' => [
                                                         'changeYear' => true,
@@ -113,8 +110,8 @@ use Yii;
                                                         //'yearRange' => '-50:-12',
                                                         'altFormat' => 'yy-mm-dd',
                                                     ]],['placeholder' => 'mm/dd/yyyy'])
-                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false)*/ ?>
-                <?= $form->field($model, 'date2')->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?>                                     
+                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?>
+                <?php //= $form->field($model, 'date2')->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?>                                     
                 </div>
             </div>
             
@@ -140,13 +137,45 @@ $(document).ready(function() {
   $("#choose_forself").hide();
   $("#application_purpose_info").hide();
   $("input[name='PermohonanMNTLForm[for_self]']").change(function() {  //alert("ramstest = "+$("input[name='PermohonanMNTLForm[for_self]']:checked").val());
-    if (this.value == 6) {
+     if (this.value == 78) {
       $("#choose_forself").show();
     }
-    else if (this.value == 7) {
+    else if (this.value == 79) {
       $("#choose_forself").hide();
     }
 });
+
+$("#permohonanmntlform-phone_number").keyup(function(event) {
+    if($("#permohonanmntlform-phone_number").val().length >= 9 && $("#permohonanmntlform-phone_number").val().length <= 12)
+    {
+            event.preventDefault(); // stopping submitting
+            $.ajax({
+                url: $(location).attr('href'),
+                type: 'post',
+                dataType: 'json',
+                data: {'phone_number' : $("#permohonanmntlform-phone_number").val()}
+            })
+            .done(function(response) { 
+                if (response.success == "success") {
+                 $("#permohonanmntlform-telco_name").val(response.telco);   
+                 } 
+                 else{
+                    $("#date_registered").text('No records found');   
+                    
+                 }
+                 
+            })
+            .fail(function() {
+                console.log("error");
+            });
+    }
+    else{
+        $("#permohonanmntlform-telco_name").val(""); 
+    }
+       
+        
+        });
+
 
 $('#add').click(function(){ var newID =  ( $('#url_input_append > div').length);
 if(newID <= 15)
