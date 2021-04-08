@@ -1,450 +1,676 @@
 {
+    "email_type": [
+        {
+            "id": 126,
+            "name": "Personal",
+            "parent_id": 0
+        },
+        {
+            "id": 127,
+            "name": "Sharing",
+            "parent_id": 0
+        }
+    ],
+    "master_branch": [
+        {
+            "id": 118,
+            "name": "zyx",
+            "parent_id": 110
+        },
+        {
+            "id": 119,
+            "name": "wvu",
+            "parent_id": 110
+        },
+        {
+            "id": 120,
+            "name": "tsr",
+            "parent_id": 110
+        },
+        {
+            "id": 121,
+            "name": "qpo",
+            "parent_id": 110
+        },
+        {
+            "id": 122,
+            "name": "nml",
+            "parent_id": 110
+        },
+        {
+            "id": 123,
+            "name": "kji",
+            "parent_id": 110
+        },
+        {
+            "id": 124,
+            "name": "hgf",
+            "parent_id": 110
+        },
+        {
+            "id": 125,
+            "name": "edcba",
+            "parent_id": 110
+        }
+    ],
     "master_case_info_type": [
         {
             "id": 1,
-            "name": "Social Media"
+            "name": "Social Media",
+            "parent_id": null
         },
         {
             "id": 2,
-            "name": "Blocking Request"
+            "name": "Blocking Request",
+            "parent_id": null
         },
         {
             "id": 3,
-            "name": "MNTL"
+            "name": "MNTL",
+            "parent_id": null
         }
     ],
     "master_citizenship": [
         {
             "id": 4,
-            "name": "Malaysian"
+            "name": "Malaysian",
+            "parent_id": null
         },
         {
             "id": 5,
-            "name": "Non-Malaysia"
+            "name": "Non-Malaysia",
+            "parent_id": null
+        },
+        {
+            "id": 102,
+            "name": "WARGANEGARA",
+            "parent_id": null
+        },
+        {
+            "id": 103,
+            "name": "LAIN-LAIN",
+            "parent_id": null
         }
     ],
     "master_country": [
         {
             "id": 6,
-            "name": "Malaysia"
+            "name": "Malaysia",
+            "parent_id": null
+        },
+        {
+            "id": 104,
+            "name": "Indonesia",
+            "parent_id": null
+        },
+        {
+            "id": 109,
+            "name": "",
+            "parent_id": null
         }
     ],
     "master_department": [
         {
             "id": 7,
-            "name": "Police Diraja Malaysia"
+            "name": "Police Diraja Malaysia",
+            "parent_id": 118
         },
         {
             "id": 8,
-            "name": "JAIS"
+            "name": "JAIS",
+            "parent_id": 119
         },
         {
             "id": 9,
-            "name": "SKMIM"
+            "name": "SKMIM",
+            "parent_id": 120
         },
         {
             "id": 10,
-            "name": "JAP"
+            "name": "JAP",
+            "parent_id": 118
         },
         {
             "id": 11,
-            "name": "Police Diraja Malaysia"
+            "name": "Police Diraja Malaysia",
+            "parent_id": 119
         },
         {
             "id": 12,
-            "name": "JAIS"
+            "name": "JAIS",
+            "parent_id": 120
         },
         {
             "id": 13,
-            "name": "SKMIM"
+            "name": "SKMIM",
+            "parent_id": 118
         },
         {
             "id": 14,
-            "name": "JAP"
+            "name": "JAP",
+            "parent_id": 119
         }
     ],
     "master_district": [
         {
             "id": 15,
-            "name": "Bukit Bintang"
+            "name": "Bukit Bintang",
+            "parent_id": 44
         },
         {
             "id": 16,
-            "name": "Titiwangsa"
+            "name": "Titiwangsa",
+            "parent_id": 44
         },
         {
             "id": 17,
-            "name": "Kangar"
+            "name": "Kangar",
+            "parent_id": 45
         },
         {
             "id": 18,
-            "name": "Kuala Perlis"
+            "name": "Kuala Perlis",
+            "parent_id": 46
         },
         {
             "id": 19,
-            "name": "Kangar"
+            "name": "Kangar",
+            "parent_id": 44
         },
         {
             "id": 20,
-            "name": "Padang Besar"
+            "name": "Padang Besar",
+            "parent_id": 46
         },
         {
             "id": 21,
-            "name": "Arau"
+            "name": "Arau",
+            "parent_id": 49
         },
         {
             "id": 22,
-            "name": "Simpang Ampat"
+            "name": "Simpang Ampat",
+            "parent_id": 49
+        },
+        {
+            "id": 107,
+            "name": "KOTA BHARU",
+            "parent_id": 52
         }
     ],
     "master_gender": [
         {
             "id": 23,
-            "name": "Male"
+            "name": "Male",
+            "parent_id": null
         },
         {
             "id": 24,
-            "name": "Female"
+            "name": "Female",
+            "parent_id": null
         }
     ],
     "master_marital_status": [
         {
             "id": 25,
-            "name": "Married"
+            "name": "Married",
+            "parent_id": null
         },
         {
             "id": 26,
-            "name": "Unmarried"
+            "name": "Unmarried",
+            "parent_id": null
+        }
+    ],
+    "master_organization": [
+        {
+            "id": 110,
+            "name": "abc",
+            "parent_id": 7
+        },
+        {
+            "id": 111,
+            "name": "def",
+            "parent_id": 7
+        },
+        {
+            "id": 112,
+            "name": "ghi",
+            "parent_id": 7
+        },
+        {
+            "id": 113,
+            "name": "jkl",
+            "parent_id": 7
+        },
+        {
+            "id": 114,
+            "name": "mno",
+            "parent_id": 7
+        },
+        {
+            "id": 115,
+            "name": "pqr",
+            "parent_id": 7
+        },
+        {
+            "id": 116,
+            "name": "stv",
+            "parent_id": 7
+        },
+        {
+            "id": 117,
+            "name": "wxy",
+            "parent_id": 7
         }
     ],
     "master_postcode": [
         {
             "id": 27,
-            "name": "123456"
+            "name": "123456",
+            "parent_id": null
         },
         {
             "id": 28,
-            "name": "654321"
+            "name": "654321",
+            "parent_id": null
+        },
+        {
+            "id": 108,
+            "name": "16150",
+            "parent_id": 15
         }
     ],
     "master_race": [
         {
             "id": 29,
-            "name": "Malay"
+            "name": "Malay",
+            "parent_id": null
         },
         {
             "id": 30,
-            "name": "India"
+            "name": "India",
+            "parent_id": null
         },
         {
             "id": 31,
-            "name": "Bangladesh"
+            "name": "Bangladesh",
+            "parent_id": null
         },
         {
             "id": 32,
-            "name": "Pakistan"
+            "name": "Pakistan",
+            "parent_id": null
         },
         {
             "id": 33,
-            "name": "Indonesia"
+            "name": "Indonesia",
+            "parent_id": null
         },
         {
             "id": 34,
-            "name": "China"
+            "name": "China",
+            "parent_id": null
         }
     ],
     "master_religion": [
         {
             "id": 35,
-            "name": "Islam"
+            "name": "Islam",
+            "parent_id": null
         },
         {
             "id": 36,
-            "name": "Christian"
+            "name": "Christian",
+            "parent_id": null
         },
         {
             "id": 37,
-            "name": "Buddha"
+            "name": "Buddha",
+            "parent_id": null
         },
         {
             "id": 38,
-            "name": "Sikhism"
+            "name": "Sikhism",
+            "parent_id": null
         }
     ],
     "master_social_media": [
         {
             "id": 39,
-            "name": "twitter"
+            "name": "twitter",
+            "parent_id": null
         },
         {
             "id": 40,
-            "name": "instagram"
+            "name": "instagram",
+            "parent_id": null
         },
         {
             "id": 41,
-            "name": "tumblr"
+            "name": "tumblr",
+            "parent_id": null
         },
         {
             "id": 42,
-            "name": "facebook"
+            "name": "facebook",
+            "parent_id": null
         },
         {
             "id": 43,
-            "name": "blog \/ website"
+            "name": "blog \/ website",
+            "parent_id": null
         },
         {
             "id": 99,
-            "name": "Yourtube"
+            "name": "Yourtube",
+            "parent_id": null
         },
         {
             "id": 100,
-            "name": "Tiktok"
+            "name": "Tiktok",
+            "parent_id": null
         },
         {
             "id": 101,
-            "name": "Others"
+            "name": "Others",
+            "parent_id": null
         }
     ],
     "master_state": [
         {
             "id": 44,
-            "name": "Kuala Lumpur"
+            "name": "Kuala Lumpur",
+            "parent_id": 6
         },
         {
             "id": 45,
-            "name": "Selangor"
+            "name": "Selangor",
+            "parent_id": 6
         },
         {
             "id": 46,
-            "name": "Negeri Sembilan"
+            "name": "Negeri Sembilan",
+            "parent_id": 6
         },
         {
             "id": 47,
-            "name": "Sabah"
+            "name": "Sabah",
+            "parent_id": 6
         },
         {
             "id": 48,
-            "name": "Sarawak"
+            "name": "Sarawak",
+            "parent_id": 6
         },
         {
             "id": 49,
-            "name": "Johor"
+            "name": "Johor",
+            "parent_id": 6
         },
         {
             "id": 50,
-            "name": "Melaka"
+            "name": "Melaka",
+            "parent_id": 6
         },
         {
             "id": 51,
-            "name": "Pahang"
+            "name": "Pahang",
+            "parent_id": 6
         },
         {
             "id": 52,
-            "name": "Kelantan"
+            "name": "Kelantan",
+            "parent_id": 6
         },
         {
             "id": 53,
-            "name": "Kedah"
+            "name": "Kedah",
+            "parent_id": 6
         },
         {
             "id": 54,
-            "name": "Perak"
+            "name": "Perak",
+            "parent_id": 6
         },
         {
             "id": 55,
-            "name": "Perlis"
+            "name": "Perlis",
+            "parent_id": 6
         },
         {
             "id": 56,
-            "name": "Labuan"
+            "name": "Labuan",
+            "parent_id": 6
         },
         {
             "id": 57,
-            "name": "Putrajaya"
+            "name": "Putrajaya",
+            "parent_id": 6
         },
         {
             "id": 58,
-            "name": "Pulau Pinang"
+            "name": "Pulau Pinang",
+            "parent_id": 6
         },
         {
             "id": 59,
-            "name": "Terengganu"
+            "name": "Terengganu",
+            "parent_id": 6
         }
     ],
     "master_status_deadline_achievement": [
         {
             "id": 80,
-            "name": "Within DeadLine"
+            "name": "Within DeadLine",
+            "parent_id": null
         },
         {
             "id": 81,
-            "name": "Overdue"
+            "name": "Overdue",
+            "parent_id": null
         }
     ],
     "master_status_identity": [
         {
             "id": 84,
-            "name": "IC"
+            "name": "IC",
+            "parent_id": null
         },
         {
             "id": 85,
-            "name": "Passport"
+            "name": "Passport",
+            "parent_id": null
         }
     ],
     "master_status_new_case": [
         {
             "id": 78,
-            "name": "Bagi Pihak"
+            "name": "Bagi Pihak",
+            "parent_id": null
         },
         {
             "id": 79,
-            "name": "Diri Sendiri"
+            "name": "Diri Sendiri",
+            "parent_id": null
         }
     ],
     "master_status_priority": [
         {
             "id": 76,
-            "name": "High"
+            "name": "High",
+            "parent_id": null
         },
         {
             "id": 77,
-            "name": "Normal"
+            "name": "Normal",
+            "parent_id": null
         }
     ],
     "master_status_purpose_of_application": [
         {
             "id": 90,
-            "name": "Mengenalpasti pengendali akaun\/laman social \/ lama"
+            "name": "Mengenalpasti pengendali akaun\/laman social \/ lama",
+            "parent_id": null
         },
         {
             "id": 91,
-            "name": "Maklumat lain, sila nyatakan"
+            "name": "Maklumat lain, sila nyatakan",
+            "parent_id": null
         }
     ],
     "master_status_record_status": [
         {
             "id": 82,
-            "name": "Active"
+            "name": "Active",
+            "parent_id": null
         },
         {
             "id": 83,
-            "name": "Delete"
+            "name": "Delete",
+            "parent_id": null
         }
     ],
     "master_status_session": [
         {
             "id": 88,
-            "name": "Login"
+            "name": "Login",
+            "parent_id": null
         },
         {
             "id": 89,
-            "name": "Logout"
+            "name": "Logout",
+            "parent_id": null
         }
     ],
     "master_status_status": [
         {
             "id": 71,
-            "name": "Pending"
+            "name": "Pending",
+            "parent_id": null
         },
         {
             "id": 72,
-            "name": "Rejected"
+            "name": "Rejected",
+            "parent_id": null
         },
         {
             "id": 73,
-            "name": "Closed"
+            "name": "Closed",
+            "parent_id": null
         },
         {
             "id": 74,
-            "name": "Approved"
+            "name": "Approved",
+            "parent_id": null
         },
         {
             "id": 75,
-            "name": "Reopen"
+            "name": "Reopen",
+            "parent_id": null
         }
     ],
     "master_status_suspect_or_witness": [
         {
             "id": 86,
-            "name": "Suspect"
+            "name": "Suspect",
+            "parent_id": null
         },
         {
             "id": 87,
-            "name": "Witness"
+            "name": "Witness",
+            "parent_id": null
         }
     ],
     "master_status_suspect_relationship_status": [
         {
             "id": 92,
-            "name": "Parent"
+            "name": "Parent",
+            "parent_id": null
         },
         {
             "id": 93,
-            "name": "Sibling"
+            "name": "Sibling",
+            "parent_id": null
         },
         {
             "id": 94,
-            "name": "Friend"
+            "name": "Friend",
+            "parent_id": null
         },
         {
             "id": 95,
-            "name": "Spouse"
+            "name": "Spouse",
+            "parent_id": null
         },
         {
             "id": 97,
-            "name": "Children"
+            "name": "Children",
+            "parent_id": null
         },
         {
             "id": 98,
-            "name": "Others"
+            "name": "Others",
+            "parent_id": null
         }
     ],
     "master_suspect": [
         {
             "id": 60,
-            "name": "Tiada maklumat mengenai suspek\/sakhi"
+            "name": "Tiada maklumat mengenai suspek\/sakhi",
+            "parent_id": null
         },
         {
             "id": 61,
-            "name": "Identiti suspek(Nama dan KPT) sudah dikenalpasti"
+            "name": "Identiti suspek(Nama dan KPT) sudah dikenalpasti",
+            "parent_id": null
         },
         {
             "id": 62,
-            "name": "Suspek telah ditahan"
+            "name": "Suspek telah ditahan",
+            "parent_id": null
         },
         {
             "id": 63,
-            "name": "Suspek dibebaskan dengan jaminan"
+            "name": "Suspek dibebaskan dengan jaminan",
+            "parent_id": null
         },
         {
             "id": 64,
-            "name": "Lain-lain sila nyatakan"
+            "name": "Lain-lain sila nyatakan",
+            "parent_id": null
         }
     ],
     "master_user_type": [
         {
             "id": 65,
-            "name": "LEA-User1"
+            "name": "LEA-User1",
+            "parent_id": null
         },
         {
             "id": 66,
-            "name": "LEA-User2"
+            "name": "LEA-User2",
+            "parent_id": null
         },
         {
             "id": 67,
-            "name": "Analyst"
+            "name": "Analyst",
+            "parent_id": null
         },
         {
             "id": 68,
-            "name": "HOD"
+            "name": "HOD",
+            "parent_id": null
         },
         {
             "id": 69,
-            "name": "Super User"
+            "name": "Super User",
+            "parent_id": null
         },
         {
             "id": 70,
-            "name": "Admin"
+            "name": "Admin",
+            "parent_id": null
         }
     ]
 }
