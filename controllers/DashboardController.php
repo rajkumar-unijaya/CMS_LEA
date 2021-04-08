@@ -101,4 +101,30 @@ class DashboardController extends Controller
 
         return $this->goHome();
     }
+
+    public function actionGetMasterData()
+    {
+        $responseInfo['message'] = 'failed';
+        $masterResult = array();
+        $data = Yii::$app->request->post();
+        $options = "<option>".$data['default_option']."</option>";
+        $masterResult = Yii::$app->mycomponent->getMasterDataBasedOnParentId($data['id'],$data['data_group']);
+        $response = array();
+        if(count($masterResult) > 0)
+        {
+            $responseInfo['status'] = 200;
+            $responseInfo['message'] = 'success';
+            foreach($masterResult as $key => $val):
+                $options .= "<option value='".$key."'>".$val."</option>";
+            endforeach;
+            $responseInfo['result'] = $options;
+            
+        }
+        else{
+            $responseInfo['message'] = 'failed';
+            $responseInfo['status'] = 200;
+            $responseInfo['result'] = "";
+        }
+        return $this->asJson($responseInfo);
+    }
 }

@@ -11,6 +11,7 @@ use app\models\PermohonanForm;
 use app\models\BlockRequestForm;
 use app\models\PermohonanMNTLForm;
 use app\models\SearchForm;
+use app\models\LeaForm;
 
 
 use yii\httpclient\Client;
@@ -2031,6 +2032,90 @@ class PermohonanController extends Controller
             ->send();
         return $this->render('mntl/mntlList', ['responses' => $responses]);
     }
+
+
+
+    // Edit existing LEA user
+	public function actionLeaEdit()
+	{ 
+        $this->layout =  'main';
+		$model = new LeaForm();
+        $client = new Client();
+		$session = Yii::$app->session;
+        $session->get('userId');
+        $userResponse = array();
+        $masterEmailType = array();
+        $masterUnitName = array();
+        $masterOrganizationName = array();
+        $masterBranch = array();
+        $masterState = array();
+        $masterDistrict = array();
+        $masterPostcode = array();
+        $masterEmailType = Yii::$app->mycomponent->getMasterData('email_type');
+        $masterUnitName = Yii::$app->mycomponent->getMasterData('master_department');
+        $masterOrganizationName = Yii::$app->mycomponent->getMasterData('master_organization');
+        $masterBranch = Yii::$app->mycomponent->getMasterData('master_branch');
+        $masterState = Yii::$app->mycomponent->getMasterData('master_state');
+        $masterDistrict = Yii::$app->mycomponent->getMasterData('master_district');
+        $masterPostcode = Yii::$app->mycomponent->getMasterData('master_postcode');
+        $response = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('GET')
+            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
+            ->setUrl($this->_url . 'user?filter=id,eq,'.$session->get('userId'))
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+            ->send();
+        if(isset($response) && count($response->data['records']) > 0)
+        {
+            $userResponse = $response->data['records'][0];
+              
+        }    
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
+            $session = Yii::$app->session;
+
+			$data = Yii::$app->request->post();
+            $telegram_verification = 0;
+            $mobile_verification = 0;
+            if(isset($data['LeaForm']['notification']) &&  $data['LeaForm']['notification'][0] == "1")
+              {
+                $telegram_verification = 1;
+              }
+            if(isset($data['LeaForm']['notification']) &&  $data['LeaForm']['notification'][1] == "2")
+              {
+                $mobile_verification = 1;
+              }
+			$responses = $client->createRequest()
+				->setFormat(Client::FORMAT_URLENCODED)
+				->setMethod('PUT')
+				->setUrl($this->_url . 'user/'.$session->get('userId'))
+				->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+				->setData([
+					"email" => $data['LeaForm']['email'],
+					"email_type" => $data['LeaForm']['email_type'],
+					"fullname" => $data['LeaForm']['name'],
+					"ic_no" => $data['LeaForm']['icno'],
+					"department" => $data['LeaForm']['unit_name'],
+					"organization" => $data['LeaForm']['organization_name'],
+					"branch" => $data['LeaForm']['branch'],
+					"master_district_id" => $data['LeaForm']['district'],
+					"master_postcode_id" => $data['LeaForm']['postcode'],
+					"master_state_id" => $data['LeaForm']['state'],
+					"mobile_no" => $data['LeaForm']['mobile_no'],
+					"office_phone_no" => $data['LeaForm']['office_phone_no'],
+					"telegram_id" => $data['LeaForm']['telegram_id'],
+                    "telegram_verification" => $telegram_verification,
+                    "mobile_verification" => $mobile_verification,
+                    "updated_by" => $session->get('userId')
+				])
+				->send();
+			if ($responses->isOk) {
+				Yii::$app->session->addFlash('success', 'Successfully updated profile.');
+			}
+		}
+
+		return $this->render('/permohonan/lea/leaedit', ['model' => $model,"userResponse" => $userResponse,"masterEmailType" => $masterEmailType,"masterUnitName" => $masterUnitName,"masterOrganizationName" => $masterOrganizationName,"masterBranch" => $masterBranch,"masterState" => $masterState,"masterDistrict" => $masterDistrict,"masterPostcode" => $masterPostcode]);
+	}
     
 
 }
