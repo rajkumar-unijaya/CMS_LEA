@@ -60,6 +60,7 @@ class MasterDataController extends Controller
                     {  
                         $masterDataArrangedInfo[$masterDataGroup['datagroup']][$i]['id'] =  $masterDataGroupInfoVal['id'];
                         $masterDataArrangedInfo[$masterDataGroup['datagroup']][$i]['name'] =  $masterDataGroupInfoVal['name'];
+                        $masterDataArrangedInfo[$masterDataGroup['datagroup']][$i]['parent_id'] =  $masterDataGroupInfoVal['parent_id'];
                         $i++;
                     }
                 

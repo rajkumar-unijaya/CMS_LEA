@@ -42,80 +42,98 @@ use Yii;
                 <?= Html::img('../images/loader.gif',["id" => "loader"]);?>
                 <?php ActiveForm::end(); ?>
             </div>
-        
+        <div><b>MNP Search Results :</b><br><br></div>
             <div class="table-responsive">
-            <table class="table table-bordered" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">Item</th>
-                        <th>Detail</th>
-                        <th>Remark</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
                         <tr>
-                            <td><strong>Phone No.</strong></td>
-                            <td id="phone_no">-</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Carrier</strong></td>
-                            <td id="carrier">-</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Ported</strong></td>
-                            <td id="ported">-</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Telco</strong></td>
-                            <td  id="telco">-</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Contact Information</strong></td>
-                            <td  id="contact_info">-</td>
-                            <td></td>
-                        </tr>
-                </tbody>
-            </table>
-</div>
-
-        <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Telefon No.</th>
-                        <th>Telco</th>
-                        <th>Nama</th>
-                        <th>IC/Pasport</th>
-                        <th>Alamat</th>
-                        <th>Tarikh Didaftarkan</th>
-                        <th>Status</th>
-                        <th>Tarikh Dibuat</th>
-                        <th>Tarikh Selesai</th>
-                        <th>Hari yang Diambil</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        <tr>
-                            <td id="telephone">-</td>
-                            <td id="telco_info">-</td>
-                            <td id="name">-</td>
-                            <td id="ic">-</td>
-                            <td id="address">-</td>
-                            <td id="date_registered">-</td>
-                            <td id="status_info">-</td>
-                            <td id="date_created">-</td>
-                            <td id="date_finish">-</td>
-                            <td id="days_taken">-</td>
+                            <th style="width: 20%;">Item</th>
+                            <th style="width: 100%;">Detail</th>
                             
                         </tr>
-                </tbody>
-            </table>
-        </div>
-        <blink id="blink_info" class="text-center"><a href="../permohonan/mntl">New Request</a></blink>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td><strong>Phone No.</strong></td>
+                                <td id="phone_no">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Carrier</strong></td>
+                                <td id="carrier">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ported</strong></td>
+                                <td id="ported">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Telco</strong></td>
+                                <td  id="telco">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Contact Information</strong></td>
+                                <td  id="contact_info">-</td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div><br><br><b>MNTL Search Results :</b><br><br></div>
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%;">Item</th>
+                            <th>Detail</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td><strong>Telefon No.</strong></td>
+                                <td id="telephone">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Telco</strong></td>
+                                <td id="telco_info">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nama</strong></td>
+                                <td id="name">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>IC/Pasport</strong></td>
+                                <td  id="ic">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Alamat</strong></td>
+                                <td  id="address">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tarikh Didaftarkan</strong></td>
+                                <td  id="date_registered">-</td>
+                                <td  id="date_registered_blink"><p id="blink"><a href="../permohonan/mntl">New Request</a></p></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Status</strong></td>
+                                <td  id="status_info">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tarikh Dibuat</strong></td>
+                                <td  id="date_created">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tarikh Selesai</strong></td>
+                                <td  id="date_finish">-</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hari yang Diambil</strong></td>
+                                <td  id="days_taken">-</td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        
     </div>
 </div>
 
@@ -124,7 +142,7 @@ use Yii;
 $script = <<< JS
 $(document).ready(function() {
     $("#loader").hide();
-    $("#blink_info").hide();
+    $("#date_registered_blink").hide();
     $("#mnp-form").submit(function(event) {
             event.preventDefault(); // stopping submitting
             var data = $(this).serializeArray();
@@ -161,9 +179,12 @@ $(document).ready(function() {
                  $("#loader").hide();
                  } 
                  else{
-                    $("#date_registered").text('No records found');   
-                    $("#blink_info").show();
+                    $("#date_registered").hide();   
+                    //$("#date_registered").text('No records found');   
+                    $("#date_registered_blink").show();
+                    $("#date_registered").html('');  
                     $("#loader").hide();
+                    
                  }
                 }
             })
@@ -173,6 +194,10 @@ $(document).ready(function() {
             });
         
         });
+        var blink = document.getElementById('blink');
+        setInterval(function() {
+        blink.style.opacity = (blink.style.opacity == 0 ? 1 : 0);
+      }, 350);
 
     return  true;
 
@@ -180,3 +205,12 @@ $(document).ready(function() {
 JS; $this->registerJs($script, \yii\web\View::POS_END);
 
 ?>
+<style>
+      .blink {
+        text-decoration: blink;
+        color: #1c87c9;
+        font-size: 30px;
+        font-weight: bold;
+        font-family: sans-serif;
+      }
+    </style>
