@@ -132,7 +132,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                     if($statusSuspectDbInfo['master_status_status_suspek_id'] == 64)
                     {
                     ?>
-                    <div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others][<?= $key?>]"><?= $statusSuspectDbInfo['others'];?></textarea></div> 
+                    <div class="col-lg-8" id="status_suspek_others_<?= $key;?>"><textarea class="form-control" name="PermohonanForm[others][<?= $key?>]"><?= $statusSuspectDbInfo['others'];?></textarea></div><div class="clearfix" id="clearfix_<?= $key;?>"></div>  
                     <?php 
                     }
                     ?>
@@ -339,54 +339,62 @@ var others_1 = 1;var others_2 = 1;var others_3 = 1;var others_4 = 1;var others_5
 $('#permohonanform-master_status_status_suspek_id-0').change(function(){  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_1 < 2)
   { 
-    $('#add_text_areabox-0').after('<div class="col-lg-8"><textarea id="status_suspek_others_0" class="form-control" name="PermohonanForm[others][0]"></textarea></div><div class="clearfix"></div>');
+    $('#add_text_areabox-0').after('<div class="col-lg-8" id="status_suspek_others_0"><textarea class="form-control" name="PermohonanForm[others][0]"></textarea></div><div class="clearfix" id="clearfix_0"></div>');
     ++others_1;
   }
   else{
+    $("#status_suspek_others_0").empty();
     $("#status_suspek_others_0").remove();
+    $("#clearfix_0").remove();
     others_1 = 1;
   }
-
-  
 });
 $('#permohonanform-master_status_status_suspek_id-1').change(function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_2 < 2){
-$('#add_text_areabox-1').after('<div class="col-lg-8"><textarea id="status_suspek_others_1" class="form-control" name="PermohonanForm[others][1]"></textarea></div><div class="clearfix"></div>');
+$('#add_text_areabox-1').after('<div class="col-lg-8" id="status_suspek_others_1"><textarea  class="form-control" name="PermohonanForm[others][1]"></textarea></div><div class="clearfix"></div><div class="clearfix" id="clearfix_1"></div>');
 ++others_2;
   }
   else{
+    $("#status_suspek_others_1").empty();
     $("#status_suspek_others_1").remove();
+    $("#clearfix_1").remove();
     others_2 = 1;
   }
 });
 $('#permohonanform-master_status_status_suspek_id-2').change(function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_3 < 2){
-$('#add_text_areabox-2').after('<div class="col-lg-8"><textarea id="status_suspek_others_2" class="form-control" name="PermohonanForm[others][2]"></textarea></div><div class="clearfix"></div>');
+$('#add_text_areabox-2').after('<div class="col-lg-8" id="status_suspek_others_2"><textarea class="form-control" name="PermohonanForm[others][2]"></textarea></div><div class="clearfix"  id="clearfix_2"></div>');
 ++others_3;
   }
   else{
+    $("#status_suspek_others_2").empty();
     $("#status_suspek_others_2").remove();
+    $("#clearfix_1").remove();
     others_3 = 1;
   }
 });
 $('#permohonanform-master_status_status_suspek_id-3').change( function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_4 < 2){
-$('#add_text_areabox-3').after('<div class="col-lg-8"><textarea id="status_suspek_others_3" class="form-control" name="PermohonanForm[others][3]"></textarea></div><div class="clearfix"></div>');
+$('#add_text_areabox-3').after('<div class="col-lg-8"  id="status_suspek_others_3"><textarea class="form-control" name="PermohonanForm[others][3]"></textarea></div><div class="clearfix"  id="clearfix_3"></div>');
 ++others_4;
   }
   else{
+    $("#status_suspek_others_3").empty();
     $("#status_suspek_others_3").remove();
-    others_3 = 1;
+    $("#clearfix_1").remove();
+    others_4 = 1;
   }
 });
 $('#permohonanform-master_status_status_suspek_id-4').change( function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64  && others_5 < 2){
-$('#add_text_areabox-4').after('<div class="col-lg-8"><textarea id="status_suspek_others_4" class="form-control" name="PermohonanForm[others][4]"></textarea></div><div class="clearfix"></div>');
+$('#add_text_areabox-4').after('<div class="col-lg-8"  id="status_suspek_others_4"><textarea class="form-control" name="PermohonanForm[others][4]"></textarea></div><div class="clearfix"  id="clearfix_4"></div>');
 ++others_5;
   }
   else{
+    $("#status_suspek_others_4").empty();
     $("#status_suspek_others_4").remove();
-    others_4 = 1;
+    $("#clearfix_4").remove();
+    others_5 = 1;
   }
 });
 
@@ -394,8 +402,8 @@ $('#add_text_areabox-4').after('<div class="col-lg-8"><textarea id="status_suspe
 // new suspek dynamic filed if user choose others then text area box show in new suspek fileds
 var new_others_1 = 1;var new_others_2 = 1;var new_others_3 = 1;var new_others_4 = 1;var new_others_5 = 1;
 
-$('#id_name').on('change','#new_master_status_status_suspek_id_0', function() {  alert(this.value);
-  if(this.value == 64  && new_others_1 < 2){ alert(23232);
+$('#id_name').on('change','#new_master_status_status_suspek_id_0', function() {  
+  if(this.value == 64  && new_others_1 < 2){ 
 $('#new_add_text_areabox-0').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_0" class="form-control" name="PermohonanForm[new_others][0]"></textarea></div><div class="clearfix"></div>');
 ++new_others_1;
   }
@@ -448,6 +456,66 @@ $('#new_add_text_areabox-4').after('<div class="col-lg-8"><textarea id="new_stat
     new_others_5 = 1;
   }
 });
+
+$('#permohonanform-master_status_suspect_or_saksi_id-0').change(function(){
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-0 option[value=60]").prop("selected", "selected");
+  }
+});
+
+$('#id_name').on('change','#permohonanform-master_status_suspect_or_saksi_id-1', function() {  
+                            
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-1 option[value=60]").prop("selected", "selected");
+  }  
+});
+
+  $('#permohonanform-master_status_suspect_or_saksi_id-1').change(function() {                              
+  if(this.value == 86 ||  this.value == 87)
+  { 
+  $("#permohonanform-master_status_status_suspek_id-1 option[value=60]").prop("selected", "selected");
+  }  
+  });
+
+$('#id_name').on('change','#permohonanform-master_status_suspect_or_saksi_id-2', function() {  
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-2 option[value=60]").prop("selected", "selected");
+  }  
+});
+  $('#permohonanform-master_status_suspect_or_saksi_id-2').change(function() {                              
+  if(this.value == 86 ||  this.value == 87)
+  { 
+  $("#permohonanform-master_status_status_suspek_id-2 option[value=60]").prop("selected", "selected");
+  }  
+  });
+$('#id_name').on('change','#permohonanform-master_status_suspect_or_saksi_id-3', function() {  
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-3 option[value=60]").prop("selected", "selected");
+  }  
+});
+  $('#permohonanform-master_status_suspect_or_saksi_id-3').change(function() {                              
+  if(this.value == 86 ||  this.value == 87)
+  { 
+  $("#permohonanform-master_status_status_suspek_id-3 option[value=60]").prop("selected", "selected");
+  }  
+  });
+$('#id_name').on('change','#permohonanform-master_status_suspect_or_saksi_id-4', function() {  
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-4 option[value=60]").prop("selected", "selected");
+  }  
+});
+
+  $('#permohonanform-master_status_suspect_or_saksi_id-4').change(function() {                              
+  if(this.value == 86 ||  this.value == 87)
+  { 
+  $("#permohonanform-master_status_status_suspek_id-4 option[value=60]").prop("selected", "selected");
+  }  
+  });
 
 var URL_obj = [{id:39, name:"https://twitter.com/"}, {id:40, name:"https://www.instagram.com/"}, {id:41, name:"https://www.tumblr.com/"}, {id:42, name:"https://www.facebook.com/"}, {id:99, name:"https://www.youtube.com/"}, {id:100, name:"https://www.tiktok.com/"}];
 $('#social_media_0').on('change',function() {   

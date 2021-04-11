@@ -78,13 +78,11 @@ class PermohonanForm extends Model
             }, 'whenClient' => "function (attribute, value) {
                 if ($('#permohonanform-email').val().toLowerCase().indexOf('.gov.my') >= 0)
                 {
-                    $('#invalid_email').html('');
+                    $('#invalid_email').remove();
                     return true;
                 }
                 else if($('#permohonanform-email').val() != '')
                 {
-                    
-                    $('#permohonanform-email').val('');
                     $('#invalid_email').html('alamat email tidak sah');
                     return false;
                 }

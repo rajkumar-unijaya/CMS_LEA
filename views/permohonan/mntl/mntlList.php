@@ -1,27 +1,12 @@
 <?php
-
-/* @var $this yii\web\View */
-
 use yii\helpers\Html;
-
-// $this->title = 'mntl';
-// $this->params['breadcrumbs'][] = $this->title;
-?>
-<!-- <div class="site-about">
-    <h1><?= Html::encode($this->title) ?></h1>
-    <p>
-        This is the <?= Html::encode($this->title) ?> page. You may modify the following file to customize its content
-    </p>
-</div> -->
-<?php
-
 $responses = $responses->data;
 ?>
 <div class="container-fluid">
     <h1 style="padding-top: 1.5rem;">MNTL List</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">MNTL</a></li>
+            <li class="breadcrumb-item"><a href="../dashboard/index">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">List</li>
         </ol>
     </nav>
