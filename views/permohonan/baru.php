@@ -194,12 +194,44 @@ else{
   alert("Can't create new field");
   return false;
 }
-  
 });
+
+$('#permohonanform-master_status_suspect_or_saksi_id-0').change(function(){
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-0 option[value=60]").prop("selected", "selected");
+  }
+});
+
+$('#id_name').on('change','#permohonanform-master_status_suspect_or_saksi_id-1', function() {  
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-1 option[value=60]").prop("selected", "selected");
+  }  
+});
+$('#id_name').on('change','#permohonanform-master_status_suspect_or_saksi_id-2', function() {  
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-2 option[value=60]").prop("selected", "selected");
+  }  
+});
+$('#id_name').on('change','#permohonanform-master_status_suspect_or_saksi_id-3', function() {  
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-3 option[value=60]").prop("selected", "selected");
+  }  
+});
+$('#id_name').on('change','#permohonanform-master_status_suspect_or_saksi_id-4', function() {  
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#permohonanform-master_status_status_suspek_id-4 option[value=60]").prop("selected", "selected");
+  }  
+});
+
 $('#add_ic_name').click(function(){ var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 3); 
-  if(newIdVal <= 5)
+  if(newIdVal < 5)
 {
-  $('#id_name').append('<div class="row"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+newIdVal+' required"><select id="permohonanform-master_status_suspect_or_saksi_id-'+newIdVal+'" class="form-control" name="PermohonanForm[master_status_suspect_or_saksi_id]['+newIdVal+']"><option value="">--Pilih Suspek or Saksi--</option><option value="14">Suspek</option><option value="15">Saksi</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+newIdVal+'"><select id="permohonanform-master_status_status_suspek_id-'+newIdVal+'" class="form-control" name="PermohonanForm[master_status_status_suspek_id]['+newIdVal+']"><option value="">--Pilih Option--</option><option value="60">Tiada maklumat mengenai suspek/sakhi</option><option value="61">Identiti suspek(Nama dan KPT) sudah dikenalpasti, tetapi belum ditahan</option><option value="62">Suspek telah ditahan</option><option value="63">Suspek dibebaskan dengan jaminan</option><option value="64">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="permohonanform-ic-0" class="form-control" name="PermohonanForm[ic]['+newIdVal+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4" id="add_text_areabox-'+newIdVal+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="permohonanform-name-0" class="form-control" name="PermohonanForm[name]['+newIdVal+']" placeholder="Name"><div class="help-block"></div></div></div></div>');
+  $('#id_name').append('<div class="row"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+newIdVal+' required"><select id="permohonanform-master_status_suspect_or_saksi_id-'+newIdVal+'" class="form-control" name="PermohonanForm[master_status_suspect_or_saksi_id]['+newIdVal+']"><option value="">--Pilih Suspek or Saksi--</option><option value="86">Suspek</option><option value="87">Saksi</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+newIdVal+'"><select id="permohonanform-master_status_status_suspek_id-'+newIdVal+'" class="form-control" name="PermohonanForm[master_status_status_suspek_id]['+newIdVal+']"><option value="">--Pilih Option--</option><option value="60">Tiada maklumat mengenai suspek/sakhi</option><option value="61">Identiti suspek(Nama dan KPT) sudah dikenalpasti, tetapi belum ditahan</option><option value="62">Suspek telah ditahan</option><option value="63">Suspek dibebaskan dengan jaminan</option><option value="64">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="permohonanform-ic-0" class="form-control" name="PermohonanForm[ic]['+newIdVal+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4" id="add_text_areabox-'+newIdVal+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="permohonanform-name-0" class="form-control" name="PermohonanForm[name]['+newIdVal+']" placeholder="Name"><div class="help-block"></div></div></div></div>');
 }
 else{
   alert("Can't create new field");
@@ -211,37 +243,67 @@ var others_1 = 1;var others_2 = 1;var others_3 = 1;var others_4 = 1;var others_5
 $('#permohonanform-master_status_status_suspek_id-0').change(function(){  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_1 < 2)
   { 
-    $('#add_text_areabox-0').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others][0]"></textarea></div><div class="clearfix"></div>');
+    $('#add_text_areabox-0').after('<div class="col-lg-8" id="textarea_1"><textarea  class="form-control" name="PermohonanForm[others][0]"></textarea></div><div class="clearfix" id="clearfix_1"></div>');
     ++others_1;
+  }
+  else{
+    $("#textarea_1").empty();
+    $("#textarea_1").remove();
+    $("#clearfix_1").remove();
+    others_1 = 1;
   }
   
 });
 
 $('#id_name').on('change','#permohonanform-master_status_status_suspek_id-1', function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_2 < 2){ 
-$('#add_text_areabox-1').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others][1]"></textarea></div><div class="clearfix"></div>');
+$('#add_text_areabox-1').after('<div class="col-lg-8" id="textarea_2"><textarea class="form-control" name="PermohonanForm[others][1]"></textarea></div><div class="clearfix" id="clearfix_2"></div>');
 ++others_2;
+  }
+  else{
+    $("#textarea_2").empty();
+    $("#textarea_2").remove();
+    $("#clearfix_2").remove();
+    others_2 = 1;
   }
 });
 
 $('#id_name').on('change','#permohonanform-master_status_status_suspek_id-2', function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_3 < 2){
-$('#add_text_areabox-2').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others][2]"></textarea></div><div class="clearfix"></div>');
+$('#add_text_areabox-2').after('<div class="col-lg-8" id="textarea_3"><textarea class="form-control" name="PermohonanForm[others][2]"></textarea></div><div class="clearfix" id="clearfix_3"></div>');
 ++others_3;
+  }
+  else{
+    $("#textarea_3").empty();
+    $("#textarea_3").remove();
+    $("#clearfix_3").remove();
+    others_3 = 1;
   }
 });
 
 $('#id_name').on('change','#permohonanform-master_status_status_suspek_id-3', function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_4 < 2){
-$('#add_text_areabox-3').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others][3]"></textarea></div><div class="clearfix"></div>');
+$('#add_text_areabox-3').after('<div class="col-lg-8" id="textarea_4"><textarea class="form-control" name="PermohonanForm[others][3]"></textarea></div><div class="clearfix" id="clearfix_4"></div>');
 ++others_4;
+  }
+  else{
+    $("#textarea_4").empty();
+    $("#textarea_4").remove();
+    $("#clearfix_4").remove();
+    others_4 = 1;
   }
 });
 
 $('#id_name').on('change','#permohonanform-master_status_status_suspek_id-4', function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64  && others_5 < 2){
-$('#add_text_areabox-4').after('<div class="col-lg-8"><textarea class="form-control" name="PermohonanForm[others][4]"></textarea></div><div class="clearfix"></div>');
+$('#add_text_areabox-4').after('<div class="col-lg-8"  id="textarea_5"><textarea class="form-control" name="PermohonanForm[others][4]"></textarea></div><div class="clearfix"  id="clearfix_5"></div>');
 ++others_5;
+  }
+  else{
+    $("#textarea_5").empty();
+    $("#textarea_5").remove();
+    $("#clearfix_5").remove();
+    others_5 = 1;
   }
 });
 

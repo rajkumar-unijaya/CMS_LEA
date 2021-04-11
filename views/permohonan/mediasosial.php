@@ -5,7 +5,7 @@
 use yii\helpers\Html;
 
 $this->title = 'Media Sosial';
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div id="success" class="info noticationMsg">
 <?php if(Yii::$app->session->hasFlash('success')):?>
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1 style="padding-top: 1.5rem;">Sosial Media</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="../dashboard/index">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Sosial Media Senaraikan</li>
         </ol>
     </nav>

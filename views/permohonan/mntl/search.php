@@ -19,7 +19,7 @@ use Yii;
     <h1 style="padding-top: 1.5rem;">MNP Search</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">MNTL</a></li>
+            <li class="breadcrumb-item"><a href="../dashboard/index">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">MNP Search</li>
         </ol>
     </nav>
