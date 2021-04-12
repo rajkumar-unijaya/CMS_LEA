@@ -2116,6 +2116,27 @@ class PermohonanController extends Controller
 
 		return $this->render('/permohonan/lea/leaedit', ['model' => $model,"userResponse" => $userResponse,"masterEmailType" => $masterEmailType,"masterUnitName" => $masterUnitName,"masterOrganizationName" => $masterOrganizationName,"masterBranch" => $masterBranch,"masterState" => $masterState,"masterDistrict" => $masterDistrict,"masterPostcode" => $masterPostcode]);
 	}
+
+
+    /****
+     * 
+     * Download Garis Panduan document
+     */
+    public function actionGuidelines()
+    { 
+        $name = "Manual-FMS-v1.pdf";
+        $guidelinesFile = \Yii::getAlias('@guidelines')."". $name;
+        
+        $pdf = file_get_contents($guidelinesFile);
+        header('Content-Type: application/pdf');
+        header('Cache-Control: public, must-revalidate, max-age=0'); // HTTP/1.1
+        header('Pragma: public');
+        header('Content-Length: '.strlen($pdf));
+        header('Content-Disposition: inline; filename="'.basename($guidelinesFile).'";');
+        ob_clean(); 
+        flush(); 
+        echo $pdf;
+        }
     
 
 }
