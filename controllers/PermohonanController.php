@@ -2133,6 +2133,7 @@ class PermohonanController extends Controller
         header('Pragma: public');
         header('Content-Length: '.strlen($pdf));
         header('Content-Disposition: inline; filename="'.basename($guidelinesFile).'";');
+        ob_clean(); 
         flush(); 
         echo $pdf;
         }
