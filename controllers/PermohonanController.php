@@ -2112,9 +2112,20 @@ class PermohonanController extends Controller
 			if ($responses->isOk) {
 				Yii::$app->session->addFlash('success', 'Successfully updated profile.');
 			}
-		}
+		} 
+        $notificationInfo = array();
+        if(isset($userResponse['mobile_verification']) && $userResponse['mobile_verification'] == 1)
+        {
+            $notificationInfo[] = 1;
 
-		return $this->render('/permohonan/lea/leaedit', ['model' => $model,"userResponse" => $userResponse,"masterEmailType" => $masterEmailType,"masterUnitName" => $masterUnitName,"masterOrganizationName" => $masterOrganizationName,"masterBranch" => $masterBranch,"masterState" => $masterState,"masterDistrict" => $masterDistrict,"masterPostcode" => $masterPostcode]);
+        }
+        if(isset($userResponse['telegram_verification']) && $userResponse['telegram_verification'] == 1)
+        {
+            $notificationInfo[] = 2;
+
+        }
+        $userResponse['notificationInfo'] = $notificationInfo;
+        return $this->render('/permohonan/lea/leaedit', ['model' => $model,"userResponse" => $userResponse,"masterEmailType" => $masterEmailType,"masterUnitName" => $masterUnitName,"masterOrganizationName" => $masterOrganizationName,"masterBranch" => $masterBranch,"masterState" => $masterState,"masterDistrict" => $masterDistrict,"masterPostcode" => $masterPostcode]);
 	}
 
 

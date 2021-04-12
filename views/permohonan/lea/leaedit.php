@@ -39,6 +39,8 @@ $this->params['breadcrumbs'][] = ['label' => 'LEA Edit', 'url' => ['lea-edit']];
                   $i++;
                   $offencesList[$offenceInfo['offence_id']] = array("selected"=>true);
                 endforeach;*/
+                $model->email_type = $userResponse['email_type'];
+                
                 ?>
                 <?= $form->field($model, 'email_type')->label('Email Type')->radioList($masterEmailType)->label(false); ?>
                 <?php //= $form->field($model, 'email_type')->dropDownList($offences,array('multiple'=>'multiple','prompt' => '--Pilih Kesalahan--','options' => $offencesList))->label(false); ?>
@@ -57,7 +59,7 @@ $this->params['breadcrumbs'][] = ['label' => 'LEA Edit', 'url' => ['lea-edit']];
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">IC </label>
                 <div class="col-sm-8">
-                <?php  $model->name = $userResponse['ic_no']; ?>
+                <?php  $model->icno = $userResponse['ic_no']; ?>
                 <?= $form->field($model, 'icno')->textInput(['placeholder' => 'IC'])->label(false) ?>   
                 </div>
             </div>
@@ -120,7 +122,7 @@ $this->params['breadcrumbs'][] = ['label' => 'LEA Edit', 'url' => ['lea-edit']];
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Mobile No. </label>
                 <div class="col-sm-8">
-                <?php  $model->name = $userResponse['mobile_no']; ?>
+                <?php  $model->mobile_no = $userResponse['mobile_no']; ?>
                 <?= $form->field($model, 'mobile_no')->textInput(['placeholder' => 'Mobile No.'])->label(false) ?>   
                 </div>
             </div>
@@ -128,7 +130,7 @@ $this->params['breadcrumbs'][] = ['label' => 'LEA Edit', 'url' => ['lea-edit']];
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Office Phone No. </label>
                 <div class="col-sm-8">
-                <?php  $model->name = $userResponse['office_phone_no']; ?>
+                <?php  $model->office_phone_no = $userResponse['office_phone_no']; ?>
                 <?= $form->field($model, 'office_phone_no')->textInput(['placeholder' => 'Office Phone No.'])->label(false) ?>   
                 </div>
             </div>
@@ -136,7 +138,7 @@ $this->params['breadcrumbs'][] = ['label' => 'LEA Edit', 'url' => ['lea-edit']];
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Telegram Id </label>
                 <div class="col-sm-8">
-                <?php  $model->name = $userResponse['telegram_id']; ?>
+                <?php  $model->telegram_id = $userResponse['telegram_id']; ?>
                 <?= $form->field($model, 'telegram_id')->textInput(['placeholder' => 'Telegram Id'])->label(false) ?>   
                 </div>
             </div>
@@ -144,7 +146,7 @@ $this->params['breadcrumbs'][] = ['label' => 'LEA Edit', 'url' => ['lea-edit']];
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Notification </label>
                 <div class="col-sm-8">
-                <?php  //$model->notification = $userResponse['notification']; ?>
+                <?php   $model->notification = $userResponse['notificationInfo']; ?>
                 <?= $form->field($model, 'notification')->label('Notify user creation by')->checkboxList(['1' => 'SMS', '2' => "Telegram"])->label(false); ?>
                 </div>
             </div>
