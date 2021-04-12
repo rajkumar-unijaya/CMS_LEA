@@ -40,7 +40,7 @@ DashboardAsset::register($this);
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                         <a class="dropdown-item" href="../misc/aboutcms">Tentang CMS</a>
-                        <a class="dropdown-item" href="../misc/guidelines">Garis Panduan</a>
+                        <a target="__blank" class="dropdown-item" href="../permohonan/guidelines">Garis Panduan</a>
                         <a class="dropdown-item" href="../permohonan/lea-edit">Lihat Profil</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="../auth/logout">Log Keluar</a>

@@ -12,6 +12,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
         '@masterData' => "@app/web/uploads/master-data/",
         '@basePath' => "@app",
+        '@guidelines' => "@app/web/uploads/guidelines/",
     ],
     'on beforeAction' => function($event)
     { 
