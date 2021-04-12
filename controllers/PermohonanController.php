@@ -368,8 +368,9 @@ class PermohonanController extends Controller
             $caseInfo['master_status_purpose_of_application_id'] = implode(",",$data['PermohonanForm']['application_purpose']);
             $caseInfo['purpose_of_application_info'] = $data['PermohonanForm']['application_purpose_info'];
             }
-            
-
+           
+        if(!empty($data['PermohonanForm']['master_status_status_suspek_id'][0]))
+        {
             for($i=0;$i<=count($data['PermohonanForm']['master_status_status_suspek_id'])-1;$i++)
             {
                 $caseStatusSuspek[$i]['master_status_suspect_or_saksi_id']  = $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i] ? $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i]: 0;
@@ -384,6 +385,7 @@ class PermohonanController extends Controller
                 }
                 
             }
+        }
             for($i=0;$i<=count($data['PermohonanForm']['url'])-1;$i++)
             { 
                 if(!empty($data['PermohonanForm']['master_social_media_id'][$i]))
@@ -401,7 +403,7 @@ class PermohonanController extends Controller
             //echo json_encode($caseInfo).'<br>';//exit;
             //echo json_encode($caseStatusSuspek).'<br>';
             //echo json_encode($caseInvolvedURL).'<br>';
-           // echo json_encode($offences).'<br>';exit;
+            //echo json_encode($offences).'<br>';exit;
             
             $caseInfoResponse = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
