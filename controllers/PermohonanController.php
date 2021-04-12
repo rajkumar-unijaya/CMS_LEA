@@ -2136,6 +2136,15 @@ class PermohonanController extends Controller
         flush(); 
         echo $pdf;
         }
+
+    /****
+     * 
+     * About CMS view page
+     */
+    public function actionAboutcms()
+    { 
+        return $this->render('/permohonan/lea/aboutcms');
+    }
     
 
 }
