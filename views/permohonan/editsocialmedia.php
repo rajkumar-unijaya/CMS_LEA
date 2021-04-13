@@ -99,9 +99,8 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             <?php 
             $count = 0;
             if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialResponse['case_info_status_suspek']) > 0)
-            {
+            { //echo "<pre>";print_r($mediaSocialResponse['case_info_status_suspek']);exit;
             foreach($mediaSocialResponse['case_info_status_suspek'] as $key => $statusSuspectDbInfo):
-              //echo "<pre>";print_r($statusSuspectDbInfo);exit;
             ?>
             <div class="col-sm-4" ></div>
             
@@ -142,7 +141,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             $count++;
             endforeach;
           }
-          else{ 
+          else{ echo 22;exit;
             ?>
             <div class="col-sm-4" ></div>
             <div class="col-sm-8" id="id_name">
@@ -169,7 +168,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                     <div class="col-sm-4">
                     <?= Html::input('text', 'PermohonanForm[new_ic][0]', '', ['class'=> 'form-control','id' => "new_ic_0","placeholder"=>"IC"]) ?>
                     </div>
-                    <div class="col-sm-4"> 
+                    <div class="col-sm-4"  id="new_add_text_areabox-0"> 
                     <?= Html::input('text', 'PermohonanForm[new_name][0]', '', ['class'=> 'form-control','id' => "new_name_0","placeholder"=>"Name"]) ?>
                     </div>  
                 </div>
@@ -459,7 +458,7 @@ $('#add_ic_name').click(function(){ //alert(new_suspek_increment_val);return fal
   if(prevVal == "no" && new_suspek_increment_val <= 3)
 {
   ++new_suspek_increment_val;
-  $('#id_name').append('<div class="row"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+new_suspek_increment_val+' required"><select name="PermohonanForm[new_master_status_suspect_or_saksi_id]['+new_suspek_increment_val+']" class="form-control" id="permohonanform-new_master_status_suspect_or_saksi_id-'+new_suspek_increment_val+'"><option value="">--Pilih Option--</option><option value="86">Suspect</option><option value="87">Witness</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+new_suspek_increment_val+'"><select name="PermohonanForm[new_master_status_status_suspek_id]['+new_suspek_increment_val+']" class="form-control" id="new_master_status_status_suspek_id_'+new_suspek_increment_val+'"><option value="">--Pilih Option--</option><option value="60">Tiada maklumat mengenai suspek/sakhi</option><option value="61">Identiti suspek(Nama dan KPT) sudah dikenalpasti</option><option value="62">Suspek telah ditahan</option><option value="63">Suspek dibebaskan dengan jaminan</option><option value="64">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="new_ic_'+new_suspek_increment_val+'" class="form-control" name="PermohonanForm[new_ic]['+new_suspek_increment_val+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4" id="add_text_areabox-'+new_suspek_increment_val+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="new_name_'+new_suspek_increment_val+'" class="form-control" name="PermohonanForm[new_name]['+new_suspek_increment_val+']" placeholder="Name"><div class="help-block"></div></div></div></div>');  
+  $('#id_name').append('<div class="row"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+new_suspek_increment_val+' required"><select name="PermohonanForm[new_master_status_suspect_or_saksi_id]['+new_suspek_increment_val+']" class="form-control" id="permohonanform-new_master_status_suspect_or_saksi_id-'+new_suspek_increment_val+'"><option value="">--Pilih Option--</option><option value="86">Suspect</option><option value="87">Witness</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+new_suspek_increment_val+'"><select name="PermohonanForm[new_master_status_status_suspek_id]['+new_suspek_increment_val+']" class="form-control" id="new_master_status_status_suspek_id_'+new_suspek_increment_val+'"><option value="">--Pilih Option--</option><option value="60">Tiada maklumat mengenai suspek/sakhi</option><option value="61">Identiti suspek(Nama dan KPT) sudah dikenalpasti</option><option value="62">Suspek telah ditahan</option><option value="63">Suspek dibebaskan dengan jaminan</option><option value="64">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="new_ic_'+new_suspek_increment_val+'" class="form-control" name="PermohonanForm[new_ic]['+new_suspek_increment_val+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4"  id="new_add_text_areabox-'+new_suspek_increment_val+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="new_name_'+new_suspek_increment_val+'" class="form-control" name="PermohonanForm[new_name]['+new_suspek_increment_val+']" placeholder="Name"><div class="help-block"></div></div></div></div>');  
 }
 else if(prevVal == "yes" && new_suspek_increment_val < 5)
 { 
@@ -551,27 +550,73 @@ var new_others_1 = 1;var new_others_2 = 1;var new_others_3 = 1;var new_others_4 
 
 $('#id_name').on('change','#new_master_status_status_suspek_id_0', function() {  
   if(this.value == 64  && new_others_1 < 2){
-$('#new_add_text_areabox-0').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_0" class="form-control" name="PermohonanForm[new_others][0]"></textarea></div><div class="clearfix"></div>');
+$('#new_add_text_areabox-0').after('<div class="col-lg-8" id="new_status_suspek_others_0"><textarea  class="form-control" name="PermohonanForm[new_others][0]"></textarea></div><div class="clearfix" id="clearfix_0"></div>');
 ++new_others_1;
   }
   else{
+    //$("#new_status_suspek_others_0").remove();
+    $("#new_status_suspek_others_0").empty();
     $("#new_status_suspek_others_0").remove();
+    $("#clearfix_0").remove();
     new_others_1 = 1;
   }
 });
 
-$('#id_name').on('change','#new_master_status_status_suspek_id_1', function() {
+$('#id_name').on('change','#new_master_status_status_suspek_id_1', function() { 
   if(this.value == 64  && new_others_2 < 2){
-$('#new_add_text_areabox-1').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_1" class="form-control" name="PermohonanForm[new_others][1]"></textarea></div><div class="clearfix"></div>');
+$('#new_add_text_areabox-1').after('<div class="col-lg-8" id="new_status_suspek_others_1"><textarea class="form-control" name="PermohonanForm[new_others][1]"></textarea></div><div class="clearfix" id="clearfix_1"></div>');
 ++new_others_2;
   }
   else{
+    $("#new_status_suspek_others_1").empty();
     $("#new_status_suspek_others_1").remove();
+    $("#clearfix_1").remove();
     new_others_2 = 1;
   }
 });
 
-$('#new_master_status_status_suspek_id_2').change( function() { 
+$('#id_name').on('change','#new_master_status_status_suspek_id_2', function() { 
+  if(this.value == 64  && new_others_3 < 2){
+$('#new_add_text_areabox-2').after('<div class="col-lg-8" id="new_status_suspek_others_2"><textarea  class="form-control" name="PermohonanForm[new_others][2]"></textarea></div><div class="clearfix" id="clearfix_2"></div>');
+++new_others_3;
+  }
+  else{
+    $("#new_status_suspek_others_2").empty();
+    $("#new_status_suspek_others_2").remove();
+    $("#clearfix_2").remove();
+    new_others_3 = 1;
+  }
+});
+
+$('#id_name').on('change','#new_master_status_status_suspek_id_3', function() { 
+  if(this.value == 64  && new_others_4 < 2){
+$('#new_add_text_areabox-3').after('<div class="col-lg-8" id="new_status_suspek_others_3"><textarea  class="form-control" name="PermohonanForm[new_others][3]"></textarea></div><div class="clearfix" id="clearfix_3"></div>');
+++new_others_4;
+  }
+  else{
+    $("#new_status_suspek_others_3").empty();
+    $("#new_status_suspek_others_3").remove();
+    $("#clearfix_3").remove();
+    new_others_4 = 1;
+  }
+});
+
+$('#id_name').on('change','#new_master_status_status_suspek_id_4', function() { 
+  if(this.value == 64  && new_others_5 < 2){
+$('#new_add_text_areabox-4').after('<div class="col-lg-8" id="new_status_suspek_others_4"><textarea  class="form-control" name="PermohonanForm[new_others][4]"></textarea></div><div class="clearfix" id="clearfix_4"></div>');
+++new_others_5;
+  }
+  else{
+    $("#new_status_suspek_others_4").empty();
+    $("#new_status_suspek_others_4").remove();
+    $("#clearfix_4").remove();
+    new_others_5 = 1;
+  }
+});
+
+
+
+$('#new_master_status_status_suspek_id_2').change( function() { alert(33);
   if(this.value == 64  && new_others_3 < 2){
 $('#new_add_text_areabox-2').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_2" class="form-control" name="PermohonanForm[new_others][2]"></textarea></div><div class="clearfix"></div>');
 ++new_others_3;
@@ -582,7 +627,7 @@ $('#new_add_text_areabox-2').after('<div class="col-lg-8"><textarea id="new_stat
   }
 });
 
-$('#new_master_status_status_suspek_id_3').change( function() { 
+$('#new_master_status_status_suspek_id_3').change( function() { alert(44);
   if(this.value == 64  && new_others_4 < 2){
 $('#new_add_text_areabox-3').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_3" class="form-control" name="PermohonanForm[new_others][3]"></textarea></div><div class="clearfix"></div>');
 ++new_others_4;
@@ -593,7 +638,7 @@ $('#new_add_text_areabox-3').after('<div class="col-lg-8"><textarea id="new_stat
   }
 });
 
-$('#new_master_status_status_suspek_id_4').change( function() { 
+$('#new_master_status_status_suspek_id_4').change( function() { alert(55);
   if(this.value == 64  && new_others_5 < 2){
 $('#new_add_text_areabox-4').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_4" class="form-control" name="PermohonanForm[new_others][4]"></textarea></div><div class="clearfix"></div>');
 ++new_others_5;
@@ -604,7 +649,40 @@ $('#new_add_text_areabox-4').after('<div class="col-lg-8"><textarea id="new_stat
   }
 });
 
+$('#new_master_status_suspect_or_saksi_id_0').change(function(){
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#new_master_status_status_suspek_id_0 option[value=60]").prop("selected", "selected");
+  }
+});
 
+$('#id_name').on('change','#permohonanform-new_master_status_suspect_or_saksi_id-1', function() {  
+if(this.value == 86 ||  this.value == 87)
+{ 
+$("#new_master_status_status_suspek_id_1 option[value=60]").prop("selected", "selected");
+}  
+});
+
+$('#id_name').on('change','#permohonanform-new_master_status_suspect_or_saksi_id-2', function() {  
+if(this.value == 86 ||  this.value == 87)
+{ 
+$("#new_master_status_status_suspek_id_2 option[value=60]").prop("selected", "selected");
+}  
+});
+
+$('#id_name').on('change','#permohonanform-new_master_status_suspect_or_saksi_id-3', function() {  
+if(this.value == 86 ||  this.value == 87)
+{ 
+$("#new_master_status_status_suspek_id_3 option[value=60]").prop("selected", "selected");
+}  
+});
+
+$('#id_name').on('change','#permohonanform-new_master_status_suspect_or_saksi_id-4', function() {  
+if(this.value == 86 ||  this.value == 87)
+{ 
+$("#new_master_status_status_suspek_id_4 option[value=60]").prop("selected", "selected");
+}  
+});
 
 
 
