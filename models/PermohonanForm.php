@@ -39,6 +39,8 @@ class PermohonanForm extends Model
     public $url;
     public $application_purpose;
     public $application_purpose_info;
+    public $new_master_social_media_id;
+    public $new_url;
     
 
     
@@ -94,10 +96,14 @@ class PermohonanForm extends Model
                  return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 78;
                  }"],     
              [['report_no'], 'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
-                 'when' => function($model) { return empty($model->investigation_no); }
+                 'when' => function($model) { return empty($model->investigation_no); }, 'whenClient' => "function (attribute, value) {
+                    return $('#permohonanform-investigation_no').val().length == 0;
+                    }"
                ],
              [['investigation_no'],'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
-                 'when' => function($model) { return empty($model->report_no); }
+                 'when' => function($model) { return empty($model->report_no); }, 'whenClient' => "function (attribute, value) {
+                    return $('#permohonanform-report_no').val().length == 0;
+                    }"
                ],
              [['offence'], 'required','message'=>'Pilih kesalahan'],
              [['case_summary'], 'required','message'=>'Masukkan Ringkasan Kes'],  
@@ -111,7 +117,7 @@ class PermohonanForm extends Model
                  }
                  
              }],*/
-             [['surat_rasmi'],'file','skipOnEmpty' => false, 'extensions' => 'png,jpg,jpeg,pdf', 'message'=>'valid Surat Rasmi'],
+             [['surat_rasmi'],'file','skipOnEmpty' => true, 'extensions' => 'png,jpg,jpeg,pdf', 'message'=>'valid Surat Rasmi'],
              //[['url'], 'anyOneURLRequired'],
              //['url','in', 'range' => [0], 'message'=>'Masukkan URL'] 
              //[['url'], 'each', 'rule' => ['string'],'message'=>'Masukkan URL'] 
@@ -120,9 +126,9 @@ class PermohonanForm extends Model
 
     public function scenarios() {
         $scenarios = parent::scenarios(); 
-        $scenarios['create'] = ['for_self',/*'surat_rasmi',*/'selfName','email','no_telephone','report_no','investigation_no','offence','case_summary',/*'master_status_suspect_or_saksi_id',*/'application_purpose'];
+        $scenarios['create'] = ['for_self','surat_rasmi','selfName','email','no_telephone','report_no','investigation_no','offence','case_summary',/*'master_status_suspect_or_saksi_id',*/'application_purpose'];
         //$scenarios['edit'] = ['report_no','investigation_no','offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
-        $scenarios['edit'] = ['report_no','investigation_no','offence','case_summary','application_purpose'];
+        $scenarios['edit'] = ['surat_rasmi','report_no','investigation_no','offence','case_summary','application_purpose'];
         $scenarios['reopen'] = ['offence','case_summary','application_purpose'];
         return $scenarios;
     

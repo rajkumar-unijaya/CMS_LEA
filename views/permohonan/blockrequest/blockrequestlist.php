@@ -54,7 +54,7 @@ $this->title = 'Blocking Request';
                             echo strcasecmp($responseTemp['case_status']['name'],"Rejected") == 0 ? "<br>(Muat Turun Komen)" : "";
                             
                             ?></td>
-                            <td><?php echo $responseTemp['case_start_date'] ? \Yii::$app->formatter->asDate($responseTemp['case_start_date'], 'long') : "N/A"; ?></td>
+                            <td><?php echo $responseTemp['created_ts'] ? \Yii::$app->formatter->asDate($responseTemp['created_ts'], 'long') : "N/A"; ?></td>
                             <td><?php echo 1; ?></td>
                             <td>
                             <?php 
