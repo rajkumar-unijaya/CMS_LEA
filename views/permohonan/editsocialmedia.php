@@ -141,7 +141,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             $count++;
             endforeach;
           }
-          else{ echo 22;exit;
+          else{ 
             ?>
             <div class="col-sm-4" ></div>
             <div class="col-sm-8" id="id_name">

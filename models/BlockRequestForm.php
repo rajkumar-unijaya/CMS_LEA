@@ -23,7 +23,7 @@ class BlockRequestForm extends Model
     public $case_summary;
     public $surat_rasmi;
     public $laporan_polis;
-    public $attachmentURL;
+    //public $attachmentURL;
     public $master_social_media_id;
     public $url;
     //public $application_purpose;
@@ -46,27 +46,54 @@ class BlockRequestForm extends Model
                 return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 78;
                 }"],
             [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
-                return ($model->for_self == 78 ? true : false); 
-            }, 'whenClient' => "function (attribute, value) {
-                return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 78;
+                 return ($model->for_self == 78 ? true : false); 
+             }, 'whenClient' => "function (attribute, value) {
+                 return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 78;
+                 }"],
+            [['email'],'domainCheck'], 
+
+            [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
+                $allDomains = [".gov.my"];
+                $domain = $this->find_occurence_from_end($model->email, ".", 2);
+                    if(!in_array( $domain ,$allDomains ))
+                {
+                    return false;
+                }
+                return true;
+                //return ($model->for_self == 78 ? true : false); 
+            }, 'whenClient' => "function (attribute, value) { 
+                if ($('#blockrequestform-email').val().toLowerCase().indexOf('.gov.my') >= 0)
+                {
+                    $('#invalid_email').remove();
+                    return true;
+                }
+                else if($('#blockrequestform-email').val() != '')
+                {
+                    $('#invalid_email').html('alamat email tidak sah');
+                    return false;
+                }
                 }"],
-           [['email'],'domainCheck'],      
-           [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
-                return ($model->for_self == 78 ? true : false);
-            }, 'whenClient' => "function (attribute, value) {
-                return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 78;
-                }"],     
+
+            [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
+                 return ($model->for_self == 78 ? true : false);
+             }, 'whenClient' => "function (attribute, value) {
+                 return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 78;
+                 }"],    
             [['report_no'], 'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
-                'when' => function($model) { return empty($model->investigation_no); }
+                'when' => function($model) { return empty($model->investigation_no); }, 'whenClient' => "function (attribute, value) {
+                    return $('#blockrequestform-investigation_no').val().length == 0;
+                    }"
               ],
             [['investigation_no'],'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
-                'when' => function($model) { return empty($model->report_no); }
+                'when' => function($model) { return empty($model->report_no); }, 'whenClient' => "function (attribute, value) {
+                    return $('#blockrequestform-report_no').val().length == 0;
+                    }"
               ],
             [['offence'], 'required','message'=>'Pilih kesalahan'],
             [['case_summary'], 'required','message'=>'Masukkan Ringkasan Kes'],  
             //[['application_purpose'], 'required','message'=>'Pilih Tujuan Permohanan'],
             //[['surat_rasmi'], 'required','message'=>'Pilih Surat Rasmi'],
-            [['surat_rasmi'], 'file',  'extensions' => 'png, jpg,jpeg,pdf','message'=>'valid Surat Rasmi'],
+            [['surat_rasmi'], 'file','skipOnEmpty' => true,  'extensions' => 'png, jpg,jpeg,pdf','message'=>'valid Surat Rasmi'],
             
             
         ];
@@ -74,7 +101,7 @@ class BlockRequestForm extends Model
 
     public function scenarios() {
         $scenarios = parent::scenarios(); 
-        //$scenarios['create'] = ['for_self','email','no_telephone','report_no','investigation_no','offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
+        $scenarios['create'] = ['for_self','surat_rasmi','selfName','email','no_telephone','report_no','investigation_no','offence','case_summary',/*'master_status_suspect_or_saksi_id',*/'application_purpose'];
         $scenarios['editBlockRequest'] = ['report_no','investigation_no','offence','case_summary'];
         $scenarios['reOpenBlockRequest'] = ['report_no','investigation_no','offence','case_summary'];
         //$scenarios['reopen'] = ['offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];

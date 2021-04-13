@@ -38,6 +38,7 @@ use Yii;
                     <div id="choose_forself">
                     <?= $form->field($model, 'selfName')->textInput(['placeholder' => 'name'])->label(false) ?>
                     <?= $form->field($model, 'email')->textInput(['placeholder' => 'email'])->label(false) ?>
+                    <div class="help-block-email" id="invalid_email"></div>
                     <?= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. telephone'])->label(false) ?>                
                     </div> 
               </div>
@@ -87,12 +88,12 @@ use Yii;
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <!--<div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Attachment URL</legend>
-                <div class="col-sm-8">
-                <?= $form->field($model, 'attachmentURL')->textInput(['placeholder' => 'URL'])->label(false) ?>
-                </div>
-            </div>
+                <div class="col-sm-8">-->
+                <?php //= $form->field($model, 'attachmentURL')->textInput(['placeholder' => 'URL'])->label(false) ?>
+                <!--</div>
+            </div>-->
             
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">URL</legend>

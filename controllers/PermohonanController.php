@@ -547,7 +547,7 @@ class PermohonanController extends Controller
             $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
             $caseInfo['laporan_polis'] = $loparaPoliceFileName;
-            $caseInfo['attachment_url'] = $data['BlockRequestForm']['attachmentURL'] ? $data['BlockRequestForm']['attachmentURL'] : "NULL";
+            //$caseInfo['attachment_url'] = $data['BlockRequestForm']['attachmentURL'] ? $data['BlockRequestForm']['attachmentURL'] : "NULL";
             $caseInfo['case_status'] = array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status'));
             $caseInfo['created_by'] = $session->get('userId');
             //$caseInfo['created_by'] = 1;
@@ -557,7 +557,8 @@ class PermohonanController extends Controller
             $caseInfo['purpose_of_application_info'] = $data['BlockRequestForm']['application_purpose_info'];
             }
             
-
+            if(isset($data['BlockRequestForm']['url']) && count($data['BlockRequestForm']['url']) > 0)
+            {
             for($i=0;$i<=count($data['BlockRequestForm']['url'])-1;$i++)
             { 
                 if(!empty($data['BlockRequestForm']['master_social_media_id'][$i]))
@@ -568,6 +569,7 @@ class PermohonanController extends Controller
                     //$caseInvolvedURL[$i]["created_by"]  = 1;
                 }
                 
+            }
             }
             $offences = $data['BlockRequestForm']['offence'];
 
@@ -1511,13 +1513,16 @@ class PermohonanController extends Controller
             
             //$caseInfo['created_by'] = $session->get('userId');
             $caseInfo['updated_by'] = $session->get('userId');
-            if(isset($data['PermohonanForm']['master_social_media_id']) && count($data['PermohonanForm']['master_social_media_id']) > 0)
+            if(isset($data['BlockRequestForm']['master_social_media_id']) && count($data['BlockRequestForm']['master_social_media_id']) > 0)
             {
                 for($i=0;$i<=count($data['BlockRequestForm']['url'])-1;$i++)
                 { 
                     if(!empty($data['BlockRequestForm']['master_social_media_id'][$i]))
-                    {
+                    { 
+                        if(isset($data['BlockRequestForm']['caseInfoURLInvolvedId']) && count($data['BlockRequestForm']['caseInfoURLInvolvedId']) > 0)
+                        {
                         $caseInvolvedURL[$i]["case_info_url_involved_id"]  = $data['BlockRequestForm']['caseInfoURLInvolvedId'][$i] ? $data['BlockRequestForm']['caseInfoURLInvolvedId'][$i] : 0;
+                        }
                         $caseInvolvedURL[$i]["master_social_media_id"]  = $data['BlockRequestForm']['master_social_media_id'][$i] ? $data['BlockRequestForm']['master_social_media_id'][$i] : 0;
                         $caseInvolvedURL[$i]["url"]  = $data['BlockRequestForm']['url'][$i] ? $data['BlockRequestForm']['url'][$i] : "NULL";
                         //$caseInvolvedURL[$i]['created_by'] = $session->get('userId');
@@ -1526,16 +1531,15 @@ class PermohonanController extends Controller
                     
                 }
             }
-
-            if(isset($data['PermohonanForm']['new_master_social_media_id']) && count($data['PermohonanForm']['new_master_social_media_id']) > 0)
+            if(isset($data['BlockRequestForm']['new_master_social_media_id']) && count($data['BlockRequestForm']['new_master_social_media_id']) > 0)
             {  
-                for($i=0;$i<=count($data['PermohonanForm']['new_master_social_media_id'])-1;$i++)
+                for($i=0;$i<=count($data['BlockRequestForm']['new_master_social_media_id'])-1;$i++)
                 { 
-                    if(!empty($data['PermohonanForm']['new_master_social_media_id'][$i]) && !empty($data['PermohonanForm']['new_url'][$i]))
+                    if(!empty($data['BlockRequestForm']['new_master_social_media_id'][$i]) && !empty($data['BlockRequestForm']['new_url'][$i]))
                     { 
-                        $newCaseInvolvedURL[$i]["case_info_id"]  = $data['PermohonanForm']['caseInfoID'] ? $data['PermohonanForm']['caseInfoID'] : 0;
-                        $newCaseInvolvedURL[$i]["master_social_media_id"]  = $data['PermohonanForm']['new_master_social_media_id'][$i] ? $data['PermohonanForm']['new_master_social_media_id'][$i] : 0;
-                        $newCaseInvolvedURL[$i]["url"]  = $data['PermohonanForm']['new_url'][$i] ? $data['PermohonanForm']['new_url'][$i] : "NULL";
+                        $newCaseInvolvedURL[$i]["case_info_id"]  = $data['BlockRequestForm']['id'] ? $data['BlockRequestForm']['id'] : 0;
+                        $newCaseInvolvedURL[$i]["master_social_media_id"]  = $data['BlockRequestForm']['new_master_social_media_id'][$i] ? $data['BlockRequestForm']['new_master_social_media_id'][$i] : 0;
+                        $newCaseInvolvedURL[$i]["url"]  = $data['BlockRequestForm']['new_url'][$i] ? $data['BlockRequestForm']['new_url'][$i] : "NULL";
                         $newCaseInvolvedURL[$i]['created_by'] = $session->get('userId');
                         $newCaseInvolvedURL[$i]['updated_by'] = $session->get('userId');
                     }

@@ -517,6 +517,42 @@ $('#id_name').on('change','#permohonanform-master_status_suspect_or_saksi_id-4',
   }  
   });
 
+
+  $('#new_master_status_suspect_or_saksi_id_0').change(function(){
+  if(this.value == 86 ||  this.value == 87)
+  { 
+    $("#new_master_status_status_suspek_id_0 option[value=60]").prop("selected", "selected");
+  }
+});
+
+$('#id_name').on('change','#permohonanform-new_master_status_suspect_or_saksi_id-1', function() {  
+if(this.value == 86 ||  this.value == 87)
+{ 
+$("#new_master_status_status_suspek_id_1 option[value=60]").prop("selected", "selected");
+}  
+});
+
+$('#id_name').on('change','#permohonanform-new_master_status_suspect_or_saksi_id-2', function() {  
+if(this.value == 86 ||  this.value == 87)
+{ 
+$("#new_master_status_status_suspek_id_2 option[value=60]").prop("selected", "selected");
+}  
+});
+
+$('#id_name').on('change','#permohonanform-new_master_status_suspect_or_saksi_id-3', function() {  
+if(this.value == 86 ||  this.value == 87)
+{ 
+$("#new_master_status_status_suspek_id_3 option[value=60]").prop("selected", "selected");
+}  
+});
+
+$('#id_name').on('change','#permohonanform-new_master_status_suspect_or_saksi_id-4', function() {  
+if(this.value == 86 ||  this.value == 87)
+{ 
+$("#new_master_status_status_suspek_id_4 option[value=60]").prop("selected", "selected");
+}  
+});
+
 var URL_obj = [{id:39, name:"https://twitter.com/"}, {id:40, name:"https://www.instagram.com/"}, {id:41, name:"https://www.tumblr.com/"}, {id:42, name:"https://www.facebook.com/"}, {id:99, name:"https://www.youtube.com/"}, {id:100, name:"https://www.tiktok.com/"}];
 $('#social_media_0').on('change',function() {   
   if(URL_obj.find(item => item.id == $("#social_media_0").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_0").val()); $("#social_media_URL_0").val(item_val.name);}
