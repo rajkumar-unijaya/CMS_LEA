@@ -91,10 +91,12 @@ use Yii;
                             <tr>
                                 <td><strong>Telefon No.</strong></td>
                                 <td id="telephone">-</td>
+                                <td  id="norecords">No records found</td>
                             </tr>
                             <tr>
                                 <td><strong>Telco</strong></td>
                                 <td id="telco_info">-</td>
+                                <td  id="date_registered_blink"><p id="blink"><a href="../permohonan/mntl?no=12345">New Request</a></p></td>
                             </tr>
                             <tr>
                                 <td><strong>Nama</strong></td>
@@ -111,7 +113,7 @@ use Yii;
                             <tr>
                                 <td><strong>Tarikh Didaftarkan</strong></td>
                                 <td  id="date_registered">-</td>
-                                <td  id="date_registered_blink"><p id="blink"><a href="../permohonan/mntl">New Request</a></p></td>
+                                
                             </tr>
                             <tr>
                                 <td><strong>Status</strong></td>
@@ -143,6 +145,8 @@ $script = <<< JS
 $(document).ready(function() {
     $("#loader").hide();
     $("#date_registered_blink").hide();
+    $("#norecords").hide();
+    
     $("#mnp-form").submit(function(event) {
             event.preventDefault(); // stopping submitting
             var data = $(this).serializeArray();
@@ -179,10 +183,12 @@ $(document).ready(function() {
                  $("#loader").hide();
                  } 
                  else{
-                    $("#date_registered").hide();   
+                    $("#telco_info").hide();   
+                    $("#telephone").hide();   
                     //$("#date_registered").text('No records found');   
                     $("#date_registered_blink").show();
-                    $("#date_registered").html('');  
+                    $("#norecords").show();
+                    $("#telco_info").html('');  
                     $("#loader").hide();
                     
                  }

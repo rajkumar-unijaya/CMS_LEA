@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use Yii;
-use yii\jui\DatePicker;
+use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
 ?>
 
 <div class="container-fluid">
@@ -71,6 +71,7 @@ use yii\jui\DatePicker;
            <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Phone Number </label>
                 <div class="col-sm-8">
+                <?php  if(isset($phone_telco['phone_no']) && !empty($phone_telco['phone_no'])){$model->phone_number = $phone_telco['phone_no']; }?>
                 <?= $form->field($model, 'phone_number')->textInput(['placeholder' => 'Phone Number'])->label(false) ?>   
                 </div>
             </div>
@@ -78,6 +79,7 @@ use yii\jui\DatePicker;
             <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Telco Name </label>
                 <div class="col-sm-8">
+                <?php  if(isset($phone_telco['telco']) && !empty($phone_telco['telco'])){$model->telco_name = $phone_telco['telco'];} ?>
                 <?= $form->field($model, 'telco_name')->textInput(['placeholder' => 'Telco Name','readonly'=> true])->label(false) ?>   
                 </div>
             </div>
