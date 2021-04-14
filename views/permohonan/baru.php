@@ -115,12 +115,12 @@ use Yii;
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <!--<div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Attachment URL</legend>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'attachmentURL')->textInput(['placeholder' => 'URL'])->label(false) ?>
+                <?php //= $form->field($model, 'attachmentURL')->textInput(['placeholder' => 'URL'])->label(false) ?>
                 </div>
-            </div>
+            </div>-->
 
             
 
