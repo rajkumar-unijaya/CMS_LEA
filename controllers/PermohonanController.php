@@ -139,6 +139,9 @@ class PermohonanController extends Controller
         $filterTipOffNoResponse = array();
         $lastCaseInfoResponse = array();
         $lastCaseInfoNo = "";
+        $phoneNumber = 0;
+        $returnResponse = array();
+        $returnResponse['success'] = "failed";
 
         /******
          * Get offence master data from the offence table using api service.
@@ -158,33 +161,40 @@ class PermohonanController extends Controller
                 }
                 }
 
-                if (Yii::$app->request->isAjax)
-                {
+                if (Yii::$app->request->isAjax || Yii::$app->request->get())
+                { 
+                    if(count(Yii::$app->request->get()) > 0)
+                    { 
+                        $phoneNumber = Yii::$app->request->get()['no'];
+                    }
                     $telcoResponse = array();
-                    $returnResponse = array();
-                    $returnResponse['success'] = "failed";
                     $client = new Client();
                     $data = Yii::$app->request->post();
+                    if(isset( $data['phone_number']) && !empty($data['phone_number']))
+                    {
+                        $phoneNumber = $data['phone_number'];
+                    }
                     $telcoResponse = $client->createRequest()
                     ->setFormat(Client::FORMAT_URLENCODED)
                     ->setMethod('GET')
-                    ->setUrl($this->_urlCrawler . 'func.telco.php?search=' . $data['phone_number'] . '&mnp=nomnp')
+                    ->setUrl($this->_urlCrawler . 'func.telco.php?search=' .  $phoneNumber . '&mnp=nomnp')
                     ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                     ->send();
                     if(isset($telcoResponse->data) && count($telcoResponse->data) > 0)
                     {
                         $returnResponse['success'] = "success";
+                        $returnResponse['phone_no'] = $phoneNumber;
                         $returnResponse['telco'] = $telcoResponse->data[0]['ported-to'];
-                        return $this->asJson($returnResponse);
+                        
                     }
-                    return $this->asJson($returnResponse);
+                   
                 }
-                //echo'<pre>';print_r($filterTipOffNoResponse);exit;
+                
         /*********
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
            * 
            *  */     
-          if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+          if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
             $data = Yii::$app->request->post();
             $caseInfo = array();
             $caseInfoMNTL = array();
@@ -238,7 +248,7 @@ class PermohonanController extends Controller
             
 		}
           
-        return $this->render('mntl/mntl',['model' => $model,"newCase" => $newCase,"masterCaseInfoTypeId" => $masterCaseInfoTypeId,"tipOff" => $filterTipOffNoResponse]);
+        return $this->render('mntl/mntl',['model' => $model,"phone_telco" => $returnResponse,"newCase" => $newCase,"masterCaseInfoTypeId" => $masterCaseInfoTypeId,"tipOff" => $filterTipOffNoResponse]);
        
     }
 
