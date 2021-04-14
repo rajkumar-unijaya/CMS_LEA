@@ -8,7 +8,11 @@ use yii\helpers\Html;
 $this->title = 'Dashboard';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-                                    
+                            <?php
+                            if (Yii::$app->session->hasFlash('success')) {
+                                echo "<div class='alert alert-success'>" . Yii::$app->session->getFlash('success')[0] . "</div>";
+                            }
+                            ?>        
                         <h3 class="mt-4"><?= Html::encode($this->title) ?></h3>
                         <div class="row">
                             <div class="col-xl-4 col-md-6">

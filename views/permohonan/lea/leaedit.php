@@ -5,12 +5,6 @@ use yii\widgets\ActiveForm;
 ?>
 
 <?php
-if (Yii::$app->session->hasFlash('success')) {
-	echo "<div class='alert alert-success'>" . Yii::$app->session->getFlash('success')[0] . "</div>";
-}
-?>
-
-<?php
 $this->title = 'Profile Edit';
 $this->params['breadcrumbs'][] = ['label' => 'LEA Edit', 'url' => ['lea-edit']];
 ?>

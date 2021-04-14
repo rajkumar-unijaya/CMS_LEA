@@ -139,9 +139,8 @@ class PermohonanController extends Controller
         $filterTipOffNoResponse = array();
         $lastCaseInfoResponse = array();
         $lastCaseInfoNo = "";
-        $phoneNumber = 0;
-        $returnResponse = array();
         $returnResponse['success'] = "failed";
+        
 
         /******
          * Get offence master data from the offence table using api service.
@@ -161,33 +160,48 @@ class PermohonanController extends Controller
                 }
                 }
 
-                if (Yii::$app->request->isAjax || Yii::$app->request->get())
+                if (Yii::$app->request->isAjax)
                 { 
-                    if(count(Yii::$app->request->get()) > 0)
-                    { 
-                        $phoneNumber = Yii::$app->request->get()['no'];
-                    }
+                    $returnResponse = array();
                     $telcoResponse = array();
                     $client = new Client();
                     $data = Yii::$app->request->post();
-                    if(isset( $data['phone_number']) && !empty($data['phone_number']))
-                    {
-                        $phoneNumber = $data['phone_number'];
-                    }
                     $telcoResponse = $client->createRequest()
                     ->setFormat(Client::FORMAT_URLENCODED)
                     ->setMethod('GET')
-                    ->setUrl($this->_urlCrawler . 'func.telco.php?search=' .  $phoneNumber . '&mnp=nomnp')
+                    ->setUrl($this->_urlCrawler . 'func.telco.php?search=' .  $data['phone_number'] . '&mnp=nomnp')
                     ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                     ->send();
                     if(isset($telcoResponse->data) && count($telcoResponse->data) > 0)
-                    {
+                    { 
                         $returnResponse['success'] = "success";
-                        $returnResponse['phone_no'] = $phoneNumber;
+                        $returnResponse['phone_no'] = $data['phone_number'];
                         $returnResponse['telco'] = $telcoResponse->data[0]['ported-to'];
-                        
+                        return $this->asJson($returnResponse);
                     }
-                   
+                    return $this->asJson($returnResponse);
+                }
+
+                if(Yii::$app->request->get())
+                { 
+                     $phoneNo = Yii::$app->request->get()['no'];
+                     $client = new Client();
+                     $data = Yii::$app->request->post();
+                     $telcoResponse = $client->createRequest()
+                     ->setFormat(Client::FORMAT_URLENCODED)
+                     ->setMethod('GET')
+                     ->setUrl($this->_urlCrawler . 'func.telco.php?search=' .  $phoneNo . '&mnp=nomnp')
+                     ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                     ->send();
+                     if(isset($telcoResponse->data) && count($telcoResponse->data) > 0)
+                     { 
+                         $returnResponse['success'] = "success";
+                         $returnResponse['phone_no'] = $phoneNo;
+                         $returnResponse['telco'] = $telcoResponse->data[0]['ported-to'];
+                         
+                     }
+                     
+
                 }
                 
         /*********
@@ -218,9 +232,9 @@ class PermohonanController extends Controller
             $caseInfo['no_telephone'] = $data['PermohonanMNTLForm']['no_telephone'];
             $caseInfo['email'] = $data['PermohonanMNTLForm']['email'];
             $caseInfo['report_no'] = $data['PermohonanMNTLForm']['report_no'];
-            $caseInfo['case_status'] = 1;
+            $caseInfo['case_status'] = 71;
             $caseInfo['investigation_no'] = $data['PermohonanMNTLForm']['investigation_no'];
-            $caseInfo['created_by'] = 1;
+            $caseInfo['created_by'] = $session->get('userId');
             
             $caseInfoMNTL['tippoff_id'] = $data['PermohonanMNTLForm']['tippoff_id'];
             $caseInfoMNTL['phone_number'] = $data['PermohonanMNTLForm']['phone_number'];
@@ -2091,11 +2105,12 @@ class PermohonanController extends Controller
 			$data = Yii::$app->request->post();
             $telegram_verification = 0;
             $mobile_verification = 0;
-            if(isset($data['LeaForm']['notification']) &&  $data['LeaForm']['notification'][0] == "1")
+            //echo "<pre>";print_r($data['LeaForm']['notification']);exit;
+            if(isset($data['LeaForm']['notification'][0]) &&  $data['LeaForm']['notification'][0] == "1")
               {
                 $telegram_verification = 1;
               }
-            if(isset($data['LeaForm']['notification']) &&  $data['LeaForm']['notification'][1] == "2")
+            if(isset($data['LeaForm']['notification'][1]) &&  $data['LeaForm']['notification'][1] == "2")
               {
                 $mobile_verification = 1;
               }
@@ -2125,6 +2140,7 @@ class PermohonanController extends Controller
 				->send();
 			if ($responses->isOk) {
 				Yii::$app->session->addFlash('success', 'Successfully updated profile.');
+                return $this->redirect('../dashboard/index');
 			}
 		} 
         $notificationInfo = array();
