@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use Yii;
+use yii\jui\DatePicker;
 ?>
 
 <div class="container-fluid">
@@ -38,6 +39,7 @@ use Yii;
                     <div id="choose_forself">
                     <?= $form->field($model, 'email')->textInput(['placeholder' => 'email'])
                                     ->label(false) ?>
+                    <div class="help-block-email" id="invalid_email"></div>
                     <?= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. telephone'])
                                     ->label(false) ?>                
                     </div> 
