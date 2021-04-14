@@ -207,13 +207,13 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                 
               </div>
 
-              <div class="row mb-3">
+              <!--<div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Attachment URL</legend>
                 <div class="col-sm-4">
-                <?php  $model->attachmentURL = $mediaSocialResponse['attachment_url']; ?>
-                <?= $form->field($model, 'attachmentURL')->textInput(['placeholder' => 'https://example.com','class'=>'form-controller'])->label(false) ?>
+                <?php  //$model->attachmentURL = $mediaSocialResponse['attachment_url']; ?>
+                <?php //= $form->field($model, 'attachmentURL')->textInput(['placeholder' => 'https://example.com','class'=>'form-controller'])->label(false) ?>
                 </div>
-              </div>  
+              </div>-->
                 
               <div id="laporanPolisAttachmentNotNull">
                 <div class="col-sm-4" id="laporan_polis_img_del">
@@ -616,7 +616,7 @@ $('#new_add_text_areabox-4').after('<div class="col-lg-8" id="new_status_suspek_
 
 
 
-$('#new_master_status_status_suspek_id_2').change( function() { alert(33);
+$('#new_master_status_status_suspek_id_2').change( function() { 
   if(this.value == 64  && new_others_3 < 2){
 $('#new_add_text_areabox-2').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_2" class="form-control" name="PermohonanForm[new_others][2]"></textarea></div><div class="clearfix"></div>');
 ++new_others_3;
@@ -627,7 +627,7 @@ $('#new_add_text_areabox-2').after('<div class="col-lg-8"><textarea id="new_stat
   }
 });
 
-$('#new_master_status_status_suspek_id_3').change( function() { alert(44);
+$('#new_master_status_status_suspek_id_3').change( function() { 
   if(this.value == 64  && new_others_4 < 2){
 $('#new_add_text_areabox-3').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_3" class="form-control" name="PermohonanForm[new_others][3]"></textarea></div><div class="clearfix"></div>');
 ++new_others_4;
@@ -638,7 +638,7 @@ $('#new_add_text_areabox-3').after('<div class="col-lg-8"><textarea id="new_stat
   }
 });
 
-$('#new_master_status_status_suspek_id_4').change( function() { alert(55);
+$('#new_master_status_status_suspek_id_4').change( function() { 
   if(this.value == 64  && new_others_5 < 2){
 $('#new_add_text_areabox-4').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_4" class="form-control" name="PermohonanForm[new_others][4]"></textarea></div><div class="clearfix"></div>');
 ++new_others_5;

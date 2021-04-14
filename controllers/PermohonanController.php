@@ -348,7 +348,6 @@ class PermohonanController extends Controller
             
             $caseInfo['master_case_info_type_id'] = $data['PermohonanForm']['masterCaseInfoTypeId'];
             $caseInfo['requestor_ref'] = $session->get('userId');
-            $caseInfo['requestor_ref'] = $session->get('userId');;
             //$caseInfo['requestor_ref'] = 1;
             $caseInfo['bagipihak_dirisendiri'] = $data['PermohonanForm']['for_self'];
             $caseInfo['no_telephone'] = $data['PermohonanForm']['no_telephone'] ? $data['PermohonanForm']['no_telephone'] : 0;
@@ -760,7 +759,7 @@ class PermohonanController extends Controller
             $caseInfo['case_summary'] = $data['PermohonanForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
             $caseInfo['laporan_polis'] = $loparaPoliceFileName;
-            $caseInfo['attachment_url'] = $data['PermohonanForm']['attachmentURL'];
+            //$caseInfo['attachment_url'] = $data['PermohonanForm']['attachmentURL'];
             $caseInfo['case_status'] = array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status'));
             
             //$caseInfo['created_by'] = $session->get('userId');
