@@ -96,7 +96,7 @@ use Yii;
                             <tr>
                                 <td><strong>Telco</strong></td>
                                 <td id="telco_info">-</td>
-                                <td  id="date_registered_blink"><p id="blink"><a href="../permohonan/mntl?no=12345">New Request</a></p></td>
+                                <td  id="date_registered_blink"><p id="blink"><a id="link_val" href="">New Request</a></p></td>
                             </tr>
                             <tr>
                                 <td><strong>Nama</strong></td>
@@ -188,6 +188,7 @@ $(document).ready(function() {
                     //$("#date_registered").text('No records found');   
                     $("#date_registered_blink").show();
                     $("#norecords").show();
+                    $("#link_val").attr("href",'../permohonan/mntl?no='+$('#searchform-phone_number').val());
                     $("#telco_info").html('');  
                     $("#loader").hide();
                     
