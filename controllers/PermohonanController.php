@@ -127,7 +127,8 @@ class PermohonanController extends Controller
         $this->layout =  'main';
         $model = new PermohonanMNTLForm();
         $session = Yii::$app->session;
-        $masterCaseInfoTypeId = 3;
+        $masterCaseInfoTypeId = array_search("MNTL",Yii::$app->mycomponent->getMasterData('master_case_info_type'));
+        
 
         /******
          * load masterdata from the master component and pass these data into view page
@@ -304,7 +305,7 @@ class PermohonanController extends Controller
         $model = new PermohonanForm();
         $model->scenario='create';
         $session = Yii::$app->session;
-        $masterCaseInfoTypeId = 1;
+        $masterCaseInfoTypeId = array_search("Social Media",Yii::$app->mycomponent->getMasterData('master_case_info_type'));
         /******
          * load masterdata from the master component and pass these data into view page
          */
@@ -313,7 +314,6 @@ class PermohonanController extends Controller
 		$newCase = Yii::$app->mycomponent->getMasterData('master_status_new_case');
         $suspectOrSaksi = Yii::$app->mycomponent->getMasterData('master_status_suspect_or_witness');
         $masterSocialMedia = Yii::$app->mycomponent->getMasterData('master_social_media');
-        //echo"<pre>";print_r($suspectOrSaksi);exit;
         $suratRasmiFileName = "";
         $suratRasmiDFFileName = "";
         $loparaPoliceFileName = "";
@@ -484,7 +484,7 @@ class PermohonanController extends Controller
         $this->layout =  'main';
         $model = new BlockRequestForm();
         $session = Yii::$app->session;
-        $masterCaseInfoTypeId = 2;
+        $masterCaseInfoTypeId = array_search("Blocking Request",Yii::$app->mycomponent->getMasterData('master_case_info_type'));
         $suratRasmiFileName = "";
         $suratRasmiDFFileName = "";
         $loparaPoliceFileName = "";
@@ -565,7 +565,6 @@ class PermohonanController extends Controller
             $caseInfo['no_telephone'] = $data['BlockRequestForm']['no_telephone'] ? $data['BlockRequestForm']['no_telephone'] : 0;
             $caseInfo['self_name'] = $data['BlockRequestForm']['selfName'] ? $data['BlockRequestForm']['selfName'] : "NULL";
             $caseInfo['email'] = $data['BlockRequestForm']['email'] ? $data['BlockRequestForm']['email'] : "NULL";
-            $caseInfo['report_no'] = $data['BlockRequestForm']['report_no'];
             $caseInfo['investigation_no'] = $data['BlockRequestForm']['investigation_no'];
             $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
@@ -720,8 +719,7 @@ class PermohonanController extends Controller
             ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
-            //echo count($responses->data['records']);exit;
-            //echo"<pre>";print_r($responses->data['records']);exit;
+            
 
         /*********
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
@@ -729,7 +727,6 @@ class PermohonanController extends Controller
            *  */     
           if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
             $data = Yii::$app->request->post();
-            //echo"<pre>";print_r($data);exit;
             if(count($responses->data['records']) > 0)
             {
                foreach($responses->data['records'][0]['case_offence'] as $offenceVal):
@@ -739,15 +736,11 @@ class PermohonanController extends Controller
             $newOffences = $data['PermohonanForm']['offence'];
             $newSelectedOffences = array_values(array_diff($newOffences,$prevOffences));
             $prevDeletedOffences = array_values(array_diff($prevOffences,$newOffences));
-            //echo"Previous <pre>";print_r($prevOffences);
-            //echo"New <pre>";print_r($newOffences);
-            //echo"new selected <pre>";print_r($newSelectedOffences);
-            //echo"prev deleted <pre>";print_r($prevDeletedOffences);exit;
             
             $this->_FileUploadSuratRasmi = Yii::$app->params['FILE_UPLOAD_SURAT_RASMI']."permohonan/surat_rasmi/";
             $this->_FileUploadLaporanPolice = Yii::$app->params['FILE_UPLOAD_LAPORAN_POLIS']."permohonan/laporan_polis/";
             
-            $model->surat_rasmi = UploadedFile::getInstance($model, 'surat_rasmi');//echo $data['PermohonanForm']['surat_rasmi_last_attachment'];exit; echo "<pre>";print_r($model->surat_rasmi);exit;
+            $model->surat_rasmi = UploadedFile::getInstance($model, 'surat_rasmi');
             if(isset($model->surat_rasmi) && !empty($model->surat_rasmi) )
             {  
             $suratRasmiFileName =  $this->_FileUploadSuratRasmi."".'_'.$model->surat_rasmi->baseName .'_'.date('YmdHis'). '.' . $model->surat_rasmi->extension;
@@ -812,7 +805,7 @@ class PermohonanController extends Controller
                     }
                 
                 }
-                //echo"<pre>";print_r($caseStatusSuspek);exit;
+                
             }
             
             if(isset($data['PermohonanForm']['new_master_status_status_suspek_id']) && count($data['PermohonanForm']['new_master_status_status_suspek_id']) > 0)
@@ -929,8 +922,6 @@ class PermohonanController extends Controller
         {
             $mediaSocialResponse = $responses->data['records'][0];
         }
-        
-        //echo "<pre>";print_r($responses->data['records']);exit;
         return $this->render('editsocialmedia', ['model'=>$model,"mediaSocialResponse" => $mediaSocialResponse,"masterStatusSuspect" => $masterStatusSuspect,"purposeOfApplication" => $purposeOfApplication,"newCase" => $newCase,"offences" => $filterOffenceResponse,"suspectOrSaksi" => $suspectOrSaksi,"masterSocialMedia" => $masterSocialMedia]);
        
         
@@ -953,7 +944,7 @@ class PermohonanController extends Controller
      * Download loparan police document
      */
     public function actionLaporanDownload($name)
-    { //echo $this->_FileDownload."".$name;exit;
+    { 
         header("Content-Type: image/png");
         header("Content-Description: File Transfer");
         header("Content-disposition: attachment; filename='".$this->_FileDownload."".$name); 
@@ -1063,9 +1054,7 @@ class PermohonanController extends Controller
              {
                 $trashPath = \Yii::getAlias('@webroot').$this->_FileTrashFolderLaporanPolice.$imageName[3];
              }
-             //echo $trashPath;exit;
-             //echo \Yii::getAlias('@webroot')."/".Yii::$app->request->get('path');exit;
-            if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')))
+             if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')))
             {  
                 $client = new Client();
                 $fileResponse = $client->createRequest()
@@ -1159,8 +1148,7 @@ class PermohonanController extends Controller
         $prevOffences = array();
         $newOffences = array();
         $newSelectedOffences = array();
-        $prevDeletedOffences = array();
-
+        
         /******
          * Get offence master data from the offence table using api service.
          */
@@ -1189,47 +1177,35 @@ class PermohonanController extends Controller
             ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
-            //echo count($responses->data['records']);exit;
-            //echo"<pre>";print_r($responses->data['records']);exit;
-
+            
         /*********
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
            * 
            *  */     
           if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
             $data = Yii::$app->request->post();
-            //echo"<pre>";print_r($data);exit;
-            if(count($responses->data['records']) > 0)
-            {
-               foreach($responses->data['records'][0]['case_offence'] as $offenceVal):
-                $prevOffences[] = $offenceVal['offence_id'];
-               endforeach; 
-            }
             $newOffences = $data['PermohonanForm']['offence'];
-            $newSelectedOffences = array_values(array_diff($newOffences,$prevOffences));
-            $prevDeletedOffences = array_values(array_diff($prevOffences,$newOffences));
-            //echo"Previous <pre>";print_r($prevOffences);
-            //echo"New <pre>";print_r($newOffences);
-            //echo"new selected <pre>";print_r($newSelectedOffences);
-            //echo"prev deleted <pre>";print_r($prevDeletedOffences);exit;
+            
             $caseInfo = array();
             $caseStatusSuspek = array();
             $newSelectedSuspekSakhi = array();
             $caseInvolvedURL = array();
             $newCaseInvolvedURL = array();
             $offences = array();
+            $masterSocialMediaId = 0;
+            $masterSuspekId = 0;
             
             $caseInfo['master_case_info_type_id'] = $data['PermohonanForm']['master_case_info_type_id'];
             $caseInfo['requestor_ref'] = $session->get('userId');
-            $caseInfo['id'] = $data['PermohonanForm']['id'];
+            //$caseInfo['id'] = $data['PermohonanForm']['id'];
             //$caseInfo['requestor_ref'] = 1;
             $caseInfo['report_no'] = $data['PermohonanForm']['report_no'];
             $caseInfo['investigation_no'] = $data['PermohonanForm']['investigation_no'];
             $caseInfo['case_summary'] = $data['PermohonanForm']['case_summary'];
             $caseInfo['case_status'] = array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
             
-            //$caseInfo['created_by'] = $session->get('userId');
-            $caseInfo['updated_by'] = $session->get('userId');
+            $caseInfo['created_by'] = $session->get('userId');
+            //$caseInfo['updated_by'] = $session->get('userId');
             if(isset($data['PermohonanForm']['application_purpose']) && !empty($data['PermohonanForm']['application_purpose']))
             { 
             $caseInfo['master_status_purpose_of_application_id'] = implode(",",$data['PermohonanForm']['application_purpose']);
@@ -1237,100 +1213,116 @@ class PermohonanController extends Controller
             }
             
             if(isset($data['PermohonanForm']['master_status_status_suspek_id']) && count($data['PermohonanForm']['master_status_status_suspek_id']) > 0)
-            { //echo"<pre>";print_r($data);exit;
+            { 
                 for($i=0;$i<=count($data['PermohonanForm']['master_status_status_suspek_id'])-1;$i++)
                 {
-                    $caseStatusSuspek[$i]['case_info_status_suspek_id']  = $data['PermohonanForm']['caseInfoStatusSuspekID'][$i] ? $data['PermohonanForm']['caseInfoStatusSuspekID'][$i]: 0;
+                    //$caseStatusSuspek[$i]['case_info_status_suspek_id']  = $data['PermohonanForm']['caseInfoStatusSuspekID'][$i] ? $data['PermohonanForm']['caseInfoStatusSuspekID'][$i]: 0;
                     $caseStatusSuspek[$i]['master_status_suspect_or_saksi_id']  = $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i] ? $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i]: 0;
                     $caseStatusSuspek[$i]['master_status_status_suspek_id']  = $data['PermohonanForm']['master_status_status_suspek_id'][$i] ? $data['PermohonanForm']['master_status_status_suspek_id'][$i] : 0;
                     $caseStatusSuspek[$i]['ic']  = $data['PermohonanForm']['ic'][$i] ? $data['PermohonanForm']['ic'][$i] : 0;
                     $caseStatusSuspek[$i]['name']  = $data['PermohonanForm']['name'][$i] ? $data['PermohonanForm']['name'][$i] : "NULL";
-                    //$caseStatusSuspek[$i]['created_by'] = $session->get('userId');
-                    $caseStatusSuspek[$i]['updated_by'] = $session->get('userId');
+                    $caseStatusSuspek[$i]['created_by'] = $session->get('userId');
+                    //$caseStatusSuspek[$i]['updated_by'] = $session->get('userId');
                     if(isset($data['PermohonanForm']['others'][$i]) && !empty($data['PermohonanForm']['others'][$i]))
                     {
                         $caseStatusSuspek[$i]['others']  = $data['PermohonanForm']['others'][$i];
                     }
+                    $masterSuspekId++;
                     
                 }
             }
             if(isset($data['PermohonanForm']['new_master_status_status_suspek_id']) && count($data['PermohonanForm']['new_master_status_status_suspek_id']) > 0)
-            { //echo"<pre>";print_r($data);exit;
+            { 
+                $newMasterSuspekId = 0;
+                if($masterSuspekId > 0)
+                {
+                    $newMasterSuspekId = $masterSuspekId;
+                }
                 for($i=0;$i<=count($data['PermohonanForm']['new_master_status_status_suspek_id'])-1;$i++)
                 { 
-                    $newSelectedSuspekSakhi[$i]['case_info_id']  = $data['PermohonanForm']['caseInfoID'] ? $data['PermohonanForm']['caseInfoID']: 0;
-                    $newSelectedSuspekSakhi[$i]['master_status_suspect_or_saksi_id']  = $data['PermohonanForm']['new_master_status_suspect_or_saksi_id'][$i] ? $data['PermohonanForm']['new_master_status_suspect_or_saksi_id'][$i]: 0;
-                    $newSelectedSuspekSakhi[$i]['master_status_status_suspek_id']  = $data['PermohonanForm']['new_master_status_status_suspek_id'][$i] ? $data['PermohonanForm']['new_master_status_status_suspek_id'][$i] : 0;
-                    $newSelectedSuspekSakhi[$i]['ic']  = $data['PermohonanForm']['new_ic'][$i] ? $data['PermohonanForm']['new_ic'][$i] : "";
-                    $newSelectedSuspekSakhi[$i]['name']  = $data['PermohonanForm']['new_name'][$i] ? $data['PermohonanForm']['new_name'][$i] : "NULL";
-                    $newSelectedSuspekSakhi[$i]['others']  = "NULL";
-                    $newSelectedSuspekSakhi[$i]['created_by'] = $session->get('userId');
-                    $newSelectedSuspekSakhi[$i]['updated_by'] = $session->get('userId');
+                    //$caseStatusSuspek[$newMasterSuspekId]['case_info_id']  = $data['PermohonanForm']['caseInfoID'] ? $data['PermohonanForm']['caseInfoID']: 0;
+                    $caseStatusSuspek[$newMasterSuspekId]['master_status_suspect_or_saksi_id']  = $data['PermohonanForm']['new_master_status_suspect_or_saksi_id'][$i] ? $data['PermohonanForm']['new_master_status_suspect_or_saksi_id'][$i]: 0;
+                    $caseStatusSuspek[$newMasterSuspekId]['master_status_status_suspek_id']  = $data['PermohonanForm']['new_master_status_status_suspek_id'][$i] ? $data['PermohonanForm']['new_master_status_status_suspek_id'][$i] : 0;
+                    $caseStatusSuspek[$newMasterSuspekId]['ic']  = $data['PermohonanForm']['new_ic'][$i] ? $data['PermohonanForm']['new_ic'][$i] : "";
+                    $caseStatusSuspek[$newMasterSuspekId]['name']  = $data['PermohonanForm']['new_name'][$i] ? $data['PermohonanForm']['new_name'][$i] : "NULL";
+                    $caseStatusSuspek[$newMasterSuspekId]['others']  = "NULL";
+                    $caseStatusSuspek[$newMasterSuspekId]['created_by'] = $session->get('userId');
+                    //$newSelectedSuspekSakhi[$newMasterSuspekId]['updated_by'] = $session->get('userId');
                     if(isset($data['PermohonanForm']['new_others'][$i]) && !empty($data['PermohonanForm']['new_others'][$i]))
                     {
-                        $newSelectedSuspekSakhi[$i]['others']  = $data['PermohonanForm']['new_others'][$i] ? $data['PermohonanForm']['new_others'][$i] : "NULL";
+                        $caseStatusSuspek[$newMasterSuspekId]['others']  = $data['PermohonanForm']['new_others'][$i] ? $data['PermohonanForm']['new_others'][$i] : "NULL";
                         
                     }
-                
+                    $newMasterSuspekId++;
                 }
-                //echo"<pre>";print_r($newSelectedSuspekSakhi);exit;
-            }
-            for($i=0;$i<=count($data['PermohonanForm']['url'])-1;$i++)
+                
+                
+            } 
+            if(isset($data['PermohonanForm']['master_social_media_id']) && count($data['PermohonanForm']['master_social_media_id']) > 0)
             { 
-                if(!empty($data['PermohonanForm']['master_social_media_id'][$i]))
-                {
-                    $caseInvolvedURL[$i]["case_info_url_involved_id"]  = $data['PermohonanForm']['caseInfoURLInvolvedId'][$i] ? $data['PermohonanForm']['caseInfoURLInvolvedId'][$i] : 0;
-                    $caseInvolvedURL[$i]["master_social_media_id"]  = $data['PermohonanForm']['master_social_media_id'][$i] ? $data['PermohonanForm']['master_social_media_id'][$i] : 0;
-                    $caseInvolvedURL[$i]["url"]  = $data['PermohonanForm']['url'][$i] ? $data['PermohonanForm']['url'][$i] : "NULL";
-                    //$caseInvolvedURL[$i]['created_by'] = $session->get('userId');
-                    $caseInvolvedURL[$i]['updated_by'] = $session->get('userId');
-                }
                 
+                for($i=0;$i<=count($data['PermohonanForm']['url'])-1;$i++)
+                { 
+                    if(!empty($data['PermohonanForm']['master_social_media_id'][$i]))
+                    {
+                        //$caseInvolvedURL[$i]["case_info_url_involved_id"]  = $data['PermohonanForm']['caseInfoURLInvolvedId'][$i] ? $data['PermohonanForm']['caseInfoURLInvolvedId'][$i] : 0;
+                        $caseInvolvedURL[$i]["master_social_media_id"]  = $data['PermohonanForm']['master_social_media_id'][$i] ? $data['PermohonanForm']['master_social_media_id'][$i] : 0;
+                        $caseInvolvedURL[$i]["url"]  = $data['PermohonanForm']['url'][$i] ? $data['PermohonanForm']['url'][$i] : "NULL";
+                        $caseInvolvedURL[$i]['created_by'] = $session->get('userId');
+                        //$caseInvolvedURL[$i]['updated_by'] = $session->get('userId');
+                        $masterSocialMediaId++;
+                    }
+                    
+                }
             }
-
             if(isset($data['PermohonanForm']['new_master_social_media_id']) && count($data['PermohonanForm']['new_master_social_media_id']) > 0)
             {  
+                $newMasterSocialMediaId = 0;
+                if($masterSocialMediaId > 0)
+                {
+                    $newMasterSocialMediaId = $masterSocialMediaId;
+                }
+                
                 for($i=0;$i<=count($data['PermohonanForm']['new_master_social_media_id'])-1;$i++)
                 { 
                     if(!empty($data['PermohonanForm']['new_master_social_media_id'][$i]) && !empty($data['PermohonanForm']['new_url'][$i]))
                     { 
-                        $newCaseInvolvedURL[$i]["case_info_id"]  = $data['PermohonanForm']['caseInfoID'] ? $data['PermohonanForm']['caseInfoID'] : 0;
-                        $newCaseInvolvedURL[$i]["master_social_media_id"]  = $data['PermohonanForm']['new_master_social_media_id'][$i] ? $data['PermohonanForm']['new_master_social_media_id'][$i] : 0;
-                        $newCaseInvolvedURL[$i]["url"]  = $data['PermohonanForm']['new_url'][$i] ? $data['PermohonanForm']['new_url'][$i] : "NULL";
-                        $newCaseInvolvedURL[$i]['created_by'] = $session->get('userId');
-                        $newCaseInvolvedURL[$i]['updated_by'] = $session->get('userId');
+                        //$caseInvolvedURL[$i]["case_info_id"]  = $data['PermohonanForm']['caseInfoID'] ? $data['PermohonanForm']['caseInfoID'] : 0;
+                        $caseInvolvedURL[$newMasterSocialMediaId]["master_social_media_id"]  = $data['PermohonanForm']['new_master_social_media_id'][$i] ? $data['PermohonanForm']['new_master_social_media_id'][$i] : 0;
+                        $caseInvolvedURL[$newMasterSocialMediaId]["url"]  = $data['PermohonanForm']['new_url'][$i] ? $data['PermohonanForm']['new_url'][$i] : "NULL";
+                        $caseInvolvedURL[$newMasterSocialMediaId]['created_by'] = $session->get('userId');
+                       // $caseInvolvedURL[$newMasterSocialMediaId]['updated_by'] = $session->get('userId');
+                        $newMasterSocialMediaId++;
                     }
                     
                 }
-                //echo"<pre>";print_r($newCaseInvolvedURL);exit;
-            }    
-            //$offences = $data['PermohonanForm']['offence'];
 
+                //echo "<pre>";print_r($caseInvolvedURL);exit;
+                
+            }    
             
             //echo json_encode($caseInfo).'<br>';
             //echo json_encode($caseStatusSuspek).'<br>';
-            //echo json_encode($newSelectedSuspekSakhi).'<br>';
             //echo json_encode($caseInvolvedURL).'<br>';
-            //echo json_encode($newCaseInvolvedURL).'<br>';
-            //echo json_encode($newSelectedOffences).'<br>';
-            //echo json_encode($prevDeletedOffences).'<br>';
-            //echo json_encode($prevDeletedOffences).'<br>';
+            //echo json_encode($newOffences).'<br>';
             //exit;
-            
+
             $caseInfoResponse = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('POST')
-            ->setUrl($this->_url_procedure.'case_info_edit')
+            ->setUrl($this->_url_procedure.'case_info')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
-            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"newCaseStatusSuspek" => json_encode($newSelectedSuspekSakhi),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newCaseInvolvedURL" => json_encode($newCaseInvolvedURL),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
-            ->send(); 
+            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"caseInvolvedURL" => json_encode($caseInvolvedURL),"offences" => json_encode($newOffences)])
+            ->send();
+
+             
             if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
                 { 
-                    Yii::$app->session->addFlash('success','Successfully updated existing case infomation.');
+                    Yii::$app->session->addFlash('success','Successfully reopen case infomation.');
                     return $this->redirect('../permohonan/mediasosial');
                 }
                 else{
-                    Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
+                    Yii::$app->session->addFlash('failed','Reopen case infomation not inserted successfully.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
             
@@ -1340,7 +1332,6 @@ class PermohonanController extends Controller
             $mediaSocialResponse = $responses->data['records'][0];
         }
         
-        //echo "<pre>";print_r($responses->data['records']);exit;
         return $this->render('reopencase', ['model'=>$model,"mediaSocialResponse" => $mediaSocialResponse,"masterStatusSuspect" => $masterStatusSuspect,"purposeOfApplication" => $purposeOfApplication,"newCase" => $newCase,"offences" => $filterOffenceResponse,"suspectOrSaksi" => $suspectOrSaksi,"masterSocialMedia" => $masterSocialMedia]);
        
         
@@ -1374,7 +1365,6 @@ class PermohonanController extends Controller
         {
             $mediaSocialResponse = $responses->data['records'][0];
         }
-        //echo "<pre>";print_r($mediaSocialResponse);exit;
         return $this->render('viewsocialmedia', ["mediaSocialResponse" => $mediaSocialResponse,"id" => $id]);
        
         
@@ -1466,16 +1456,13 @@ class PermohonanController extends Controller
             ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_url_involved&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
-            //echo count($responses->data['records']);exit;
-            //echo"<pre>";print_r($responses->data['records']);exit;
-
+            
         /*********
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
            * 
            *  */     
           if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
             $data = Yii::$app->request->post();
-            //echo"<pre>";print_r($data);exit;
             if(count($responses->data['records']) > 0)
             {
                foreach($responses->data['records'][0]['case_offence'] as $offenceVal):
@@ -1485,15 +1472,11 @@ class PermohonanController extends Controller
             $newOffences = $data['BlockRequestForm']['offence'];
             $newSelectedOffences = array_values(array_diff($newOffences,$prevOffences));
             $prevDeletedOffences = array_values(array_diff($prevOffences,$newOffences));
-            //echo"Previous <pre>";print_r($prevOffences);
-            //echo"New <pre>";print_r($newOffences);
-            //echo"new selected <pre>";print_r($newSelectedOffences);
-            //echo"prev deleted <pre>";print_r($prevDeletedOffences);exit;
             
             $this->_FileUploadSuratRasmi = Yii::$app->params['FILE_UPLOAD_SURAT_RASMI']."block-request/surat_rasmi/";
             $this->_FileUploadLaporanPolice = Yii::$app->params['FILE_UPLOAD_LAPORAN_POLIS']."block-request/laporan_polis/";
             
-            $model->surat_rasmi = UploadedFile::getInstance($model, 'surat_rasmi');//echo $data['PermohonanForm']['surat_rasmi_last_attachment'];exit; echo "<pre>";print_r($model->surat_rasmi);exit;
+            $model->surat_rasmi = UploadedFile::getInstance($model, 'surat_rasmi');
             if(isset($model->surat_rasmi) && !empty($model->surat_rasmi) )
             {  
             $suratRasmiFileName =  $this->_FileUploadSuratRasmi."".'_'.$model->surat_rasmi->baseName .'_'.date('YmdHis'). '.' . $model->surat_rasmi->extension;
@@ -1568,10 +1551,8 @@ class PermohonanController extends Controller
                     }
                     
                 }
-                //echo"<pre>";print_r($newCaseInvolvedURL);exit;
+                
             }  
-            //$offences = $data['PermohonanForm']['offence'];
-
             
             //echo json_encode($caseInfo).'<br>';
             //echo json_encode($caseStatusSuspek).'<br>';
@@ -1629,7 +1610,6 @@ class PermohonanController extends Controller
             $mediaSocialResponse = $responses->data['records'][0];
         }
         
-        //echo "<pre>";print_r($responses->data['records']);exit;
         return $this->render('blockrequest/editblockrequest', ['model'=>$model,"mediaSocialResponse" => $mediaSocialResponse,"newCase" => $newCase,"offences" => $filterOffenceResponse,"masterSocialMedia" => $masterSocialMedia]);
        
         
@@ -1659,8 +1639,7 @@ class PermohonanController extends Controller
              {
                 $trashPath = \Yii::getAlias('@webroot').$this->_FileTrashFolderBlockRequestSuratRasmi.$imageName[3];
              }
-             //echo $trashPath."<br>".\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path');exit;
-            if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')))
+             if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')))
             {  
                 $client = new Client();
                 $fileResponse = $client->createRequest()
@@ -1746,9 +1725,7 @@ class PermohonanController extends Controller
              {
                 $trashPath = \Yii::getAlias('@webroot').$this->_FileTrashFolderBlockRequestLaporanPolice.$imageName[3];
              }
-             //echo $trashPath;exit;
-             //echo \Yii::getAlias('@webroot')."/".Yii::$app->request->get('path');exit;
-            if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')))
+             if(file_exists(\Yii::getAlias('@webroot')."/".Yii::$app->request->get('path')))
             {  
                 $client = new Client();
                 $fileResponse = $client->createRequest()
@@ -1868,16 +1845,13 @@ class PermohonanController extends Controller
             ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
-            //echo count($responses->data['records']);exit;
-            //echo"<pre>";print_r($responses->data['records']);exit;
-
+            
         /*********
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
            * 
            *  */     
           if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
             $data = Yii::$app->request->post();
-            //echo"<pre>";print_r($data);exit;
             if(count($responses->data['records']) > 0)
             {
                foreach($responses->data['records'][0]['case_offence'] as $offenceVal):
@@ -1887,10 +1861,7 @@ class PermohonanController extends Controller
             $newOffences = $data['BlockRequestForm']['offence'];
             $newSelectedOffences = array_values(array_diff($newOffences,$prevOffences));
             $prevDeletedOffences = array_values(array_diff($prevOffences,$newOffences));
-            //echo"Previous <pre>";print_r($prevOffences);
-            //echo"New <pre>";print_r($newOffences);
-            //echo"new selected <pre>";print_r($newSelectedOffences);
-            //echo"prev deleted <pre>";print_r($prevDeletedOffences);exit;
+            
             $caseInfo = array();
             $caseStatusSuspek = array();
             $caseInvolvedURL = array();
@@ -1899,18 +1870,13 @@ class PermohonanController extends Controller
             $newCaseInvolvedURL = array();
             $newSelectedOffences = array();
             $prevDeletedOffences = array();
-            
             $caseInfo['master_case_info_type_id'] = $data['BlockRequestForm']['master_case_info_type_id'];
             $caseInfo['requestor_ref'] = $session->get('userId');
-            //$caseInfo['requestor_ref'] = 1;
             $caseInfo['id'] = $data['BlockRequestForm']['id'];
-            //$caseInfo['requestor_ref'] = 1;
-            //$caseInfo['report_no'] = $data['PermohonanForm']['report_no'];
             $caseInfo['investigation_no'] = $data['BlockRequestForm']['investigation_no'];
             $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
             $caseInfo['case_status'] = array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
             
-            //$caseInfo['created_by'] = $session->get('userId');
             $caseInfo['updated_by'] = $session->get('userId');
             if(isset($data['BlockRequestForm']['new_master_social_media_id']) && count($data['BlockRequestForm']['new_master_social_media_id']) > 0)
             {
@@ -1928,7 +1894,7 @@ class PermohonanController extends Controller
                 }
             }
             if(isset($data['BlockRequestForm']['new_master_social_media_id']) && count($data['BlockRequestForm']['new_master_social_media_id']) > 0)
-            {  //echo"<pre>";print_r($data['BlockRequestForm']);exit;
+            {  
                 for($i=0;$i<=count($data['BlockRequestForm']['new_master_social_media_id'])-1;$i++)
                 { 
                     if(!empty($data['BlockRequestForm']['new_master_social_media_id'][$i]) && !empty($data['BlockRequestForm']['new_url'][$i]))
@@ -1941,10 +1907,8 @@ class PermohonanController extends Controller
                     }
                     
                 }
-                //echo"<pre>";print_r($newCaseInvolvedURL);exit;
+                
             }
-            //$offences = $data['PermohonanForm']['offence'];
-
             
             //echo json_encode($caseInfo).'<br>';
             //echo json_encode($caseStatusSuspek).'<br>';
@@ -1975,8 +1939,6 @@ class PermohonanController extends Controller
         {
             $mediaSocialResponse = $responses->data['records'][0];
         }
-        
-        //echo "<pre>";print_r($responses->data['records']);exit;
         return $this->render('blockrequest/reopenblockrequest', ['model'=>$model,"mediaSocialResponse" => $mediaSocialResponse,"offences" => $filterOffenceResponse,"masterSocialMedia" => $masterSocialMedia]);
        
         
@@ -2034,7 +1996,6 @@ class PermohonanController extends Controller
             return $this->asJson($returnResponse);
            
         }
-    //echo"<pre>";print_r($model);exit;
         return $this->render('mntl/search', ['model' => $model]);
     }
 
@@ -2105,7 +2066,6 @@ class PermohonanController extends Controller
 			$data = Yii::$app->request->post();
             $telegram_verification = 0;
             $mobile_verification = 0;
-            //echo "<pre>";print_r($data['LeaForm']['notification']);exit;
             if(isset($data['LeaForm']['notification'][0]) &&  $data['LeaForm']['notification'][0] == "1")
               {
                 $telegram_verification = 1;
