@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <thead>
                                             <tr>
                                                 <th>No. Permohanan</th>
-                                                <th>No. Laparan Polis</th>
+                                                <th>No. Laporan Polis</th>
                                                 <th>Ringkasan</th>
                                                 <th>Lampiran</th>
                                                 <th>Status</th>
