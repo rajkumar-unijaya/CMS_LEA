@@ -10,14 +10,29 @@ use Yii;
 ?>
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Blocking Request</h1>
+<!-- ============================================================== -->
+		<!-- Bread crumb and right sidebar toggle -->
+		<!-- ============================================================== -->
+		<div class="row page-titles">
+			<div class="col-md-5 col-8 align-self-center">
+				<h3 class="text-themecolor">Permintaan Sekatan</h3>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
+					<li class="breadcrumb-item active">Permintaan Sekatan</li>
+
+				</ol>
+			</div>
+
+		</div>
+
+   <!-- <h1 style="padding-top: 1.5rem;">Permintaan Sekatan</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Blocking Request</li>
+            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Permintaan Sekatan</li>
             
         </ol>
-    </nav>
+    </nav>-->
     <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
@@ -46,14 +61,14 @@ use Yii;
 
 
            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No Laporan Polis </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Laporan Polis </label>
                 <div class="col-sm-8">
                 <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>   
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No Kertas Siasatan </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Kertas Siasatan </label>
                 <div class="col-sm-8">
                 <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No Kertas Siasata'])->label(false) ?> 
                 </div>
@@ -62,7 +77,7 @@ use Yii;
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Kesalahan</legend>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'offence')->dropDownList($offences,array('multiple'=>'multiple','prompt' => '--Pilih Kesalahan--'))->label(false); ?>
+                <?= $form->field($model, 'offence')->dropDownList($offences,array('multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
                 </div>
            </div>
 
@@ -77,14 +92,14 @@ use Yii;
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Surat Rasmi</legend>
                 <div class="col-sm-8">
-                <?=  $form->field($model, 'surat_rasmi')->fileInput()->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf'); ?>
+                <?=  $form->field($model, 'surat_rasmi')->fileInput()->label(false)->hint('fail format : png | jpg | jpeg | pdf'); ?>
                 </div>
             </div>
 
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Laporan Polis</legend>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>   
+                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('fail format : png | jpg | jpeg | pdf');?>   
                 </div>
             </div>
 
@@ -107,7 +122,7 @@ use Yii;
                   ?>
                   <div class="row">
                   <?php
-                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$i))->label(false);
+                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media-','id' => 'social_media_'.$i))->label(false);
                 echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
                 ?>
                 </div>
@@ -120,7 +135,7 @@ use Yii;
 
     
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -146,7 +161,7 @@ $(document).ready(function() {
 $('#add').click(function(){ var newID =  ( $('#url_input_append > div').length);
 if(newID <= 15)
 {
-  $('#url_input_append').append('<div class="row"><div class="form-group field-blockrequestform-master_social_media_id"><select id="blockrequestform-master_social_media_id['+newID+']" class="form-control" name="BlockRequestForm[master_social_media_id]['+newID+']"><option value="">--Pilih Social Media--</option><option value="1">twitter</option><option value="2">instagram</option><option value="3">tumblr</option><option value="4">facebook</option><option value="5">blog / website</option></select><div class="help-block"></div></div><div class="form-group field-blockrequestform-url-'+newID+'"><input type="text" id="blockrequestform-url-'+newID+'" class="form-control" name="BlockRequestForm[url]['+newID+']"><div class="help-block"></div></div></div>');
+  $('#url_input_append').append('<div class="row"><div class="form-group field-blockrequestform-master_social_media_id"><select id="blockrequestform-master_social_media_id['+newID+']" class="form-control" name="BlockRequestForm[master_social_media_id]['+newID+']"><option value="">-Pilih Sosial Media</option><option value="1">Twitter</option><option value="2">Instagram</option><option value="3">Tumblr</option><option value="4">Facebook</option><option value="5">Blog / Website</option></select><div class="help-block"></div></div><div class="form-group field-blockrequestform-url-'+newID+'"><input type="text" id="blockrequestform-url-'+newID+'" class="form-control" name="BlockRequestForm[url]['+newID+']"><div class="help-block"></div></div></div>');
 }
 else{
   alert("Can't create new field");

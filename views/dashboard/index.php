@@ -17,9 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="row">
                             <div class="col-xl-4 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Jumlah Kes Bulalan</div>
+                                    <div class="card-body">Jumlah Kes Bulanan</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="#">Lihat terperinci</a>
                                         <div class="small text-white"><i class="fa fa-angle-right"></i></div>
                                     </div>
                                 </div>
@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="card bg-warning text-white mb-4">
                                     <div class="card-body">Jumlah Kes Tahunan</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="#">Lihat terperinci</a>
                                         <div class="small text-white"><i class="fa fa-angle-right"></i></div>
                                     </div>
                                 </div>
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="card bg-success text-white mb-4">
                                     <div class="card-body">Jumlah Kes Harian</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="#">Lihat terperinci</a>
                                         <div class="small text-white"><i class="fa fa-angle-right"></i></div>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="card mb-4">
                         <div class="card-header">
-                                Senarai/Permohanan Terbaru
+                                Senarai Permohanan Terbaru
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 <th>Ringkasan</th>
                                                 <th>Lampiran</th>
                                                 <th>Status</th>
-                                                <th>Tarik Permohanan</th>
+                                                <th>Tarikh Permohanan</th>
                                                 <th>Tempoh Proses</th>
                                                 <th>Tindakan</th>
                                             </tr>
@@ -86,11 +86,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <tfoot>
                                             <tr>
                                             <th>No. Permohanan</th>
-                                                <th>No. Laparan Polis</th>
+                                                <th>No. Laporan Polis</th>
                                                 <th>Ringkasan</th>
                                                 <th>Lampiran</th>
                                                 <th>Status</th>
-                                                <th>Tarik Permohanan</th>
+                                                <th>Tarikh Permohanan</th>
                                                 <th>Tempoh Proses</th>
                                                 <th>Tindakan</th>
                                             </tr>
@@ -911,11 +911,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <thead>
                                             <tr>
                                                 <th>No. Permohanan</th>
-                                                <th>No. Laparan Polis</th>
+                                                <th>No. Laporan Polis</th>
                                                 <th>Ringkasan</th>
                                                 <th>Lampiran</th>
                                                 <th>Status</th>
-                                                <th>Tarik Permohanan</th>
+                                                <th>Tarikh Permohanan</th>
                                                 <th>Tempoh Proses</th>
                                                 <th>Tindakan</th>
                                             </tr>
@@ -923,11 +923,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <tfoot>
                                             <tr>
                                             <th>No. Permohanan</th>
-                                                <th>No. Laparan Polis</th>
+                                                <th>No. Laporan Polis</th>
                                                 <th>Ringkasan</th>
                                                 <th>Lampiran</th>
                                                 <th>Status</th>
-                                                <th>Tarik Permohanan</th>
+                                                <th>Tarikh Permohanan</th>
                                                 <th>Tempoh Proses</th>
                                                 <th>Tindakan</th>
                                             </tr>

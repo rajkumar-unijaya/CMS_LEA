@@ -58,7 +58,7 @@ DashboardAsset::register($this);
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Menu</div>
+                        <!--<div class="sb-sidenav-menu-heading">Menu</div>-->
                         <!-- <a class="nav-link collapsed" href="../dashboard" data-toggle="collapse" data-target="#collapseDashboardPages" aria-expanded="false" aria-controls="collapseDashboardPages">
                             -- <div class="sb-nav-link-icon" >
                                 sss
@@ -76,8 +76,8 @@ DashboardAsset::register($this);
 
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <!--<a class="nav-link" href="../permohonan/mediasosial">Melalui Media Sosial</a>-->
-                                    <a class="nav-link" href="../permohonan/mediasosial">Social Media</a>
-                                    <a class="nav-link" href="../permohonan/block-request-list">Blocking Request</a>
+                                    <a class="nav-link" href="../permohonan/mediasosial">Sosial Media</a>
+                                    <a class="nav-link" href="../permohonan/block-request-list">Permintaan Sekatan</a>
                                     <!--<a class="nav-link" href="../permohonan/mntl">MNTL</a>-->
 
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseMNTL" aria-expanded="false" aria-controls="pagesCollapseMNTL">
@@ -87,8 +87,8 @@ DashboardAsset::register($this);
                                     <div class="collapse" id="pagesCollapseMNTL" aria-labelledby="headingOne"
                                     data-parent="#sidenavAccordionPages">
                                     <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="../permohonan/mntl-list">List</a>
-                                        <a class="nav-link" href="../permohonan/search">MNP Search</a>
+                                        <a class="nav-link" href="../permohonan/mntl-list">Senarai</a>
+                                        <a class="nav-link" href="../permohonan/search">MNP Carian</a>
                                     </nav>
                                     </div>
                                     
