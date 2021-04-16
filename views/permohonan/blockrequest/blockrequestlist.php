@@ -12,15 +12,16 @@ $this->title = 'Blocking Request';
 <?php endif;?>
 </div>
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Blocking Request</h1>
+    <h1 class="text-themecolor" style="padding-top: 2rem;">Permintaan Sekatan</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../dashboard/index">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Blocking Request</li>
+            <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Permintaan Sekatan</li>
         </ol>
     </nav>
+    
     <div style="text-align: right;padding:10px;">
-        <a href="../permohonan/block-request"><button type="button" class="btn btn-primary">Permohonan Baru
+        <a href="../permohonan/block-request"><button type="button" class="btn btn-primary"><i class="fa fa-plus"></i>Permohonan Baru
             </button></a>
     </div>
     <div class="card-body">
@@ -28,7 +29,7 @@ $this->title = 'Blocking Request';
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        <th>No.</th>
                         <th>No. Permohonan</th>
                         <th>Ringkasan Kes</th>
                         <th>Lampiran</th>

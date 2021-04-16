@@ -15,7 +15,7 @@ use Yii;
 		<!-- ============================================================== -->
 		<div class="row page-titles">
 			<div class="col-md-5 col-8 align-self-center">
-				<h3 class="text-themecolor">Permintaan Sekatan</h3>
+				<h1 class="text-themecolor" style="padding-top: 2rem;">Permintaan Sekatan</h1>
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
 					<li class="breadcrumb-item active">Permintaan Sekatan</li>
@@ -33,6 +33,11 @@ use Yii;
             
         </ol>
     </nav>-->
+
+    <div class="row">
+			<div class="col-lg-12">
+				<div class="card card-outline-info">
+
     <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
@@ -40,15 +45,24 @@ use Yii;
                                         ?>
                                         <?php endif; ?>  
                                     </div>
-        <div class="row">`
        
-            <div class="col-lg-5">
+    <div class="form-body">
+
+                  
+								</div>
+
+                                        
+    <div class="row">
+									<div class="col-md-6 col-6">
+
+          <!-- <div class="row">
+            <div class="col-lg-5">-->
 
            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
            <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId])->label(false); ?>
            <div class="row mb-3">
               <label for="inputEmail3" class="col-sm-4 col-form-label">Pilihan Mengisi</label>
-              <div class="col-sm-8">
+              <div class="col-sm-6">
                     <?= $form->field($model, 'for_self')->radioList($newCase,array('class'=>'for_self'))->label(false); ?>
                     <div id="choose_forself">
                     <?= $form->field($model, 'selfName')->textInput(['placeholder' => 'name'])->label(false) ?>
@@ -121,7 +135,7 @@ use Yii;
                   ?>
                   <div class="row">
                   <?php
-                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media-','id' => 'social_media_'.$i))->label(false);
+                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','id' => 'social_media_'.$i))->label(false);
                 echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
                 ?>
                 </div>
@@ -142,6 +156,8 @@ use Yii;
         </div>
     </div>
 </div>
+
+</div></div></div>
 
 <?php
 $script = <<< JS
