@@ -10,11 +10,11 @@ use Yii;
 ?>
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Block Request</h1>
+<h1 class="text-themecolor" style="padding-top: 2rem;">Permintaan Sekatan</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Home</a></li>
-            <li class="breadcrumb-item active">Block Request</li>
+            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
+            <li class="breadcrumb-item active">Permintaan Sekatan</li>
             
         </ol>
     </nav>
@@ -42,10 +42,10 @@ use Yii;
            <?=  Html::hiddenInput('BlockRequestForm[id]', $mediaSocialResponse['id'],["id" => "permohonanId"]); ?>
            
             <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No Kertas Siasatan </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Kertas Siasatan </label>
                 <div class="col-sm-8">
                 <?php  $model->investigation_no = $mediaSocialResponse['investigation_no']; ?>
-                <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No Kertas Siasata'])->label(false) ?> 
+                <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No Kertas Siasatan'])->label(false) ?> 
                 </div>
             </div>
 
@@ -78,7 +78,7 @@ use Yii;
                 <legend class="col-form-label col-sm-4 pt-0">Surat Rasmi</legend>
                 
               <div class="col-sm-4" id="suratRasmiAttachmentIsNull">
-                <?= $form->field($model, 'surat_rasmi')->fileInput()->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>
+                <?= $form->field($model, 'surat_rasmi')->fileInput()->label(false)->hint('fail format :  png | jpg | jpeg | pdf');?>
                 
               </div>
                 
@@ -86,11 +86,11 @@ use Yii;
               <div id="suratRasmiAttachmentNotNull">
                 <div class="col-sm-4" id="surat_rasmi_img_del">
                 <input type="hidden" id="suratRasmiImagePath" name="BlockRequestForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
-                <?= Html::button("Delete",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
+                <?= Html::button("Padam",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
                 </div>
                 
                 <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
-                <?= Html::button("Download | View",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
+                <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
                 </div>
               </div>
                 
@@ -100,7 +100,7 @@ use Yii;
                 <legend class="col-form-label col-sm-4 pt-0">Laporan Polis</legend>
                 
               <div class="col-sm-4" id="laporanPolisAttachmentIsNull">
-                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>
+                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('fail format :  png | jpg | jpeg | pdf');?>
                 
               </div>
                 
@@ -172,7 +172,7 @@ use Yii;
 
     
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

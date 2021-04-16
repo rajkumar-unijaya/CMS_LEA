@@ -15,7 +15,7 @@ class SearchForm extends Model
     public function attributeLabels()
     {
         return [
-            'phone_number' => 'Search'
+            'phone_number' => 'Cari'
         ];
     }
 
@@ -25,7 +25,7 @@ class SearchForm extends Model
     public function rules()
     {
         return [
-            [['phone_number'], 'required','message'=>'Masukkan Phone No.'],
+            [['phone_number'], 'required','message'=>'Masukkan No. Telefon'],
             //[['phone_number'], 'integer', 'min' => 7, 'max' => 12,'message'=>'Masukkan No. Telefon Yang Sah'],
             
         ];
@@ -36,7 +36,7 @@ class SearchForm extends Model
         $domain = $this->find_occurence_from_end($this->email, ".", 2);
          if(!in_array( $domain ,$allDomains ))
         {
-            $this->addError($attribute,"Email is not valid");
+            $this->addError($attribute,"E-mel tidak sah");
         }
         
     }
