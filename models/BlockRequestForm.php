@@ -17,7 +17,6 @@ class BlockRequestForm extends Model
     public $selfName;
     public $no_telephone;
     public $email;
-    public $report_no;
     public $investigation_no;
     public $offence;
     public $case_summary;
@@ -79,16 +78,7 @@ class BlockRequestForm extends Model
              }, 'whenClient' => "function (attribute, value) {
                  return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 78;
                  }"],    
-            [['report_no'], 'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
-                'when' => function($model) { return empty($model->investigation_no); }, 'whenClient' => "function (attribute, value) {
-                    return $('#blockrequestform-investigation_no').val().length == 0;
-                    }"
-              ],
-            [['investigation_no'],'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
-                'when' => function($model) { return empty($model->report_no); }, 'whenClient' => "function (attribute, value) {
-                    return $('#blockrequestform-report_no').val().length == 0;
-                    }"
-              ],
+            [['investigation_no'],'required','message'=>'Masukkan No Kertas Siasatan'],
             [['offence'], 'required','message'=>'Pilih kesalahan'],
             [['case_summary'], 'required','message'=>'Masukkan Ringkasan Kes'],  
             //[['application_purpose'], 'required','message'=>'Pilih Tujuan Permohanan'],
@@ -101,10 +91,9 @@ class BlockRequestForm extends Model
 
     public function scenarios() {
         $scenarios = parent::scenarios(); 
-        $scenarios['create'] = ['for_self','surat_rasmi','selfName','email','no_telephone','report_no','investigation_no','offence','case_summary',/*'master_status_suspect_or_saksi_id',*/'application_purpose'];
-        $scenarios['editBlockRequest'] = ['report_no','investigation_no','offence','case_summary'];
-        $scenarios['reOpenBlockRequest'] = ['report_no','investigation_no','offence','case_summary'];
-        //$scenarios['reopen'] = ['offence','case_summary','master_status_suspect_or_saksi_id','application_purpose'];
+        $scenarios['create'] = ['for_self','surat_rasmi','selfName','email','no_telephone','investigation_no','offence','case_summary',/*'master_status_suspect_or_saksi_id',*/'application_purpose'];
+        $scenarios['editBlockRequest'] = ['investigation_no','offence','case_summary'];
+        $scenarios['reOpenBlockRequest'] = ['investigation_no','offence','case_summary'];
         return $scenarios;
     
     }
