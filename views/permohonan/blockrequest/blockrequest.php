@@ -15,14 +15,14 @@ use Yii;
 		<!-- ============================================================== -->
 		<div class="row page-titles">
 			<div class="col-md-5 col-8 align-self-center">
-				<h1 class="text-themecolor" style="padding-top: 2rem;">Permintaan Sekatan</h1>
+				<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
+        <nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
-					<li class="breadcrumb-item active">Permintaan Sekatan</li>
-
+					<li class="breadcrumb-item active">Permohonan Penyekatan</li>
 				</ol>
+        </nav>
 			</div>
-
 		</div>
 
    <!-- <h1 style="padding-top: 1.5rem;">Permintaan Sekatan</h1>
@@ -46,14 +46,287 @@ use Yii;
                                         <?php endif; ?>  
                                     </div>
        
-    <div class="form-body">
+  <div class="form-body">
+<h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+<hr>
+          <div class="row">
+						<div class="col-md-6">
+							  <div class="form-group">
+								    <label>Pilihan Mengisi <span class="text-danger">*</span></label>
+								      <select class="custom-select" id="inquiry">
+									        <option selected="">Pilih Pilihan</option>
+									        <option value="1">Bagi Pihak</option>
+									        <option value="2">Diri Sendiri</option>	
+								      </select>
+							  </div>
+						  </div>
+              </div>
+      <!--/span-->
+      <br>
 
+          <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="control-label">Nama<span class="text-danger">*</span></label>
+                      <div class="controls">
+                      <input type="text" id="nama" class="form-control" name="nama" data-validation-required-message="This field is required" required>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="control-label">E-mel<span class="text-danger">*</span></label>
+                      <div class="controls">
+                      <input type="text" id="emel" class="form-control" name="emel" data-validation-required-message="This field is required" required>
+                      </div>
+                  </div>
+              </div>
+              <!--/span-->
+              </br>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="control-label">No. Telefon <span class="text-danger">*</span></label>
+                      <div class="controls">
+                      <input type="text" id="notelefon" class="form-control" name="notelefon" data-validation-required-message="This field is required" required>
+                      </div>
+                  </div>
+              </div>
+              </div>
+              <!--no. Laporan Polis-->
+              <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="control-label">No. Laporan Polis <span class="text-danger"></span></label>
+                      <div class="controls">
+                      <input type="text" id="" class="form-control" name="" data-validation-required-message="This field is required" required>
+                      </div>
+                  </div>
+              </div>
+
+              <!--No. Kertas Siasatan-->
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="control-label">No. Kertas siasatan <span class="text-danger">*</span></label>
+                      <div class="controls">
+                      <input type="text" id="" class="form-control" name="" data-validation-required-message="This field is required" required>
+                      </div>
+                  </div>
+              </div>
+              </div>
+
+<!--Kesalahan-->
+              <label class="control-label">Kesalahan<span class="text-danger">*</span></label>
+      <h5>Pilih Kesalahan</h5>
+      <div class="row">
+          <div class="col-md col-sm">
+
+              <select id='search' multiple='multiple' name="from[]" class="form-control" size="10" style="font-size:14px;important!">
+              <option value="">Seksyen 505 Kanun Keseksaan</option>
+              <option value="">Seksyen 405 Kanun Keseksaan</option>
+              <option value="">Seksyen 305 Kanun Keseksaan</option>
+              <option value="">Seksyen 205 Kanun Keseksaan</option>
+              <option value="">Seksyen 105 Kanun Keseksaan</option>
+              <option value="">Seksyen 503 Kanun Keseksaan</option>
+              <option value="">Seksyen 502 Kanun Keseksaan</option>
+              <option value="">Seksyen 506 Kanun Keseksaan</option>
+              </select>
+            <div class='control-label count-from'  style="margin:10px;">
+            </div>
+          </div>
+      <div class="col-md-1 col-sm-12" style="margin: auto;">
+              <button type="button" id="search_rightSelected" class="btn btn-sm waves-effect waves-light btn-info btn-block"> > </button>
+              <button type="button" id="search_leftSelected" class="btn btn-sm waves-effect waves-light btn-info btn-block">< </button> 
+      </div> 
+      <div class="col-md col-sm">
+            <select name="aktiviti_kod[]" multiple="multiple" id="search_to" class="form-control"
+                          size="10" multiple="multiple" required style="font-size:14px;important!"
+                          data-validation-required-message="This field is required">
+            </select>
+                  <div class='control-label count-to'  style="margin:10px;">
+                          0 Record
+                  </div>
+      </div>
+    </div>
+ <!--Ringkasan Kes-->
+              <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="control-label"> Ringkasan Kes<span class="text-danger">*</span></label>
+                      <div class="controls">
+                      <textarea id="mymce" rows="5" type="text" id="path" class="form-control" name="aktiviti_lesen" data-validation-required-message="This field is required" required></textarea>
+                      </div>
+                  </div>
+              </div>
+              </div>
+<br>
+  <!-- Surat Rasmi-->         
+  <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
+      <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+					  	<label>Surat Rasmi</label>
                   
-								</div>
-
+						    <input type="file" id="file" accept=".doc,.docx,.pdf,image/*" multiple="multiple" onchange="javascript:updateList()" /><br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+						      <div id="fileList"></div>                     
+				  	</div>
+          </div>
+</div>
+  <!--Laporan Polis-->   
+  <div class="row">       
+          <div class="col-md-6">
+            <div class="form-group">
+					  	<label>Laporan Polis</label>
+						    <input type="file" id="file" accept=".doc,.docx,.pdf,image/*" multiple="multiple" onchange="javascript:updateList()" /><br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+						      <div id="fileList"></div>
+               </div>      
+				  	</div>
+          </div>
+        </div>
+<br>
+  <!--URL--> 
+                      <div class="row">
+                      <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Link (URL)</label>
+                                    <button type="button" class="btn btn-info m-b-20" id="button1">
+	                                     <i class="fa fa-plus text"></i>
+	                                  </button> 
+                                    <div class="form-group">
+                                    <select class="custom-select" id="inquiry">
+                                      <option selected="">Pilih Sosial Media</option>
+                                      <option value="1">Twitter</option>
+                                      <option value="2">Facebook</option>
+                                      <option value="3">Instagram</option>
+                                      <option value="4">Tumblr</option>	
+                                      <option value="5">Youtube</option>
+                                      <option value="6">Tiktok</option>		
+                                  </select>
+                                  <input type="text" id="" class="form-control" name="">
+                                    </div>
+                                </div>
+                      </div>
+                      </div>
+<br>
+                      <!--/span-->
+                      <h4 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h4>
+      <hr>
+                      <div class="row"> 
+                            <div class="col-lg-6">
+                                <label class="custom-control custom-radio"
+                                    style="display: inline-block; padding-right: 30px;">
+                                    <input type="radio" class="custom-control-input" name="agensi_action_id" value="0">
+                                    <span class="custom-control-label">Mengenalpasti pengendali akaun/laman sosial/laman web<br>
                                         
+                                </label>
+                            </div>
+                            <div class="col-lg-6 m-t-20">
+                                <label class="custom-control custom-radio"
+                                    style="display: inline-block; padding-right: 30px;">
+                                    <input type="radio" class="custom-control-input" name="agensi_action_id" value="1">
+                                    <span class="custom-control-label">Maklumat lain, sila nyatakan:<br>
+                                </label>
+                                <input type="text" id="agency_web" class="form-control"
+                                    placeholder="">
+                            </div>
+                        </div>
+              <!--/button--> <br>
+                      <div class="row">
+                        <div class="col-md-12 col-12">
+                            <div class="text-right">
+
+                                <button type="button" name="btnSave"
+                                    class="btn  waves-effect-light btn-info btn-sm btnSave" data-toggle="tooltip"
+                                    data-placement="left" title=""
+                                    data-original-title="Click to submit and back to the main page"><i
+                                        class="ti-check"></i>Hantar</button>
+                                <a href="{{route('licensing.license.index')}}"
+                                    class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
+                                    data-placement="left" title=""
+                                    data-original-title="Click to cancel and back to the main page"><i
+                                        class="ti-close"></i>
+                                    Batal</a>
+                            </div>
+                        </div>
+                    </div>
+</div>
+</div>
+                                        </div></div>
+<!-- end form design  -->
+
+	<script src="../assets/plugins/dropify/dist/js/dropify.min.js"></script>
+	<script>
+		//block form field
+		$("#name,#emel,#notelefon").hide();
+		
+		//control selection from inquiry
+		$('#inquiry').change(function() {
+			var zz = $(this).val();
+
+			if (zz == 2) {
+
+				$("#name,#emel,#notelefon").hide();
+
+			} else {
+
+				$("#name,#emel,#notelefon").show();
+
+			}
+
+		});
+
+    pre = $("#search option").length + ' Record';
+    $(".count-from").text(pre);
+    $(".count-from").text("0 Record");
+
+    $("#search").change(function(){
+
+        text = $("#search").find("option").length + ' Record'+($("#search option").length>1?'s':'');
+        balance = $("#search_to").find('option').length + ' Record'+($("#search_to").find('option').length>1?'s':'');
+        //all = balance + ' Record';
+        $(".count-from").text(text);
+        $(".count-to").text(balance);
+    });
+
+    $("#search_to").change(function(){
+
+        text = $("#search option").length + ' Record'+($("#search option").length>1?'s':'');
+        balance = $("#search_to option").length + ' Record'+($("#search_to").find('option').length>1?'s':'')
+        //all = balance + ' Record';
+        $(".count-from").text(text);
+        $(".count-to").text(balance);
+    });
+
+    $('#search').multiselect({
+        search: {
+            left: '<label class="control-label">Selectable Activity</label><input type="text" name="q" class="form-control" placeholder="Search..." style="margin-bottom:20px;"/>',
+            right: '<label class="control-label">Selected Activity</label><input type="text" name="q" class="form-control" placeholder="Search..." style="margin-bottom:20px;"/>',
+        },
+
+        startUp: false,
+        fireSearch: function(value) {
+            return value.length > 2;
+        },
+        afterMoveToRight: function(){
+            $("#search_to").trigger('change');
+        },
+        afterMoveToLeft: function() {
+            $("#search").trigger('change');
+        },
+        afterInit: function(){
+            $(".count-from").text($("#search").find("option").length + ' Record'+($("#search option").length>1?'s':''));
+        },
+        submitAllLeft:false,
+        submitAllRight:true
+
+    });
+	</script>
+<!-- ============================================================== -->
+	<!-- End wanie part -->
+	<!-- ============================================================== -->      
+
     <div class="row">
-									<div class="col-md-6 col-6">
+			<div class="col-md-6 col-6">
 
           <!-- <div class="row">
             <div class="col-lg-5">-->
