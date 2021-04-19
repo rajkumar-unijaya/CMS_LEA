@@ -12,21 +12,22 @@ $this->title = 'Blocking Request';
 <?php endif;?>
 </div>
 <div class="container-fluid">
-    <h1 class="text-themecolor" style="padding-top: 2rem;">Permintaan Sekatan</h1>
+    <h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Permintaan Sekatan</li>
+            <li class="breadcrumb-item active" aria-current="page">Permohonan Penyekatan</li>
         </ol>
     </nav>
-    
+
+
     <div style="text-align: right;padding:10px;">
         <a href="../permohonan/block-request"><button type="button" class="btn btn-primary"><i class="fa fa-plus"></i>Permohonan Baru
             </button></a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table id="dataTable"  class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th>No.</th>
@@ -61,25 +62,28 @@ $this->title = 'Blocking Request';
                             <?php 
                             if(strcasecmp($responseTemp['case_status']['name'],"Closed") == 0)
                             {
-                             echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('permohonan/reopencase', 'id'=>$responseTemp['id']));
-                             echo "&nbsp;&nbsp;&nbsp;";
                              echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
+                             echo "&nbsp;&nbsp;&nbsp;";
+                             echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('permohonan/reopencase', 'id'=>$responseTemp['id']));
                             }
                             if(strcasecmp($responseTemp['case_status']['name'],"Rejected") == 0)
                             {
                              echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
+                             echo "&nbsp;&nbsp;&nbsp;";
+                             echo "&nbsp;&nbsp;&nbsp;";
                             }
                             if(strcasecmp($responseTemp['case_status']['name'],"Pending") == 0)
                             {
+                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
+                            echo "&nbsp;&nbsp;&nbsp;";
                             echo Html::a('<i class="fa fa-pencil" aria-hidden="true"></i>', array('permohonan/edit-block-request', 'id'=>$responseTemp['id']));
                             echo "&nbsp;&nbsp;&nbsp;";
-                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
                             }
                             if(strcasecmp($responseTemp['case_status']['name'],"Reopen") == 0)
                             {
-                            echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('permohonan/reopen-block-request', 'id'=>$responseTemp['id']));
-                            echo "&nbsp;&nbsp;&nbsp;";
                             echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
+                            echo "&nbsp;&nbsp;&nbsp;";
+                            echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('permohonan/reopen-block-request', 'id'=>$responseTemp['id']));
                             }
                             ?>
                             </td>

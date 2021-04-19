@@ -10,11 +10,11 @@ use Yii;
 ?>
 
 <div class="container-fluid">
-<h1 class="text-themecolor" style="padding-top: 2rem;">Permintaan Sekatan</h1>
+<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
-            <li class="breadcrumb-item active">Permintaan Sekatan</li>
+            <li class="breadcrumb-item active">Permohonan Penyekatan</li>
             
         </ol>
     </nav>
