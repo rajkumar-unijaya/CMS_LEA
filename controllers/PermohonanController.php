@@ -345,7 +345,7 @@ class PermohonanController extends Controller
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
            * 
            *  */     
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $data = Yii::$app->request->post();
             $this->_FileUploadSuratRasmi = Yii::$app->params['FILE_UPLOAD_SURAT_RASMI']."permohonan/surat_rasmi/";
             $this->_FileUploadLaporanPolice = Yii::$app->params['FILE_UPLOAD_LAPORAN_POLIS']."permohonan/laporan_polis/";
@@ -2157,12 +2157,12 @@ class PermohonanController extends Controller
             ->setUrl($this->_url . 'case_info?filter=report_no,eq,'.$data['laporan_police'].'&size=1')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
-
-            if(count($responses->data['records']) > 0){ $laporanPoliceNoCount = count($responses->data['records']);}
+        if(count($responses->data['records']) > 0){ $laporanPoliceNoCount = count($responses->data['records']);}
         $response = array();
         if($laporanPoliceNoCount > 0)
         {
             $responseInfo['status'] = 200;
+            $responseInfo['strlength'] = strlen($responses->data['records'][0]['report_no']);
             $responseInfo['message'] = 'success';
             $responseInfo['result'] = "Laporan Police number already exists.";
             
@@ -2174,6 +2174,70 @@ class PermohonanController extends Controller
         }
         return $this->asJson($responseInfo);
     }
+
+    /****
+     * 
+     * Download Garis Panduan document
+     */
+    public function actionCheckWhiteListDomain()
+    {
+        $responseInfo['message'] = 'failed';
+        $domainCount = 0;
+        $masterResult = array();
+        $data = Yii::$app->request->post();
+        $domain = $this->find_occurence_from_end($data['email'], ".", 2);
+        //echo $data['laporan_police'];exit;
+        $client = new Client();
+        $responses = $client->createRequest()
+            ->setFormat(Client::FORMAT_URLENCODED)
+            ->setMethod('GET')
+            ->setUrl($this->_url . 'email_domain_whitelist?filter=name,eq,'.$domain.'&size=1')
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+            ->send();
+        if(count($responses->data['records']) > 0){ $domainCount = count($responses->data['records']);}
+        $response = array();
+        //echo "123<pre>";print_r($responses->data['records']);exit;
+        if($domainCount > 0)
+        {
+            $responseInfo['status'] = 200;
+            $responseInfo['strlength'] = strlen($responses->data['records'][0]['name']);
+            $responseInfo['message'] = 'success';
+            $responseInfo['result'] = "Valid domain";
+            
+        }
+        else{
+            $responseInfo['message'] = 'failed';
+            $responseInfo['strlength'] = 0;
+            $responseInfo['status'] = 200;
+            $responseInfo['result'] = "Invalid domain";
+        }
+        return $this->asJson($responseInfo);
+    }
+
+    public function find_occurence_from_end($haystack, $needle, $num) {
+        $actual = $haystack;
+       
+           for ($i=1; $i <=$num ; $i++) {
+       
+               # first loop return position of needle
+               if($i == 1) {
+                   $pos = strrpos($haystack, $needle);
+               }
+       
+               # subsequent loops trim haystack to pos and return needle's new position
+               if($i != 1) {
+       
+                   $haystack = substr($haystack, 0, $pos);
+                   $pos = strrpos($haystack, $needle);
+                   $realString = substr($actual,$pos);
+       
+               }
+       
+           }
+       
+           return $realString;
+       
+       }
     
 
 }

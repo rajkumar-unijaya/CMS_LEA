@@ -5,6 +5,8 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\httpclient\Client;
+use app\components\validator\Reportno;
+use app\components\validator\DomainCheck;
 
 /**
  * EmailForm is the model behind the login form.
@@ -72,9 +74,8 @@ class PermohonanForm extends Model
              }, 'whenClient' => "function (attribute, value) {
                  return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 78;
                  }"],
-            [['email'],'domainCheck'], 
-
-            [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
+            [['email'],Domaincheck::className()],     
+            /*[['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
                 $allDomains = [".gov.my"];
                 $domain = $this->find_occurence_from_end($model->email, ".", 2);
                     if(!in_array( $domain ,$allDomains ))
@@ -95,7 +96,7 @@ class PermohonanForm extends Model
                     return false;
                 }
                 }"],
-
+            [['email'],'domainCheck'],*/
             [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false);
              }, 'whenClient' => "function (attribute, value) {
@@ -106,39 +107,7 @@ class PermohonanForm extends Model
                     return $('#permohonanform-investigation_no').val().length == 0;
                     }"
                ],
-            [['report_no'], 'required','message'=>'Report No should be unique',
-               'whenClient' => "function (attribute, value) {
-                   if($('#permohonanform-report_no').val().length > 0)
-                   {
-                       var url = window.location.origin+'/permohonan/checkloporanno';
-           
-           $.ajax({
-               url: url,
-               type: 'post',
-               dataType: 'json',
-               data: {'laporan_police' : $('#permohonanform-report_no').val()}
-           })
-           .done(function(response) { 
-               if (response.message == 'success') { 
-                 $('#invalid_report_no').show();   
-                 return false;
-                } 
-                else{
-                   $('#invalid_report_no').hide();   
-                   return true;
-                   
-                }
-                
-           })
-           .fail(function() {
-               console.log('error');
-           });
-                   }
-                   
-                   }"
-            ],  
-             
-            [['report_no'],'uniqueLaporanPoliceNo'],   
+            [['report_no'],Reportno::className()],   
              [['investigation_no'],'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
                  'when' => function($model) { return empty($model->report_no); }, 'whenClient' => "function (attribute, value) {
                     return $('#permohonanform-report_no').val().length == 0;
@@ -197,7 +166,7 @@ class PermohonanForm extends Model
        
        }
 
-   public function domainCheck($attribute, $params){ 
+   public function domainCheck($attribute, $params){ echo 22;exit;
        $allDomains = [".gov.my"];
        $domain = $this->find_occurence_from_end($this->email, ".", 2);
         if(!in_array( $domain ,$allDomains ))
