@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use app\components\validator\DomainCheck;
 
 /**
  * EmailForm is the model behind the login form.
@@ -49,29 +50,7 @@ class BlockRequestForm extends Model
              }, 'whenClient' => "function (attribute, value) {
                  return $('input[type=\"radio\"][name=\"BlockRequestForm[for_self]\"]:checked').val() == 78;
                  }"],
-            [['email'],'domainCheck'], 
-
-            [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
-                $allDomains = [".gov.my"];
-                $domain = $this->find_occurence_from_end($model->email, ".", 2);
-                    if(!in_array( $domain ,$allDomains ))
-                {
-                    return false;
-                }
-                return true;
-                //return ($model->for_self == 78 ? true : false); 
-            }, 'whenClient' => "function (attribute, value) { 
-                if ($('#blockrequestform-email').val().toLowerCase().indexOf('.gov.my') >= 0)
-                {
-                    $('#invalid_email').remove();
-                    return true;
-                }
-                else if($('#blockrequestform-email').val() != '')
-                {
-                    $('#invalid_email').html('alamat email tidak sah');
-                    return false;
-                }
-                }"],
+            [['email'],Domaincheck::className()], 
 
             [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false);
