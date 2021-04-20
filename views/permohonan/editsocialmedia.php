@@ -54,6 +54,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                 <?php  $model->report_no = $mediaSocialResponse['report_no']; ?>
                 <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>   
                 </div>
+                <div class="help-block-report_no" id="invalid_report_no">No Laporan Polis already exists</div>   
             </div>
 
             <div class="row mb-3">
@@ -90,7 +91,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             </div>
 
             <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Status Suspek / Sakhi</legend>
+                <legend class="col-form-label col-sm-4 pt-0">Status Suspek / Saksi</legend>
                 <div class="pull-right">
                         <button type="button" id="add_ic_name" class="add-item btn btn-success btn-xs">+</button>
                         </div>
@@ -331,6 +332,7 @@ $isLaporanPoliceExists = 1;
 
 $script = <<< JS
 $(document).ready(function() { 
+  $("#invalid_report_no").hide();
 if($isSuratRasmiExists)
 {
   $("#suratRasmiAttachmentIsNull").hide();
