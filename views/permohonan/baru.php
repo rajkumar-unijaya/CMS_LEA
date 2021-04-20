@@ -48,7 +48,8 @@ use Yii;
            <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">No Laporan Polis </label>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>   
+                <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>
+                <div class="help-block-report_no" id="invalid_report_no">No Laporan Polis already exists</div>   
                 </div>
             </div>
 
@@ -75,7 +76,7 @@ use Yii;
             </div>
 
             <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Status Suspek / Sakhi</legend>
+                <legend class="col-form-label col-sm-4 pt-0">Status Suspek / Saksi</legend>
                 <div class="pull-right">
                         <button type="button" id="add_ic_name" class="add-item btn btn-success btn-xs">+</button>
                         </div>
@@ -174,6 +175,7 @@ $(document).ready(function() {
   var pausecontent=new Array();
   $("#choose_forself").hide();
   $("#application_purpose_info").hide();
+  $("#invalid_report_no").hide();
 
   $("input[name='PermohonanForm[for_self]']").change(function() {
     if (this.value == 78) {
@@ -412,6 +414,8 @@ $("input:checkbox[name='PermohonanForm[application_purpose][]']").click(function
           $("#application_purpose_info").hide();
         }
    });
+
+   
 
     var valid = true;
 

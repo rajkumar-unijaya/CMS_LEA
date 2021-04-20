@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use yii\httpclient\Client;
 
 /**
  * EmailForm is the model behind the login form.
@@ -41,6 +42,11 @@ class PermohonanForm extends Model
     public $application_purpose_info;
     public $new_master_social_media_id;
     public $new_url;
+
+    private $_url = null;
+    private $_DFHeaderKey = null;
+    private $_DFHeaderPass = null;
+
     
 
     
@@ -100,6 +106,39 @@ class PermohonanForm extends Model
                     return $('#permohonanform-investigation_no').val().length == 0;
                     }"
                ],
+            [['report_no'], 'required','message'=>'Report No should be unique',
+               'whenClient' => "function (attribute, value) {
+                   if($('#permohonanform-report_no').val().length > 0)
+                   {
+                       var url = window.location.origin+'/permohonan/checkloporanno';
+           
+           $.ajax({
+               url: url,
+               type: 'post',
+               dataType: 'json',
+               data: {'laporan_police' : $('#permohonanform-report_no').val()}
+           })
+           .done(function(response) { 
+               if (response.message == 'success') { 
+                 $('#invalid_report_no').show();   
+                 return false;
+                } 
+                else{
+                   $('#invalid_report_no').hide();   
+                   return true;
+                   
+                }
+                
+           })
+           .fail(function() {
+               console.log('error');
+           });
+                   }
+                   
+                   }"
+            ],  
+             
+            [['report_no'],'uniqueLaporanPoliceNo'],   
              [['investigation_no'],'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
                  'when' => function($model) { return empty($model->report_no); }, 'whenClient' => "function (attribute, value) {
                     return $('#permohonanform-report_no').val().length == 0;
@@ -184,6 +223,27 @@ class PermohonanForm extends Model
     
 }
 
+    public function uniqueLaporanPoliceNo($attribute, $params)
+    {
+        $this->_url = Yii::$app->params['DreamFactoryContextURL'];
+        $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
+        $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
+        $laporanPoliceNoCount = 0;
+        $client = new Client();
+            $responses = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_url . 'case_info?filter=report_no,eq,'.$this->report_no.'&size=1')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
 
+                if(count($responses->data['records']) > 0){ $laporanPoliceNoCount = count($responses->data['records']);}
+            $response = array();
+            if($laporanPoliceNoCount > 0)
+            { 
+                $this->addError($attribute,"No Laporan Polis already exists");
+            }
+            
+    }
 
 }
