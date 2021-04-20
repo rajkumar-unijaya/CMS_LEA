@@ -61,13 +61,7 @@ use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
                 </div>
             </div>
 
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No. TP </label>
-                <div class="col-sm-8">
-                <?= $form->field($model, 'tippoff_id')->dropDownList($tipOff,array(/*'multiple'=>'multiple',*/'prompt' => '--Pilih tipOff--'))->label(false); ?>
-                </div>
-           </div>
-
+            
            <div class="row mb-3">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">Phone Number </label>
                 <div class="col-sm-8">
@@ -85,7 +79,7 @@ use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
             </div>
 
             <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Date1 </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">Search from </label>
                 <div class="col-sm-8">
                 <?=  $form->field($model, 'date1',['inputOptions' => [
 'autocomplete' => 'off']])->widget(\yii\jui\DatePicker::className(),
@@ -103,7 +97,7 @@ use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
 
 
             <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Date2 </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">Search until </label>
                 <div class="col-sm-8">
                 <?=  $form->field($model, 'date2',['inputOptions' => [
 'autocomplete' => 'off']])->widget(\yii\jui\DatePicker::className(),

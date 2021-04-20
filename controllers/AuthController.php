@@ -124,14 +124,14 @@ class AuthController extends Controller
                     ->setUrl($this->_url_crawler."func.telegram_sendmsg.php?chatid=".$emailResponse->data['records'][0]['telegram_id']."&msg=".rawurlencode("Oyi"))
                     ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
                     ->send();
-                    if($telegramResponse->data['ok'])
+                    if(isset($telegramResponse->data['ok']) && !empty($telegramResponse->data['ok']))
                     {
                         array_push($otpSendDeviceList,"telegram");
                     }
-                    else{
+                    /*else{
                         Yii::$app->session->addFlash('failed','telegram id is not correct');
                         return $this->refresh();
-                    }
+                    }*/
                 }
                 // check if user entered mobile number is exists in database or not, If exists then proceed with next business logic
 
