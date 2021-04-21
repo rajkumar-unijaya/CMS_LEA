@@ -20,133 +20,191 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="../crawler/mntl-list">Permohonan Baru</a></li>
+            <li class="breadcrumb-item"><a href="../crawler/mntl-list">Permohonan Baru Sosial Media</a></li>
             
         </ol>
     </nav>
-    <div class="card-body">
+    
+  <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
                                          echo Yii::$app->session->getFlash('failed')[0];
                                         ?>
                                         <?php endif; ?>  
                                     </div>
-        <div class="row">`
-       
-            <div class="col-lg-5">
-<?php //echo $mediaSocialResponse['case_no'];exit;?>
-           <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-           <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Permohonan </label>
-                <div class="col-sm-8">
+
+      <h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+      <hr>
+<div class="row">
+  <div class="col-lg-12">
+                <?php //echo $mediaSocialResponse['case_no'];exit;?>
+                <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+
+           <div class="row">
+              <div class="col-md-6">
+                <label for="inputPassword3">No. Permohonan </label>
+                
                 <?= Html::input('text', 'case_no', $mediaSocialResponse['case_no'], ['class'=> 'form-control','readonly' => true]) ?>
                 
-                </div>
+              </div>
             </div>
+
+
            <?= $form->field($model, 'master_case_info_type_id')->hiddenInput(['value' => $mediaSocialResponse['master_case_info_type_id']])->label(false); ?>
            <?=  Html::hiddenInput('PermohonanForm[id]', $mediaSocialResponse['id'],["id" => "permohonanId"]); ?>
-
            <?=  Html::hiddenInput('PermohonanForm[prev_case_info_status_suspek]', $prevSuspekStatus,["id" => "prev_case_info_status_suspek"]); ?>
-           
-           <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No Laporan Polis </label>
-                <div class="col-sm-8">
+           <br>
+           <div class="row">
+              <div class="col-md-6">
+                  <label for="inputPassword3">No. Laporan Polis </label>
+                  <?php  $model->report_no = $mediaSocialResponse['report_no']; ?>
+                    <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>           
+                    <div class="help-block-report_no" id="invalid_report_no">No Laporan Polis already exists</div>
+              </div>
+
+            <div class="col-md-6">
+                <label for="inputPassword3">No. Kertas Siasatan </label>
                 <?php  $model->report_no = $mediaSocialResponse['report_no']; ?>
-                <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>   
-                </div>
-                <div class="help-block-report_no" id="invalid_report_no">No Laporan Polis already exists</div>   
+                    <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>           
+                    <div class="help-block-report_no" id="invalid_report_no">No Laporan Polis already exists</div>   
             </div>
-
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No Kertas Siasatan </label>
-                <div class="col-sm-8">
-                <?php  $model->investigation_no = $mediaSocialResponse['investigation_no']; ?>
-                <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No Kertas Siasata'])->label(false) ?> 
-                </div>
             </div>
+       <!--/span-->
+<!--Kesalahan-->
+<label class="control-label">Kesalahan</label>
+      <h5>Pilih Kesalahan</h5>
+      <div class="row">
+          <div class="col-md col-sm">
 
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Kesalahan</legend>
+              <select id='search' multiple='multiple' name="from[]" class="form-control" size="10" style="font-size:14px;important!">
+              <option value="">Seksyen 505 Kanun Keseksaan</option>
+              <option value="">Seksyen 405 Kanun Keseksaan</option>
+              <option value="">Seksyen 305 Kanun Keseksaan</option>
+              <option value="">Seksyen 205 Kanun Keseksaan</option>
+              <option value="">Seksyen 105 Kanun Keseksaan</option>
+              <option value="">Seksyen 503 Kanun Keseksaan</option>
+              <option value="">Seksyen 502 Kanun Keseksaan</option>
+              <option value="">Seksyen 506 Kanun Keseksaan</option>
+              </select>
+            <div class='control-label count-from'  style="margin:10px;">
+            </div>
+          </div>
+      <div class="col-md-1 col-sm-12" style="margin: auto;">
+              <button type="button" id="search_rightSelected" class="btn btn-sm waves-effect waves-light btn-info btn-block"> > </button>
+              <button type="button" id="search_leftSelected" class="btn btn-sm waves-effect waves-light btn-info btn-block">< </button> 
+      </div> 
+      <div class="col-md col-sm">
+            <select name="aktiviti_kod[]" multiple="multiple" id="search_to" class="form-control"
+                          size="10" multiple="multiple" required style="font-size:14px;important!"
+                          data-validation-required-message="This field is required">
+            </select>
+                  <div class='control-label count-to'  style="margin:10px;">
+                          0 Record
+                  </div>
+      </div>
+    </div>
+
+          <!-- code kesalahan -->
+
+
+           <!-- <div class="row">
+              <div class="col-md-6">
+                <label>Kesalahan</label>
                 <div class="col-sm-8">
                 <?php 
-                $offencesList = array();
-                $i = 0;
-                foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
-                  $i++;
-                  $offencesList[$offenceInfo['offence_id']] = array("selected"=>true);
+                //$offencesList = array();
+                //$i = 0;
+                //foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
+                 // $i++;
+                  //$offencesList[$offenceInfo['offence_id']] = array("selected"=>true);
                   //echo Html::hiddenInput("PermohonanForm[offenceId][".$key."]", $offenceInfo['id']);
-                endforeach;
-                ?>
-                <?= $form->field($model, 'offence')->dropDownList($offences,array('multiple'=>'multiple','prompt' => '--Pilih Kesalahan--','options' => $offencesList))->label(false); ?>
+                //endforeach;
+               // ?>
+                 <?//= $form->field($model, 'offence')->dropDownList($offences,array('multiple'=>'multiple','prompt' => '--Pilih Kesalahan--','options' => $offencesList))->label(false); ?>
                 </div>
            </div>
+           </div> -->
 
-
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Ringkasan Kes </label>
-                <div class="col-sm-8">
+ <!--Ringkasan Kes-->
+          <br>
+           <div class="row">
+           <div class="col-md-6">
+                <label for="inputPassword3" >Ringkasan Kes </label>
                 <?php  $model->case_summary = $mediaSocialResponse['case_summary']; ?>
                 <?= $form->field($model, 'case_summary')->textarea()->label(false); ?>
-                </div>
+            </div>
             </div>
 
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Status Suspek / Saksi</legend>
-                <div class="pull-right">
+<!--/status suspect-->
+         <br>
+            <div class="row">
+            <div class="col-md-6">
+                <label class="col-form-label col-sm-4 pt-0">Status Suspek / Saksi</label>
                         <button type="button" id="add_ic_name" class="add-item btn btn-success btn-xs">+</button>
-                        </div>
-                
+                </div>
             </div>
+           <br>
+<!--/span-->
+
             <?php 
             $count = 0;
             if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialResponse['case_info_status_suspek']) > 0)
             { //echo "<pre>";print_r($mediaSocialResponse['case_info_status_suspek']);exit;
             foreach($mediaSocialResponse['case_info_status_suspek'] as $key => $statusSuspectDbInfo):
             ?>
-            <div class="col-sm-4" ></div>
+            <div class="col-lg-12" ></div>
             
             <!--<div class="col-sm-8" id="id_name_<?=$key;?>"-->
-            <div class="col-sm-8" id="id_name">
+            <div class="col-lg-12" id="id_name">
                     <div class="row">
-                    <?=  Html::hiddenInput('PermohonanForm[caseInfoID]', $mediaSocialResponse['id']); ?>  
-                    <?=  Html::hiddenInput('PermohonanForm[caseInfoStatusSuspekID]['.$key.']', $statusSuspectDbInfo['id']); ?>
-                    <?php  $model->master_status_suspect_or_saksi_id[$key] = $statusSuspectDbInfo['master_status_suspect_or_saksi_id']; ?>
+                    <div class="col-md-6">
+                        <?=  Html::hiddenInput('PermohonanForm[caseInfoID]', $mediaSocialResponse['id']); ?>  
+                        <?=  Html::hiddenInput('PermohonanForm[caseInfoStatusSuspekID]['.$key.']', $statusSuspectDbInfo['id']); ?>
+                        <?php  $model->master_status_suspect_or_saksi_id[$key] = $statusSuspectDbInfo['master_status_suspect_or_saksi_id']; ?>
                         <?= $form->field($model, 'master_status_suspect_or_saksi_id['.$key.']')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek or Saksi--'))->label(false); ?>
-                        
                     </div>
 
-                    <div class="row">
-                    <?php  $model->master_status_status_suspek_id[$key] = $statusSuspectDbInfo['master_status_status_suspek_id']; ?>
-                    <?= $form->field($model, 'master_status_status_suspek_id['.$key.']')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Option--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
+                    <div class="col-md-6">
+                        <?php  $model->master_status_status_suspek_id[$key] = $statusSuspectDbInfo['master_status_status_suspek_id']; ?>
+                        <?= $form->field($model, 'master_status_status_suspek_id['.$key.']')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Option--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
                     </div>
+                    </div>
+                    <br>
                   <div class="row">
-                    <div class="col-sm-4">
-                    <?php  $model->ic[$key] = $statusSuspectDbInfo['ic']; ?>
-                    <?= $form->field($model, 'ic['.$key.']')->textInput(['placeholder' => 'IC'])->label(false);?> 
+                      <div class="col-md-6">
+                          <?php  $model->ic[$key] = $statusSuspectDbInfo['ic']; ?>
+                          <?= $form->field($model, 'ic['.$key.']')->textInput(['placeholder' => 'IC'])->label(false);?> 
+                      </div>
+                      <div class="col-md-6" id="add_text_areabox-<?=$key;?>"> 
+                          <?php  $model->name[$key] = $statusSuspectDbInfo['name']; ?>
+                          <?= $form->field($model, 'name['.$key.']')->textInput(['placeholder' => 'Name'])->label(false);?>  
+                      </div> </div>
+                            <?php 
+                            if($statusSuspectDbInfo['master_status_status_suspek_id'] == 64)
+                            {
+                            ?>
+                    <br>  
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div id="status_suspek_others_<?= $key;?>"><textarea class="form-control" name="PermohonanForm[others][<?= $key?>]"><?= $statusSuspectDbInfo['others'];?></textarea></div><div class="clearfix" id="clearfix_<?= $key;?>"></div> 
+                            <?php 
+                            }
+                            ?>
+                        </div>
+                        </div>
                     </div>
-                    <div class="col-sm-4" id="add_text_areabox-<?=$key;?>"> 
-                    <?php  $model->name[$key] = $statusSuspectDbInfo['name']; ?>
-                    <?= $form->field($model, 'name['.$key.']')->textInput(['placeholder' => 'Name'])->label(false);?>  
-                    </div> 
-                    <?php 
-                    if($statusSuspectDbInfo['master_status_status_suspek_id'] == 64)
-                    {
-                    ?>
-                    <div class="col-lg-8" id="status_suspek_others_<?= $key;?>"><textarea class="form-control" name="PermohonanForm[others][<?= $key?>]"><?= $statusSuspectDbInfo['others'];?></textarea></div><div class="clearfix" id="clearfix_<?= $key;?>"></div> 
-                    <?php 
-                    }
-                    ?>
-                </div>
-            </div>
             <?php 
             $count++;
             endforeach;
           }
           else{ 
             ?>
-            <div class="col-sm-4" ></div>
-            <div class="col-sm-8" id="id_name">
+
+            <br>
+            <div class="col-md-6" ></div>
+            <div class="col-md-6" id="id_name">
                     <div class="row"> 
+                    <div class="col-md-6" >
                     <?=  Html::hiddenInput('PermohonanForm[caseInfoID]', $mediaSocialResponse['id']); ?>                                 
                     <select name="PermohonanForm[new_master_status_suspect_or_saksi_id][0]" class="form-control" id="new_master_status_suspect_or_saksi_id_0">
                     <option value="">--Pilih Option--</option>
@@ -155,8 +213,10 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                       <?php } ?>
                     </select>
                     </div>
+                    </div>
 
-                    <div class="row">                                                                               
+                    <div class="row">  
+                    <div class="col-md-6" >                                                                             
                     <select name="PermohonanForm[new_master_status_status_suspek_id][0]" class="form-control" id="new_master_status_status_suspek_id_0">
                     <option value="">--Pilih Option--</option>
                     <?php foreach($masterStatusSuspect as $key => $val){?>
@@ -164,12 +224,13 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                       <?php } ?>
                     </select>
                     </div>
+                    </div>
 
                     <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-md-6">
                     <?= Html::input('text', 'PermohonanForm[new_ic][0]', '', ['class'=> 'form-control','id' => "new_ic_0","placeholder"=>"IC"]) ?>
                     </div>
-                    <div class="col-sm-4"  id="new_add_text_areabox-0"> 
+                    <div class="col-md-6"  id="new_add_text_areabox-0"> 
                     <?= Html::input('text', 'PermohonanForm[new_name][0]', '', ['class'=> 'form-control','id' => "new_name_0","placeholder"=>"Name"]) ?>
                     </div>  
                 </div>
@@ -177,31 +238,33 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             <?php 
           }
             ?>
-
+    <br>
+    <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
+      <hr>
+      <br>
             <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Surat Rasmi</legend>
+            <label class="col-form-label col-sm-4 pt-0">Surat Rasmi</label>
                 
-              <div class="col-sm-4" id="suratRasmiAttachmentIsNull">
+                <div class="col-sm-4" id="suratRasmiAttachmentIsNull">
                 <?= $form->field($model, 'surat_rasmi')->fileInput()->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>
-                
-              </div>
-                
+                </div>
+                <br>
               
-              <div id="suratRasmiAttachmentNotNull">
-                <div class="col-sm-4" id="surat_rasmi_img_del">
-                <input type="hidden" id="suratRasmiImagePath" name="PermohonanForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
-                <?= Html::button("Delete",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
-                </div>
+                <div id="suratRasmiAttachmentNotNull">
+                    <div class="col-sm-4" id="surat_rasmi_img_del">
+                    <input type="hidden" id="suratRasmiImagePath" name="PermohonanForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
+                    <?= Html::button("Padam",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
+                    </div>
                 
-                <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
-                <?= Html::button("Download | View",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
+                    <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
+                    <?= Html::button("Muat Turun | Papar",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
+                    </div>
                 </div>
-              </div>
-                
-            </div>
 
+            </div>
+<br>
             <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Laporan Polis</legend>
+                <label class="col-form-label col-sm-4 pt-0">Laporan Polis</label>
                 
               <div class="col-sm-4" id="laporanPolisAttachmentIsNull">
                 <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>
@@ -219,65 +282,72 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
               <div id="laporanPolisAttachmentNotNull">
                 <div class="col-sm-4" id="laporan_polis_img_del">
                 <input type="hidden" id="loparanImagePath" name="PermohonanForm[laporan_polis_last_attachment]" value="<?php echo $mediaSocialResponse['laporan_polis'];?>"> 
-                <?= Html::button("Delete",['class'=>'btn btn-primary',"id" => "laporanPolisDeleteImg"]);?>
+                <?= Html::button("Padam",['class'=>'btn btn-primary',"id" => "laporanPolisDeleteImg"]);?>
                 </div>
                 
                
                 <div class="col-sm-4 text-right" id="laporan_polis_img_download">
-                <?= Html::button("Download | View",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
+                <?= Html::button("Muat Turun | Papar",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
                 </div>
-              </div>
-               
-                
+              </div>     
             </div>
 
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">URL</legend>
-                <div class="pull-right">
-                <button type="button" id="add" class="add-item btn btn-success btn-xs">+</button>
-            </div>
-            <?php if(count($mediaSocialResponse['case_info_url_involved']) > 0 ){?>
-            <div class="col-sm-8" id="url_input_append">
-                <?php
+            <br>
+                    <div class="row">
+                    <div class="col-md-6">
+                    <legend class="col-form-label col-sm-4 pt-0">URL</legend>
                
-                //for($i=0;$i<=4;$i++)
-                //{
-                  $k = 0;
-                  foreach($mediaSocialResponse['case_info_url_involved'] as $key => $URLDbInfo):
-                  $model->master_social_media_id[$key] = $URLDbInfo['master_social_media_id'];
-                  $model->url[$key] = $URLDbInfo['url'];
-                  ?>
-                  <div class="row">
-                  <?=  Html::hiddenInput('PermohonanForm[caseInfoURLInvolvedId]['.$key.']', $URLDbInfo['id']); ?>
-                  <?php
-                echo $form->field($model, 'master_social_media_id['.$key.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$k))->label(false);
-                echo $form->field($model, 'url['.$key.']')->textInput(['id' => 'social_media_URL_'.$k])->label(false); 
-                ?>
-                </div>
-                <?php
-                $k++;
-                endforeach;
-                //}
-                ?> 
-            </div>
-              <?php } else { ?>
-                <div class="col-sm-8" id="url_input_append">
-                <?php
-                for($i=0;$i<=4;$i++)
-                {
-                  ?>
-                  <div class="row">
-                  <?php                    
-                echo $form->field($model, 'new_master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$i))->label(false);
-                echo $form->field($model, 'new_url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
-                ?>
-                </div>
-                <?php
-                }
-                ?> 
-            </div>
-            <?php } ?>
-            
+                     <button type="button" id="add" class="add-item btn btn-success btn-xs">+</button>
+                    </div>
+                    </div>
+                            <?php if(count($mediaSocialResponse['case_info_url_involved']) > 0 ){?>
+<br>
+                        <div class="row">
+                           <div class="col-md-6" id="url_input_append">
+                              <?php
+               
+                              //for($i=0;$i<=4;$i++)
+                              //{
+                                $k = 0;
+                                foreach($mediaSocialResponse['case_info_url_involved'] as $key => $URLDbInfo):
+                                $model->master_social_media_id[$key] = $URLDbInfo['master_social_media_id'];
+                                $model->url[$key] = $URLDbInfo['url'];
+                                ?>
+                                
+                                <?=  Html::hiddenInput('PermohonanForm[caseInfoURLInvolvedId]['.$key.']', $URLDbInfo['id']); ?>
+                                <?php
+                                echo $form->field($model, 'master_social_media_id['.$key.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$k))->label(false);
+                                echo $form->field($model, 'url['.$key.']')->textInput(['id' => 'social_media_URL_'.$k])->label(false); 
+                                ?>
+                                
+                                <?php
+                                $k++;
+                                endforeach;
+                                //}
+                                ?> 
+                            </div>
+                        </div>
+                          <?php } else { ?>
+                            <div class="row">
+                                  <div class="col-md-6" id="url_input_append">
+                                      <?php
+                                      for($i=0;$i<=4;$i++)
+                                      {
+                                        ?>
+                                     <div class="row">
+                                        <?php                    
+                                      echo $form->field($model, 'new_master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$i))->label(false);
+                                      echo $form->field($model, 'new_url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
+                                      ?>
+                                    </div>
+                                    <?php
+                                    }
+                                    ?> 
+                                 </div>
+                                <?php } ?>
+                            </div>
+                            
+<br>
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Tujuan Permohanan</legend>
                 <div class="col-sm-8">
@@ -294,7 +364,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
 
     
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -437,7 +507,7 @@ $('#add').click(function(){ var newID =  ( $('#url_input_append > div').length);
 if(newID < 15)
 {
   //$('#url_input_append').append('<div class="row"><div class="form-group field-permohonanform-master_social_media_id"><select id="permohonanform-master_social_media_id['+newURLVal+']" class="form-control" name="PermohonanForm[new_master_social_media_id]['+newURLVal+']"><option value="">--Pilih Social Media--</option><option value="1">twitter</option><option value="2">instagram</option><option value="3">tumblr</option><option value="4">facebook</option><option value="5">blog / website</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newURLVal+'"><input type="text" id="permohonanform-url-'+newURLVal+'" class="form-control" name="PermohonanForm[new_url]['+newURLVal+']"><div class="help-block"></div></div></div>');
-  $('#url_input_append').append('<div class="row"><div class="form-group field-permohonanform-master_social_media_id"><select id="new_social_media_'+newURLVal+'" name="PermohonanForm[new_master_social_media_id]['+newURLVal+']"><option value="">--Pilih Social Media--</option><option value="39">twitter</option><option value="40">instagram</option><option value="41">tumblr</option><option value="42">facebook</option><option value="43">blog / website</option><option value="99">Yourtube</option><option value="100">Tiktok</option><option value="101">Others</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newURLVal+'"><input type="text" id="new_social_media_URL_'+newURLVal+'" class="form-control" name="PermohonanForm[new_url]['+newURLVal+']"><div class="help-block"></div></div></div>');
+  $('#url_input_append').append('<div class="row"><div class="form-group field-permohonanform-master_social_media_id"><select id="new_social_media_'+newURLVal+'" name="PermohonanForm[new_master_social_media_id]['+newURLVal+']"><option value="">--Pilih Social Media--</option><option value="39">twitter</option><option value="40">instagram</option><option value="41">tumblr</option><option value="42">facebook</option><option value="43">blog / website</option><option value="99">Youtube</option><option value="100">Tiktok</option><option value="101">Others</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newURLVal+'"><input type="text" id="new_social_media_URL_'+newURLVal+'" class="form-control" name="PermohonanForm[new_url]['+newURLVal+']"><div class="help-block"></div></div></div>');
   ++newURLVal;
 }
 else{
