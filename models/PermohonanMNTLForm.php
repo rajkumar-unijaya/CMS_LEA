@@ -19,7 +19,6 @@ class PermohonanMNTLForm extends Model
     public $email;
     public $report_no;
     public $investigation_no;
-    public $tippoff_id;
     public $phone_number;
     public $telco_name;
     public $date1;

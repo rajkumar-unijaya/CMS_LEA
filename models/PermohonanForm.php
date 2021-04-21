@@ -4,6 +4,9 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use yii\httpclient\Client;
+use app\components\validator\Reportno;
+use app\components\validator\DomainCheck;
 
 /**
  * EmailForm is the model behind the login form.
@@ -41,6 +44,11 @@ class PermohonanForm extends Model
     public $application_purpose_info;
     public $new_master_social_media_id;
     public $new_url;
+
+    private $_url = null;
+    private $_DFHeaderKey = null;
+    private $_DFHeaderPass = null;
+
     
 
     
@@ -66,9 +74,8 @@ class PermohonanForm extends Model
              }, 'whenClient' => "function (attribute, value) {
                  return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 78;
                  }"],
-            [['email'],'domainCheck'], 
-
-            [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
+            [['email'],Domaincheck::className()],     
+            /*[['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
                 $allDomains = [".gov.my"];
                 $domain = $this->find_occurence_from_end($model->email, ".", 2);
                     if(!in_array( $domain ,$allDomains ))
@@ -89,7 +96,7 @@ class PermohonanForm extends Model
                     return false;
                 }
                 }"],
-
+            [['email'],'domainCheck'],*/
             [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false);
              }, 'whenClient' => "function (attribute, value) {
@@ -100,6 +107,7 @@ class PermohonanForm extends Model
                     return $('#permohonanform-investigation_no').val().length == 0;
                     }"
                ],
+            [['report_no'],Reportno::className()],   
              [['investigation_no'],'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
                  'when' => function($model) { return empty($model->report_no); }, 'whenClient' => "function (attribute, value) {
                     return $('#permohonanform-report_no').val().length == 0;
@@ -158,7 +166,7 @@ class PermohonanForm extends Model
        
        }
 
-   public function domainCheck($attribute, $params){ 
+   public function domainCheck($attribute, $params){ echo 22;exit;
        $allDomains = [".gov.my"];
        $domain = $this->find_occurence_from_end($this->email, ".", 2);
         if(!in_array( $domain ,$allDomains ))
@@ -184,6 +192,27 @@ class PermohonanForm extends Model
     
 }
 
+    public function uniqueLaporanPoliceNo($attribute, $params)
+    {
+        $this->_url = Yii::$app->params['DreamFactoryContextURL'];
+        $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
+        $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
+        $laporanPoliceNoCount = 0;
+        $client = new Client();
+            $responses = $client->createRequest()
+                ->setFormat(Client::FORMAT_URLENCODED)
+                ->setMethod('GET')
+                ->setUrl($this->_url . 'case_info?filter=report_no,eq,'.$this->report_no.'&size=1')
+                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                ->send();
 
+                if(count($responses->data['records']) > 0){ $laporanPoliceNoCount = count($responses->data['records']);}
+            $response = array();
+            if($laporanPoliceNoCount > 0)
+            { 
+                $this->addError($attribute,"No Laporan Polis already exists");
+            }
+            
+    }
 
 }
