@@ -17,7 +17,7 @@ $this->title = 'Media Sosial';
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Sosial Media Senaraikan</li>
+            <li class="breadcrumb-item active" aria-current="page">Sosial Media</li>
         </ol>
     </nav>
     <div style="text-align: right;padding:10px;">

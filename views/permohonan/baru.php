@@ -37,17 +37,17 @@ use Yii;
               <div class="col-md-12">
                     <?= $form->field($model, 'for_self')->radioList($newCase,array('class'=>'for_self'))->label(false); ?>
                     <div id="choose_forself">
-                        <div class="col-md-12">
+                            <div class="col-md-12">
                             <label for="inputPassword3" class="col-sm-4 col-form-label">Nama </label>
                             <?= $form->field($model, 'selfName')->textInput(['placeholder' => 'Nama'])->label(false) ?>
                             <label for="inputPassword3" class="col-sm-4 col-form-label">E-mel </label>
                             <?= $form->field($model, 'email')->textInput(['placeholder' => 'E-mel'])->label(false) ?>
-                        </div>
-                         <div class="col-md-12">
-                            <div class="help-block-email" id="invalid_email"></div>
-                            <label for="inputPassword3" class="col-sm-4 col-form-label">No. Telefon </label>
-                              <?= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. Telefon'])->label(false) ?>                
-                        </div> 
+                            </div>
+                               <div class="col-md-12">
+                                  <div class="help-block-email" id="invalid_email"></div>
+                                   <label for="inputPassword3" class="col-sm-4 col-form-label">No. Telefon </label>
+                                    <?= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. Telefon'])->label(false) ?>                
+                              </div> 
                     </div>
               </div>
             </div>
@@ -157,7 +157,7 @@ use Yii;
             <br>
            <div class="row">
            <div class="col-md-6">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Ringkasan Kes </label>
+                <label for="inputPassword3" >Ringkasan Kes </label>
                 
                 <?= $form->field($model, 'case_summary')->textarea()->label(false); ?>
                 
@@ -229,6 +229,7 @@ use Yii;
                       <button type="button" id="add" class="add-item btn btn-success btn-xs">+</button>
                 </div> </div>
                 <br>
+                
                 <div class="row">
                     <div class="col-md-6" id="url_input_append">
                         <?php
