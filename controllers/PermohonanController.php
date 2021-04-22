@@ -479,9 +479,10 @@ class PermohonanController extends Controller
      * @return string
      */
     public function actionBlockRequest()
-    {
+    { 
         $this->layout =  'main';
         $model = new BlockRequestForm();
+        $model->scenario='createBlockRequest';
         $session = Yii::$app->session;
         $masterCaseInfoTypeId = array_search("Blocking Request",Yii::$app->mycomponent->getMasterData('master_case_info_type'));
         $suratRasmiFileName = "";
@@ -564,6 +565,7 @@ class PermohonanController extends Controller
             $caseInfo['no_telephone'] = $data['BlockRequestForm']['no_telephone'] ? $data['BlockRequestForm']['no_telephone'] : 0;
             $caseInfo['self_name'] = $data['BlockRequestForm']['selfName'] ? $data['BlockRequestForm']['selfName'] : "NULL";
             $caseInfo['email'] = $data['BlockRequestForm']['email'] ? $data['BlockRequestForm']['email'] : "NULL";
+            $caseInfo['report_no'] = $data['BlockRequestForm']['report_no'];
             $caseInfo['investigation_no'] = $data['BlockRequestForm']['investigation_no'];
             $caseInfo['case_summary'] = $data['BlockRequestForm']['case_summary'];
             $caseInfo['surat_rasmi'] = $suratRasmiFileName;
@@ -2204,6 +2206,13 @@ class PermohonanController extends Controller
             $responseInfo['message'] = 'success';
             $responseInfo['result'] = "Valid domain";
             
+        }
+        else if(strlen($domain) == 0)
+        {
+            $responseInfo['message'] = 'failedempty';
+            $responseInfo['strlength'] = 0;
+            $responseInfo['status'] = 200;
+            $responseInfo['result'] = "Invalid domain";
         }
         else{
             $responseInfo['message'] = 'failed';
