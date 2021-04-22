@@ -4,8 +4,10 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
-use app\components\validator\DomainCheck;
-use app\components\validator\Reportno;
+Yii::import("application.components.validator/DomainCheck");
+Yii::import("application.components.validator/Reportno");
+//use app\components\validator\DomainCheck;
+//use app\components\validator\Reportno;
 
 
 /**
@@ -52,14 +54,14 @@ class BlockRequestForm extends Model
              }, 'whenClient' => "function (attribute, value) {
                 return $('#blockrequestform-for_self').val() == 78;
                  }"],
-            [['email'],\app\components\validator\DomainCheck::className()], 
+            [['email'],DomainCheck::className()], 
 
             [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false);
              }, 'whenClient' => "function (attribute, value) {
                 return $('#blockrequestform-for_self').val() == 78;
                  }"],
-            [['report_no'],\app\components\validator\Reportno::className()],       
+            [['report_no'],Reportno::className()],       
             ['investigation_no','required','message'=>'Masukkan No Kertas Siasatan'],
             [['offence'], 'required','message'=>'Pilih kesalahan'],
             [['case_summary'], 'required','message'=>'Masukkan Ringkasan Kes'],  
