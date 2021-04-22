@@ -4,7 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
-use app\components\validator\DomainCheck;
+use app\components\validator\Domaincheck;
 use app\components\validator\Reportno;
 
 /**
@@ -51,7 +51,7 @@ class BlockRequestForm extends Model
              }, 'whenClient' => "function (attribute, value) {
                 return $('#blockrequestform-for_self').val() == 78;
                  }"],
-            [['email'],DomainCheck::className()], 
+            [['email'],Domaincheck::className()], 
 
             [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false);
