@@ -4,10 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
-Yii::import("application.components.validator/DomainCheck");
-Yii::import("application.components.validator/Reportno");
-//use app\components\validator\DomainCheck;
-//use app\components\validator\Reportno;
+use yii\validators\validator\DomainCheck;
+use yii\validators\validator\Reportno;
 
 
 /**
