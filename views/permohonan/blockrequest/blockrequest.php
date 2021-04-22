@@ -49,27 +49,25 @@ use Yii;
   <div class="form-body">
 <h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
 <hr>
+<?php $form = ActiveForm::begin(['enableClientValidation' => true,'options' => ['enctype' => 'multipart/form-data']]); ?>
+           <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId])->label(false); ?>
           <div class="row">
 						<div class="col-md-6">
 							  <div class="form-group">
 								    <label>Pilihan Mengisi <span class="text-danger">*</span></label>
-								      <select class="custom-select" id="inquiry">
-									        <option selected="">Pilih Pilihan</option>
-									        <option value="1">Bagi Pihak</option>
-									        <option value="2">Diri Sendiri</option>	
-								      </select>
+								      <?= $form->field($model, 'for_self')->dropDownList($newCase,array('prompt' => 'Pilih Pilihan'))->label(false);?>
 							  </div>
 						  </div>
               </div>
       <!--/span-->
       <br>
-
+      <div id="choose_forself">
           <div class="row">
               <div class="col-md-6">
                   <div class="form-group">
                       <label class="control-label">Nama<span class="text-danger">*</span></label>
                       <div class="controls">
-                      <input type="text" id="nama" class="form-control" name="nama" data-validation-required-message="This field is required" required>
+                      <?= $form->field($model, 'selfName')->textInput(['class' => 'form-control','placeholder' => 'Nama'])->label(false); ?>
                       </div>
                   </div>
               </div>
@@ -77,28 +75,29 @@ use Yii;
                   <div class="form-group">
                       <label class="control-label">E-mel<span class="text-danger">*</span></label>
                       <div class="controls">
-                      <input type="text" id="emel" class="form-control" name="emel" data-validation-required-message="This field is required" required>
+                      <?= $form->field($model, 'email')->textInput(['class' => 'form-control','placeholder' => 'E-mel'])->label(false); ?>
                       </div>
                   </div>
               </div>
-              <!--/span-->
               </br>
               <div class="col-md-6">
                   <div class="form-group">
                       <label class="control-label">No. Telefon <span class="text-danger">*</span></label>
                       <div class="controls">
-                      <input type="text" id="notelefon" class="form-control" name="notelefon" data-validation-required-message="This field is required" required>
+                      <?= $form->field($model, 'no_telephone')->textInput(['class' => 'form-control','placeholder' => 'No. Telefon'])->label(false); ?> 
                       </div>
                   </div>
               </div>
-              </div>
+              
+        </div>
+      </div>
               <!--no. Laporan Polis-->
               <div class="row">
               <div class="col-md-6">
                   <div class="form-group">
                       <label class="control-label">No. Laporan Polis <span class="text-danger"></span></label>
                       <div class="controls">
-                      <input type="text" id="" class="form-control" name="" data-validation-required-message="This field is required" required>
+                      <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No. Laporan Polis'])->label(false); ?>  
                       </div>
                   </div>
               </div>
@@ -108,7 +107,7 @@ use Yii;
                   <div class="form-group">
                       <label class="control-label">No. Kertas siasatan <span class="text-danger">*</span></label>
                       <div class="controls">
-                      <input type="text" id="" class="form-control" name="" data-validation-required-message="This field is required" required>
+                      <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No. Kertas siasatan'])->label(false); ?> 
                       </div>
                   </div>
               </div>
@@ -119,32 +118,24 @@ use Yii;
       <h5>Pilih Kesalahan</h5>
       <div class="row">
           <div class="col-md col-sm">
-
-              <select id='search' multiple='multiple' name="from[]" class="form-control" size="10" style="font-size:14px;important!">
-              <option value="">Seksyen 505 Kanun Keseksaan</option>
-              <option value="">Seksyen 405 Kanun Keseksaan</option>
-              <option value="">Seksyen 305 Kanun Keseksaan</option>
-              <option value="">Seksyen 205 Kanun Keseksaan</option>
-              <option value="">Seksyen 105 Kanun Keseksaan</option>
-              <option value="">Seksyen 503 Kanun Keseksaan</option>
-              <option value="">Seksyen 502 Kanun Keseksaan</option>
-              <option value="">Seksyen 506 Kanun Keseksaan</option>
-              </select>
+             <?= $form->field($model, 'offence_preselected')->dropDownList($offences,array('id'=>'mySideToSideSelect','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
             <div class='control-label count-from'  style="margin:10px;">
             </div>
           </div>
       <div class="col-md-1 col-sm-12" style="margin: auto;">
-              <button type="button" id="search_rightSelected" class="btn btn-sm waves-effect waves-light btn-info btn-block"> > </button>
-              <button type="button" id="search_leftSelected" class="btn btn-sm waves-effect waves-light btn-info btn-block">< </button> 
+      
+      <button type="button" id="add_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+      <button type="button" id="remove_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+		
+	
+        
       </div> 
       <div class="col-md col-sm">
-            <select name="aktiviti_kod[]" multiple="multiple" id="search_to" class="form-control"
-                          size="10" multiple="multiple" required style="font-size:14px;important!"
-                          data-validation-required-message="This field is required">
-            </select>
-                  <div class='control-label count-to'  style="margin:10px;">
-                          0 Record
-                  </div>
+        <?php 
+        $selectedNewOffences =  array();
+        ?>
+      <?= $form->field($model, 'offence')->dropDownList($selectedNewOffences,array('id' => 'mySideToSideSelect_to','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
+                  
       </div>
     </div>
  <!--Ringkasan Kes-->
@@ -153,7 +144,7 @@ use Yii;
                   <div class="form-group">
                       <label class="control-label"> Ringkasan Kes<span class="text-danger">*</span></label>
                       <div class="controls">
-                      <textarea id="mymce" rows="5" type="text" id="path" class="form-control" name="aktiviti_lesen" data-validation-required-message="This field is required" required></textarea>
+                      <?= $form->field($model, 'case_summary')->textarea(['class' => 'form-control','rows' => "5"])->label(false); ?>
                       </div>
                   </div>
               </div>
@@ -167,7 +158,8 @@ use Yii;
             <div class="form-group">
 					  	<label>Surat Rasmi</label>
                   
-						    <input type="file" id="file" accept=".doc,.docx,.pdf,image/*" multiple="multiple" onchange="javascript:updateList()" /><br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+						    <?=  $form->field($model, 'surat_rasmi')->fileInput()->label(false); ?>
+                <br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
 						      <div id="fileList"></div>                     
 				  	</div>
           </div>
@@ -177,7 +169,8 @@ use Yii;
           <div class="col-md-6">
             <div class="form-group">
 					  	<label>Laporan Polis</label>
-						    <input type="file" id="file" accept=".doc,.docx,.pdf,image/*" multiple="multiple" onchange="javascript:updateList()" /><br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+						    <?=  $form->field($model, 'laporan_polis')->fileInput()->label(false); ?>
+                <br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
 						      <div id="fileList"></div>
                </div>      
 				  	</div>
@@ -189,66 +182,46 @@ use Yii;
                       <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Link (URL)</label>
-                                    <button type="button" class="btn btn-info m-b-20" id="button1">
+                                    <button type="button" class="btn btn-info m-b-20" id="add">
 	                                     <i class="fa fa-plus text"></i>
 	                                  </button> 
                                     <div class="form-group">
-                                    <select class="custom-select" id="inquiry">
-                                      <option selected="">Pilih Sosial Media</option>
-                                      <option value="1">Twitter</option>
-                                      <option value="2">Facebook</option>
-                                      <option value="3">Instagram</option>
-                                      <option value="4">Tumblr</option>	
-                                      <option value="5">Youtube</option>
-                                      <option value="6">Tiktok</option>		
-                                  </select>
-                                  <input type="text" id="" class="form-control" name="">
+                                    
+                                  <div id="url_input_append">
+                                    <?php
+                                    for($i=0;$i<=4;$i++)
+                                    {
+                                      ?>
+                                      <div class="row">
+                                      <?php
+                                    echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','id' => 'social_media_'.$i))->label(false);
+                                    echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
+                                    ?>
+                                    </div>
+                                    <?php
+                                    }
+                                    ?> 
+                                  </div>
                                     </div>
                                 </div>
                       </div>
                       </div>
-<br>
-                      <!--/span-->
-                      <h4 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h4>
-      <hr>
-                      <div class="row"> 
-                            <div class="col-lg-6">
-                                <label class="custom-control custom-radio"
-                                    style="display: inline-block; padding-right: 30px;">
-                                    <input type="radio" class="custom-control-input" name="agensi_action_id" value="0">
-                                    <span class="custom-control-label">Mengenalpasti pengendali akaun/laman sosial/laman web<br>
-                                        
-                                </label>
-                            </div>
-                            <div class="col-lg-6 m-t-20">
-                                <label class="custom-control custom-radio"
-                                    style="display: inline-block; padding-right: 30px;">
-                                    <input type="radio" class="custom-control-input" name="agensi_action_id" value="1">
-                                    <span class="custom-control-label">Maklumat lain, sila nyatakan:<br>
-                                </label>
-                                <input type="text" id="agency_web" class="form-control"
-                                    placeholder="">
-                            </div>
-                        </div>
               <!--/button--> <br>
                       <div class="row">
                         <div class="col-md-12 col-12">
                             <div class="text-right">
-
-                                <button type="button" name="btnSave"
-                                    class="btn  waves-effect-light btn-info btn-sm btnSave" data-toggle="tooltip"
-                                    data-placement="left" title=""
-                                    data-original-title="Click to submit and back to the main page"><i
-                                        class="ti-check"></i>Hantar</button>
-                                <a href="{{route('licensing.license.index')}}"
+                            <?= Html::submitButton('Hantar', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
+                                <a href="../block-request-list"
                                     class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
                                     data-placement="left" title=""
                                     data-original-title="Click to cancel and back to the main page"><i
                                         class="ti-close"></i>
                                     Batal</a>
+                                    
                             </div>
                         </div>
                     </div>
+                    <?php ActiveForm::end(); ?>
 </div>
 </div>
                                         </div></div>
@@ -325,109 +298,7 @@ use Yii;
 	<!-- End wanie part -->
 	<!-- ============================================================== -->      
 
-    <div class="row">
-			<div class="col-md-6 col-6">
-
-          <!-- <div class="row">
-            <div class="col-lg-5">-->
-
-           <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-           <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId])->label(false); ?>
-           <div class="row mb-3">
-              <label for="inputEmail3" class="col-sm-4 col-form-label">Pilihan Mengisi</label>
-              <div class="col-sm-6">
-                    <?= $form->field($model, 'for_self')->radioList($newCase,array('class'=>'for_self'))->label(false); ?>
-                    <div id="choose_forself">
-                    <?= $form->field($model, 'selfName')->textInput(['placeholder' => 'name'])->label(false) ?>
-                    <?= $form->field($model, 'email')->textInput(['placeholder' => 'email'])->label(false) ?>
-                    <div class="help-block-email" id="invalid_email"></div>
-                    <?= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. telephone'])->label(false) ?>                
-                    </div> 
-              </div>
-           </div>
-
-           <!--<div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Laporan Polis </label>
-                <div class="col-sm-8">
-                <?php //= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>   
-                </div>
-            </div>-->
-
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Kertas Siasatan </label>
-                <div class="col-sm-8">
-                <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No Kertas Siasata'])->label(false) ?> 
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Kesalahan</legend>
-                <div class="col-sm-8">
-                <?= $form->field($model, 'offence')->dropDownList($offences,array('multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
-                </div>
-           </div>
-
-
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Ringkasan Kes </label>
-                <div class="col-sm-8">
-                <?= $form->field($model, 'case_summary')->textarea()->label(false); ?>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Surat Rasmi</legend>
-                <div class="col-sm-8">
-                <?=  $form->field($model, 'surat_rasmi')->fileInput()->label(false)->hint('fail format : png | jpg | jpeg | pdf'); ?>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Laporan Polis</legend>
-                <div class="col-sm-8">
-                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('fail format : png | jpg | jpeg | pdf');?>   
-                </div>
-            </div>
-
-            <!--<div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Attachment URL</legend>
-                <div class="col-sm-8">-->
-                <?php //= $form->field($model, 'attachmentURL')->textInput(['placeholder' => 'URL'])->label(false) ?>
-                <!--</div>
-            </div>-->
-            
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">URL</legend>
-                <div class="pull-right">
-                <button type="button" id="add" class="add-item btn btn-success btn-xs">+</button>
-            </div>
-            <div class="col-sm-8" id="url_input_append">
-                <?php
-                for($i=0;$i<=4;$i++)
-                {
-                  ?>
-                  <div class="row">
-                  <?php
-                echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','id' => 'social_media_'.$i))->label(false);
-                echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
-                ?>
-                </div>
-                <?php
-                }
-                ?> 
-            </div>
-        </div>
-
-
-    
-    <div class="form-group">
-        <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-            </div>
-        </div>
-    </div>
+   
 </div>
 
 </div></div></div>
@@ -435,9 +306,15 @@ use Yii;
 <?php
 $script = <<< JS
 $(document).ready(function() {
+  $("#add_options").click(function(){
+    $("#mySideToSideSelect option:selected").remove().appendTo($("#mySideToSideSelect_to"));
+})
+$("#remove_options").click(function(){
+    $("#mySideToSideSelect_to option:selected").remove().appendTo($("#mySideToSideSelect"));
+})
   $("#choose_forself").hide();
   $("#application_purpose_info").hide();
-  $("input[name='BlockRequestForm[for_self]']").change(function() {  //alert("ramstest = "+$("input[name='BlockRequestForm[for_self]']:checked").val());
+  $('#blockrequestform-for_self').change(function() {  //alert("ramstest = "+$("input[name='BlockRequestForm[for_self]']:checked").val());
     if (this.value == 78) {
       $("#choose_forself").show();
     }
@@ -450,7 +327,7 @@ $('#add').click(function(){ var newID =  ( $('#url_input_append > div').length);
 if(newID <= 15)
 {
 
-  $('#url_input_append').append('<div class="row"><div class="form-group field-blockrequestform-master_social_media_id"><select id="social_media_'+newID+'" class="form-control" name="BlockRequestForm[master_social_media_id]['+newID+']"><option value="">--Pilih Social Media--</option><option value="39">twitter</option><option value="40">instagram</option><option value="41">tumblr</option><option value="42">facebook</option><option value="43">blog / website</option><option value="99">Yourtube</option><option value="100">Tiktok</option><option value="101">Others</option></select><div class="help-block"></div></div><div class="form-group field-blockrequestform-url-'+newID+'"><input type="text" id="blockrequestform-url-'+newID+'" class="form-control" name="BlockRequestForm[url]['+newID+']"><div class="help-block"></div></div></div>');
+  $('#url_input_append').append('<div class="row"><div class="form-group field-blockrequestform-master_social_media_id"><select id="social_media_'+newID+'" class="form-control" name="BlockRequestForm[master_social_media_id]['+newID+']"><option value="">--Pilih Social Media--</option><option value="39">twitter</option><option value="40">instagram</option><option value="41">tumblr</option><option value="42">facebook</option><option value="43">blog / website</option><option value="99">Yourtube</option><option value="100">Tiktok</option><option value="101">Others</option></select><div class="help-block"></div></div><div class="form-group field-blockrequestform-url-'+newID+'"><input type="text" id="social_media_URL_'+newID+'" class="form-control" name="BlockRequestForm[url]['+newID+']"><div class="help-block"></div></div></div>');
 
 }
 else{
@@ -569,8 +446,6 @@ $('#url_input_append').on('change','#social_media_15', function() {
 });
 
     var valid = true;
-
-   
 
 });
 JS; $this->registerJs($script, \yii\web\View::POS_END);
