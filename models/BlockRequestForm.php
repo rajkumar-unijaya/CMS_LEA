@@ -52,14 +52,14 @@ class BlockRequestForm extends Model
              }, 'whenClient' => "function (attribute, value) {
                 return $('#blockrequestform-for_self').val() == 78;
                  }"],
-            [['email'],Domaincheck::className()], 
+            [['email'],\app\components\validator\DomainCheck::className()], 
 
             [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false);
              }, 'whenClient' => "function (attribute, value) {
                 return $('#blockrequestform-for_self').val() == 78;
                  }"],
-            [['report_no'],Reportno::className()],       
+            [['report_no'],\app\components\validator\Reportno::className()],       
             ['investigation_no','required','message'=>'Masukkan No Kertas Siasatan'],
             [['offence'], 'required','message'=>'Pilih kesalahan'],
             [['case_summary'], 'required','message'=>'Masukkan Ringkasan Kes'],  
