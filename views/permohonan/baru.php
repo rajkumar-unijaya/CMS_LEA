@@ -13,8 +13,8 @@ use Yii;
     <h1 style="padding-top: 1.5rem;">Permohonan Baru Sosial Media</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="../crawler/mntl-list">Permohonan Baru Sosial Media</a></li>
+            <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Home</a></li>
+            <li class="breadcrumb-item active">Permohonan Baru Sosial Media</a></li>
             
         </ol>
     </nav>
@@ -31,22 +31,22 @@ use Yii;
 
            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
            <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId])->label(false); ?>
-           <div class="row">
+           <!--<div class="row">
             <div class="col-md-6">
               <label for="inputEmail3" class="col-sm-4 col-form-label">Pilihan Mengisi</label>
               <div class="col-md-12">
-                    <?= $form->field($model, 'for_self')->radioList($newCase,array('class'=>'for_self'))->label(false); ?>
+                    <?//= $form->field($model, 'for_self')->radioList($newCase,array('class'=>'for_self'))->label(false); ?>
                     <div id="choose_forself">
                             <div class="col-md-12">
                             <label for="inputPassword3" class="col-sm-4 col-form-label">Nama </label>
-                            <?= $form->field($model, 'selfName')->textInput(['placeholder' => 'Nama'])->label(false) ?>
+                            <?//= $form->field($model, 'selfName')->textInput(['placeholder' => 'Nama'])->label(false) ?>
                             <label for="inputPassword3" class="col-sm-4 col-form-label">E-mel </label>
-                            <?= $form->field($model, 'email')->textInput(['placeholder' => 'E-mel'])->label(false) ?>
+                            <?//= $form->field($model, 'email')->textInput(['placeholder' => 'E-mel'])->label(false) ?>
                             </div>
                                <div class="col-md-12">
                                   <div class="help-block-email" id="invalid_email"></div>
                                    <label for="inputPassword3" class="col-sm-4 col-form-label">No. Telefon </label>
-                                    <?= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. Telefon'])->label(false) ?>                
+                                    <?//= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. Telefon'])->label(false) ?>                
                               </div> 
                     </div>
               </div>
@@ -57,7 +57,7 @@ use Yii;
 		<!-- Start new code-->
 		<!-- ============================================================== -->
 
-    <div class="form-body">
+    
 <h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
 <hr>
           <div class="row">
@@ -72,7 +72,7 @@ use Yii;
 							  </div>
 						  </div>
               </div>
-      <!--/span-->
+      <!--/name-->
       <br>
 
           <div class="row">
@@ -92,7 +92,7 @@ use Yii;
                       </div>
                   </div>
               </div>
-              <!--/span-->
+              <!--/phone number-->
               </br>
               <div class="col-md-6">
                   <div class="form-group">
@@ -153,14 +153,12 @@ use Yii;
       </div>
     </div>
  <!--Ringkasan Kes-->
-            <!--/span-->
-            <br>
            <div class="row">
            <div class="col-md-6">
                 <label for="inputPassword3" >Ringkasan Kes </label>
                 
                 <?= $form->field($model, 'case_summary')->textarea()->label(false); ?>
-                
+                <small class="text-muted" id="description">(maksimum 2000 character)</small>
             </div>
             </div>
         <!--/span-->
@@ -168,23 +166,29 @@ use Yii;
 
             <div class="row">
             <div class="col-md-6">
-                <label class="col-form-label col-sm-4 pt-0">Status Suspek / Saksi</label>
+                <label class="col-form-label col-sm-5 pt-0">Status Suspek / Saksi</label>
                         <button type="button" id="add_ic_name" class="add-item btn btn-success btn-xs">+</button>
+                        <hr style="width:95%;text-align:left;margin-left:0">    
                 </div>
+               
             </div>
             <br>
-    <!--/span--><div class="form-group">
+    <!--/span-->
+    <div class="form-group">
             <div class="row">
-              <div class="col-md-6" id="id_name">
-                        <?= $form->field($model, 'master_status_suspect_or_saksi_id[0]')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek or Saksi--'))->label(false); ?>
-                    </div>
-                   
-                  <!--/span-->
-                    
-                      <div class="col-md-6">
-                    <?= $form->field($model, 'master_status_status_suspek_id[0]')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Pilihan--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
-                      </div>
-                    </div>
+                <div class="col-md-6" id="id_name">
+               <?= $form->field($model, 'master_status_suspect_or_saksi_id[0]')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek or Saksi--'))->label(false); ?>
+                </div>
+            </div>       
+                  <!--/span--><br>
+          <div class="row">         
+            <div class="col-md-6">
+              <?= $form->field($model, 'master_status_status_suspek_id[0]')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Pilihan--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
+            </div>
+              <div class="col-md-6">
+                <input type="text" id="lainlain" class="form-control" name="lain" placeholder="Lain-lain">
+              </div>
+          </div>
     <!--/span--><br>
                 <div class="row">
                     <div class="col-md-6">
@@ -194,7 +198,7 @@ use Yii;
                     <?= $form->field($model, 'name[0]')->textInput(['placeholder' => 'Nama'])->label(false);?>  
                     </div>  
                 </div>
-           </div>
+    </div>
     <!--/span-->
     <br>
     <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
@@ -216,7 +220,7 @@ use Yii;
     <!--/span--><br>
             <div class="row">
                     <div class="col-md-6">
-                <legend class="col-form-label col-sm-4 pt-0">Lampiran URL</legend>
+                <label>Lampiran URL</label>
                 <?= $form->field($model, 'attachmentURL')->textInput(['placeholder' => 'URL'])->label(false) ?>
                 </div>
             </div>
@@ -225,11 +229,12 @@ use Yii;
                 <br>
             <div class="row">
                 <div class="col-md-6">
-                      <label class="col-form-label col-sm-4 pt-0">URL</label>
+                      <label class="col-form-label col-sm-2 pt-0">URL</label>
                       <button type="button" id="add" class="add-item btn btn-success btn-xs">+</button>
                 </div> </div>
+                <hr style="width:47%;text-align:left;margin-left:0">
                 <br>
-                
+
                 <div class="row">
                     <div class="col-md-6" id="url_input_append">
                         <?php
@@ -252,17 +257,17 @@ use Yii;
                 <hr>
                 <div class="row"> 
                             <div class="col-lg-6">
-                                <label class="custom-control custom-radio"
+                                <label class="custom-control custom-checkbox"
                                     style="display: inline-block; padding-right: 30px;">
-                                    <input type="radio" class="custom-control-input" name="agensi_action_id" value="0">
+                                    <input type="checkbox" class="custom-control-input" name="agensi_action_id" value="0">
                                     <span class="custom-control-label">Mengenalpasti pengendali akaun/laman sosial/laman web<br>
                                         
                                 </label>
                             </div>
                             <div class="col-lg-6 m-t-20">
-                                <label class="custom-control custom-radio"
+                                <label class="custom-control custom-checkbox"
                                     style="display: inline-block; padding-right: 30px;">
-                                    <input type="radio" class="custom-control-input" name="agensi_action_id" value="1">
+                                    <input type="checkbox" class="custom-control-input" name="agensi_action_id" value="1">
                                     <span class="custom-control-label">Maklumat lain, sila nyatakan:<br>
                                 </label>
                                 <input type="text" id="agency_web" class="form-control"
@@ -276,7 +281,7 @@ use Yii;
                         <div class="col-md-12 col-12">
                             <div class="text-right">
                                 <div class="form-group">
-                                     <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+                                     <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
                                  </div>
                             </div>
                         </div>
