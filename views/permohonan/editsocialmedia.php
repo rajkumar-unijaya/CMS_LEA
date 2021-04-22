@@ -19,12 +19,13 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
     <h1 style="padding-top: 1.5rem;">Permohonan Baru Sosial Media</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="../crawler/mntl-list">Permohonan Baru Sosial Media</a></li>
+        <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Home</a></li>
+            <li class="breadcrumb-item active">Permohonan Baru Sosial Media</a></li>
             
         </ol>
     </nav>
     
+<div class="card card-outline-info"> 
   <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
@@ -33,33 +34,33 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                         <?php endif; ?>  
                                     </div>
 
-      <h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
-      <hr>
-<div class="row">
-  <div class="col-lg-12">
-                <?php //echo $mediaSocialResponse['case_no'];exit;?>
-                <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+    
+      <div class="row">
+        <div class="col-lg-12">
+                      <?php //echo $mediaSocialResponse['case_no'];exit;?>
+                      <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-           <div class="row">
-              <div class="col-md-6">
-                <label for="inputPassword3">No. Permohonan </label>
-                
-                <?= Html::input('text', 'case_no', $mediaSocialResponse['case_no'], ['class'=> 'form-control','readonly' => true]) ?>
-                
-              </div>
-            </div>
+                      <h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+                      <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                          <label for="inputPassword3">No. Permohonan </label>
+                          <?= Html::input('text', 'case_no', $mediaSocialResponse['case_no'], ['class'=> 'form-control','readonly' => true]) ?>
+                        </div>
+                    </div>
 
 
            <?= $form->field($model, 'master_case_info_type_id')->hiddenInput(['value' => $mediaSocialResponse['master_case_info_type_id']])->label(false); ?>
            <?=  Html::hiddenInput('PermohonanForm[id]', $mediaSocialResponse['id'],["id" => "permohonanId"]); ?>
            <?=  Html::hiddenInput('PermohonanForm[prev_case_info_status_suspek]', $prevSuspekStatus,["id" => "prev_case_info_status_suspek"]); ?>
            <br>
+
            <div class="row">
               <div class="col-md-6">
                   <label for="inputPassword3">No. Laporan Polis </label>
                   <?php  $model->report_no = $mediaSocialResponse['report_no']; ?>
-                    <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>           
-                    <div class="help-block-report_no" id="invalid_report_no">No Laporan Polis already exists</div>
+                  <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>           
+                  <div class="help-block-report_no" id="invalid_report_no">No Laporan Polis already exists</div>
               </div>
 
             <div class="col-md-6">
@@ -132,6 +133,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                 <label for="inputPassword3" >Ringkasan Kes </label>
                 <?php  $model->case_summary = $mediaSocialResponse['case_summary']; ?>
                 <?= $form->field($model, 'case_summary')->textarea()->label(false); ?>
+                <small class="text-muted" id="description">(maksimum 2000 character)</small>
             </div>
             </div>
 
@@ -139,9 +141,10 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
          <br>
             <div class="row">
             <div class="col-md-6">
-                <label class="col-form-label col-sm-4 pt-0">Status Suspek / Saksi</label>
+                <label class="col-form-label col-sm-5 pt-0">Status Suspek / Saksi</label>
                         <button type="button" id="add_ic_name" class="add-item btn btn-success btn-xs">+</button>
-                </div>
+                        <hr style="width:95%;text-align:left;margin-left:0"> 
+            </div>
             </div>
            <br>
 <!--/span-->
@@ -162,114 +165,116 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                         <?=  Html::hiddenInput('PermohonanForm[caseInfoStatusSuspekID]['.$key.']', $statusSuspectDbInfo['id']); ?>
                         <?php  $model->master_status_suspect_or_saksi_id[$key] = $statusSuspectDbInfo['master_status_suspect_or_saksi_id']; ?>
                         <?= $form->field($model, 'master_status_suspect_or_saksi_id['.$key.']')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek or Saksi--'))->label(false); ?>
+                    </div> 
                     </div>
 
-                    <div class="col-md-6">
-                        <?php  $model->master_status_status_suspek_id[$key] = $statusSuspectDbInfo['master_status_status_suspek_id']; ?>
-                        <?= $form->field($model, 'master_status_status_suspek_id['.$key.']')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Option--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php  $model->master_status_status_suspek_id[$key] = $statusSuspectDbInfo['master_status_status_suspek_id']; ?>
+                            <?= $form->field($model, 'master_status_status_suspek_id['.$key.']')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Option--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
+                        </div>
+                        <!--if user choose lain-lain the text field below will show -->
+                        <div class="col-md-6">
+                            <input type="text" id="lainlain" class="form-control" name="lain" placeholder="Lain-lain">
+                        </div>
                     </div>
-                    </div>
-                    <br>
-                  <div class="row">
-                      <div class="col-md-6">
-                          <?php  $model->ic[$key] = $statusSuspectDbInfo['ic']; ?>
-                          <?= $form->field($model, 'ic['.$key.']')->textInput(['placeholder' => 'IC'])->label(false);?> 
-                      </div>
-                      <div class="col-md-6" id="add_text_areabox-<?=$key;?>"> 
-                          <?php  $model->name[$key] = $statusSuspectDbInfo['name']; ?>
-                          <?= $form->field($model, 'name['.$key.']')->textInput(['placeholder' => 'Name'])->label(false);?>  
-                      </div> </div>
+          <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <?php  $model->ic[$key] = $statusSuspectDbInfo['ic']; ?>
+                                    <?= $form->field($model, 'ic['.$key.']')->textInput(['placeholder' => 'IC'])->label(false);?> 
+                                </div>
+                                <div class="col-md-6" id="add_text_areabox-<?=$key;?>"> 
+                                    <?php  $model->name[$key] = $statusSuspectDbInfo['name']; ?>
+                                    <?= $form->field($model, 'name['.$key.']')->textInput(['placeholder' => 'Name'])->label(false);?>  
+                                </div> 
+                            </div>
+
                             <?php 
                             if($statusSuspectDbInfo['master_status_status_suspek_id'] == 64)
                             {
                             ?>
                     <br>  
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div id="status_suspek_others_<?= $key;?>"><textarea class="form-control" name="PermohonanForm[others][<?= $key?>]"><?= $statusSuspectDbInfo['others'];?></textarea></div><div class="clearfix" id="clearfix_<?= $key;?>"></div> 
-                            <?php 
-                            }
-                            ?>
-                        </div>
-                        </div>
-                    </div>
-            <?php 
-            $count++;
-            endforeach;
-          }
-          else{ 
-            ?>
-
+                        <!--  <div class="row">
+                            <div class="col-md-6">
+                              <div id="status_suspek_others_<?//= $key;?>"><textarea class="form-control" name="PermohonanForm[others][<?= $key?>]"><?= $statusSuspectDbInfo['others'];?></textarea></div><div class="clearfix" id="clearfix_<?= $key;?>"></div> 
+                                  <?php //
+                                  }
+                                  ?>
+                              </div>
+                              </div>
+                          </div> -->
+                              
+                          <?php 
+                          $count++;
+                          endforeach;
+                        }
+                        else{ 
+                          ?>
             <br>
-            <div class="col-md-6" ></div>
-            <div class="col-md-6" id="id_name">
-                    <div class="row"> 
-                    <div class="col-md-6" >
-                    <?=  Html::hiddenInput('PermohonanForm[caseInfoID]', $mediaSocialResponse['id']); ?>                                 
-                    <select name="PermohonanForm[new_master_status_suspect_or_saksi_id][0]" class="form-control" id="new_master_status_suspect_or_saksi_id_0">
-                    <option value="">--Pilih Option--</option>
-                    <?php foreach($suspectOrSaksi as $key => $val){?>
-                      <option value="<?= $key ?>"><?= $val ?></option>
-                      <?php } ?>
-                    </select>
-                    </div>
-                    </div>
+                          <div class="row"> 
+                              <div class="col-md-6" >
+                              <?=  Html::hiddenInput('PermohonanForm[caseInfoID]', $mediaSocialResponse['id']); ?>                                 
+                              <select name="PermohonanForm[new_master_status_suspect_or_saksi_id][0]" class="form-control" id="new_master_status_suspect_or_saksi_id_0">
+                              <option value="">--Pilih Option--</option>
+                              <?php foreach($suspectOrSaksi as $key => $val){?>
+                                <option value="<?= $key ?>"><?= $val ?></option>
+                                <?php } ?>
+                              </select>
+                              </div>
+                          </div>
 
-                    <div class="row">  
-                    <div class="col-md-6" >                                                                             
-                    <select name="PermohonanForm[new_master_status_status_suspek_id][0]" class="form-control" id="new_master_status_status_suspek_id_0">
-                    <option value="">--Pilih Option--</option>
-                    <?php foreach($masterStatusSuspect as $key => $val){?>
-                      <option value="<?= $key ?>"><?= $val ?></option>
-                      <?php } ?>
-                    </select>
-                    </div>
-                    </div>
+                          <div class="row">  
+                              <div class="col-md-6" >                                                                             
+                                <select name="PermohonanForm[new_master_status_status_suspek_id][0]" class="form-control" id="new_master_status_status_suspek_id_0">
+                                <option value="">--Pilih Option--</option>
+                                <?php foreach($masterStatusSuspect as $key => $val){?>
+                                  <option value="<?= $key ?>"><?= $val ?></option>
+                                  <?php } ?>
+                                </select>
+                              </div>
+                          </div>
 
-                    <div class="row">
-                    <div class="col-md-6">
-                    <?= Html::input('text', 'PermohonanForm[new_ic][0]', '', ['class'=> 'form-control','id' => "new_ic_0","placeholder"=>"IC"]) ?>
-                    </div>
-                    <div class="col-md-6"  id="new_add_text_areabox-0"> 
-                    <?= Html::input('text', 'PermohonanForm[new_name][0]', '', ['class'=> 'form-control','id' => "new_name_0","placeholder"=>"Name"]) ?>
-                    </div>  
-                </div>
-            </div>
-            <?php 
-          }
-            ?>
+                          <div class="row">
+                              <div class="col-md-6">
+                                <?= Html::input('text', 'PermohonanForm[new_ic][0]', '', ['class'=> 'form-control','id' => "new_ic_0","placeholder"=>"IC"]) ?>
+                              </div>
+                              <div class="col-md-6"  id="new_add_text_areabox-0"> 
+                              <?= Html::input('text', 'PermohonanForm[new_name][0]', '', ['class'=> 'form-control','id' => "new_name_0","placeholder"=>"Name"]) ?>
+                              </div>  
+                          </div>
+         
+         </div>
+                                <?php 
+                              }
+                                ?>
     <br>
     <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
       <hr>
       <br>
             <div class="row mb-3">
-            <label class="col-form-label col-sm-4 pt-0">Surat Rasmi</label>
-                
-                <div class="col-sm-4" id="suratRasmiAttachmentIsNull">
-                <?= $form->field($model, 'surat_rasmi')->fileInput()->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>
-                </div>
+                <label class="col-form-label col-sm-2 pt-0">Surat Rasmi</label>
+                    <div class="col-sm-4" id="suratRasmiAttachmentIsNull">
+                    <?= $form->field($model, 'surat_rasmi')->fileInput()->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>
+                    </div>
                 <br>
-              
-                <div id="suratRasmiAttachmentNotNull">
-                    <div class="col-sm-4" id="surat_rasmi_img_del">
-                    <input type="hidden" id="suratRasmiImagePath" name="PermohonanForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
-                    <?= Html::button("Padam",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
+                    <div id="suratRasmiAttachmentNotNull">
+                        <div class="col-sm-4" id="surat_rasmi_img_del">
+                        <input type="hidden" id="suratRasmiImagePath" name="PermohonanForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
+                        <?= Html::button("Padam",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
+                        </div>
+                    
+                        <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
+                        <?= Html::button("Muat Turun | Papar",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
+                        </div>
                     </div>
-                
-                    <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
-                    <?= Html::button("Muat Turun | Papar",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
-                    </div>
-                </div>
-
             </div>
 <br>
-            <div class="row mb-3">
-                <label class="col-form-label col-sm-4 pt-0">Laporan Polis</label>
-                
-              <div class="col-sm-4" id="laporanPolisAttachmentIsNull">
-                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>
-                
-              </div>
+             <div class="row mb-3">
+                  <label class="col-form-label col-sm-2 pt-0">Laporan Polis</label>  
+                  <div class="col-sm-4" id="laporanPolisAttachmentIsNull">
+                    <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?> 
+                  </div>
 
               <!--<div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Attachment URL</legend>
@@ -279,31 +284,30 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                 </div>
               </div>-->
                 
-              <div id="laporanPolisAttachmentNotNull">
-                <div class="col-sm-4" id="laporan_polis_img_del">
-                <input type="hidden" id="loparanImagePath" name="PermohonanForm[laporan_polis_last_attachment]" value="<?php echo $mediaSocialResponse['laporan_polis'];?>"> 
-                <?= Html::button("Padam",['class'=>'btn btn-primary',"id" => "laporanPolisDeleteImg"]);?>
-                </div>
-                
-               
-                <div class="col-sm-4 text-right" id="laporan_polis_img_download">
-                <?= Html::button("Muat Turun | Papar",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
-                </div>
-              </div>     
+                  <div id="laporanPolisAttachmentNotNull">
+                      <div class="col-sm-4" id="laporan_polis_img_del">
+                      <input type="hidden" id="loparanImagePath" name="PermohonanForm[laporan_polis_last_attachment]" value="<?php echo $mediaSocialResponse['laporan_polis'];?>"> 
+                      <?= Html::button("Padam",['class'=>'btn btn-primary',"id" => "laporanPolisDeleteImg"]);?>
+                      </div>
+  
+                      <div class="col-sm-4 text-right" id="laporan_polis_img_download">
+                      <?= Html::button("Muat Turun | Papar",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
+                      </div>
+                  </div>     
             </div>
 
             <br>
-                    <div class="row">
-                    <div class="col-md-6">
-                    <legend class="col-form-label col-sm-4 pt-0">URL</legend>
-               
-                     <button type="button" id="add" class="add-item btn btn-success btn-xs">+</button>
-                    </div>
-                    </div>
-                            <?php if(count($mediaSocialResponse['case_info_url_involved']) > 0 ){?>
+            <div class="row">
+                  <div class="col-md-6">
+                    <label class="col-form-label col-sm-2 pt-0">URL</label>
+                    <button type="button" id="add" class="add-item btn btn-success btn-xs">+</button>
+                  </div>
+            </div>
+             <hr style="width:47%;text-align:left;margin-left:0">
+                   <?php if(count($mediaSocialResponse['case_info_url_involved']) > 0 ){?>
 <br>
-                        <div class="row">
-                           <div class="col-md-6" id="url_input_append">
+              <div class="row">
+                    <div class="col-md-6" id="url_input_append">
                               <?php
                
                               //for($i=0;$i<=4;$i++)
@@ -325,49 +329,95 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                 endforeach;
                                 //}
                                 ?> 
-                            </div>
-                        </div>
+                    </div>
+                </div>
                           <?php } else { ?>
-                            <div class="row">
-                                  <div class="col-md-6" id="url_input_append">
-                                      <?php
-                                      for($i=0;$i<=4;$i++)
-                                      {
-                                        ?>
-                                     <div class="row">
-                                        <?php                    
-                                      echo $form->field($model, 'new_master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$i))->label(false);
-                                      echo $form->field($model, 'new_url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
-                                      ?>
-                                    </div>
-                                    <?php
-                                    }
-                                    ?> 
-                                 </div>
+
+                <div class="row">
+                      <div class="col-md-6" id="url_input_append">
+                            <?php
+                              for($i=0;$i<=4;$i++)
+                                {
+                            ?>
+                          <div class="row">
+                             <?php                    
+                              echo $form->field($model, 'new_master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$i))->label(false);
+                              echo $form->field($model, 'new_url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
+                              ?>
+                          </div>
+                              <?php
+                             }
+                              ?> 
+                      </div>
                                 <?php } ?>
-                            </div>
+                  </div>
                             
-<br>
+              <!--/span--><br>
+
+              
+            <!--  <h4 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h4>
+                <hr>
             <div class="row mb-3">
                 <legend class="col-form-label col-sm-4 pt-0">Tujuan Permohanan</legend>
                 <div class="col-sm-8">
-                <?php  $model->application_purpose = explode(",",$mediaSocialResponse['master_status_purpose_of_application_id']); ?>
-                <?= $form->field($model, 'application_purpose')->checkboxList($purposeOfApplication)->label(false);?>  
+                <//?php  $model->application_purpose = explode(",",$mediaSocialResponse['master_status_purpose_of_application_id']); ?>
+                <//?= $form->field($model, 'application_purpose')->checkboxList($purposeOfApplication)->label(false);?>  
                 <div id="application_purpose_info">
                
                 <input type="text" name="PermohonanForm[application_purpose_info]" placeholder="Tujuan Permohanan" value="<?= $mediaSocialResponse['purpose_of_application_info']?>">
                 </div> 
                 </div>
             </div>
-        </div>
+      
 
-
+            <br>
+            <div class="row">
+                        <div class="col-md-12 col-12">
+                            <div class="text-right">
+                                <div class="form-group">
+                                     <?//= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
+                                 </div>
+                            </div>
+                        </div>
+             <div>
+    -->
     
-    <div class="form-group">
-        <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
-    </div>
+ <!--/span--><br>
+ <h4 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h4>
+                <hr>
+                <div class="row"> 
+                            <div class="col-lg-6">
+                                <label class="custom-control custom-checkbox"
+                                    style="display: inline-block; padding-right: 30px;">
+                                    <input type="checkbox" class="custom-control-input" name="agensi_action_id" value="0">
+                                    <span class="custom-control-label">Mengenalpasti pengendali akaun/laman sosial/laman web<br>
+                                        
+                                </label>
+                            </div>
+                            <div class="col-lg-6 m-t-20">
+                                <label class="custom-control custom-checkbox"
+                                    style="display: inline-block; padding-right: 30px;">
+                                    <input type="checkbox" class="custom-control-input" name="agensi_action_id" value="1">
+                                    <span class="custom-control-label">Maklumat lain, sila nyatakan:<br>
+                                </label>
+                                <input type="text" id="agency_web" class="form-control"
+                                    placeholder="">
+                            </div>
+                        </div>
+         
 
+<br>
+            <div class="row">
+                        <div class="col-md-12 col-12">
+                            <div class="text-right">
+                                <div class="form-group">
+                                     <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
+                                 </div>
+                            </div>
+                        </div>
+                                 <div>
     <?php ActiveForm::end(); ?>
+            </div>
             </div>
         </div>
     </div>
@@ -507,7 +557,9 @@ $('#add').click(function(){ var newID =  ( $('#url_input_append > div').length);
 if(newID < 15)
 {
   //$('#url_input_append').append('<div class="row"><div class="form-group field-permohonanform-master_social_media_id"><select id="permohonanform-master_social_media_id['+newURLVal+']" class="form-control" name="PermohonanForm[new_master_social_media_id]['+newURLVal+']"><option value="">--Pilih Social Media--</option><option value="1">twitter</option><option value="2">instagram</option><option value="3">tumblr</option><option value="4">facebook</option><option value="5">blog / website</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newURLVal+'"><input type="text" id="permohonanform-url-'+newURLVal+'" class="form-control" name="PermohonanForm[new_url]['+newURLVal+']"><div class="help-block"></div></div></div>');
-  $('#url_input_append').append('<div class="row"><div class="form-group field-permohonanform-master_social_media_id"><select id="new_social_media_'+newURLVal+'" name="PermohonanForm[new_master_social_media_id]['+newURLVal+']"><option value="">--Pilih Social Media--</option><option value="39">twitter</option><option value="40">instagram</option><option value="41">tumblr</option><option value="42">facebook</option><option value="43">blog / website</option><option value="99">Youtube</option><option value="100">Tiktok</option><option value="101">Others</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newURLVal+'"><input type="text" id="new_social_media_URL_'+newURLVal+'" class="form-control" name="PermohonanForm[new_url]['+newURLVal+']"><div class="help-block"></div></div></div>');
+  $('#url_input_append').append('<div class="row"><div class="col-lg-12"><div class="form-group field-permohonanform-master_social_media_id"><select id="new_social_media_'+newURLVal+'" class="form-control" name="PermohonanForm[new_master_social_media_id]['+newURLVal+']"><option value="">--Pilih Social Media--</option><option value="39">twitter</option><option value="40">instagram</option><option value="41">tumblr</option><option value="42">facebook</option><option value="43">blog / website</option><option value="99">Youtube</option><option value="100">Tiktok</option><option value="101">Others</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newURLVal+'"><input type="text" id="new_social_media_URL_'+newURLVal+'" class="form-control" name="PermohonanForm[new_url]['+newURLVal+']"><div class="help-block"></div></div></div></div>');
+
+
   ++newURLVal;
 }
 else{
@@ -530,11 +582,11 @@ $('#add_ic_name').click(function(){ //alert(new_suspek_increment_val);return fal
   if(prevVal == "no" && new_suspek_increment_val <= 3)
 {
   ++new_suspek_increment_val;
-  $('#id_name').append('<div class="row"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+new_suspek_increment_val+' required"><select name="PermohonanForm[new_master_status_suspect_or_saksi_id]['+new_suspek_increment_val+']" class="form-control" id="permohonanform-new_master_status_suspect_or_saksi_id-'+new_suspek_increment_val+'"><option value="">--Pilih Option--</option><option value="86">Suspect</option><option value="87">Witness</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+new_suspek_increment_val+'"><select name="PermohonanForm[new_master_status_status_suspek_id]['+new_suspek_increment_val+']" class="form-control" id="new_master_status_status_suspek_id_'+new_suspek_increment_val+'"><option value="">--Pilih Option--</option><option value="60">Tiada maklumat mengenai suspek/sakhi</option><option value="61">Identiti suspek(Nama dan KPT) sudah dikenalpasti</option><option value="62">Suspek telah ditahan</option><option value="63">Suspek dibebaskan dengan jaminan</option><option value="64">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="new_ic_'+new_suspek_increment_val+'" class="form-control" name="PermohonanForm[new_ic]['+new_suspek_increment_val+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4"  id="new_add_text_areabox-'+new_suspek_increment_val+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="new_name_'+new_suspek_increment_val+'" class="form-control" name="PermohonanForm[new_name]['+new_suspek_increment_val+']" placeholder="Name"><div class="help-block"></div></div></div></div>');  
+  $('#id_name').append('<div class="row"><div class="col-lg-12"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+new_suspek_increment_val+' required"><select name="PermohonanForm[new_master_status_suspect_or_saksi_id]['+new_suspek_increment_val+']" class="form-control" id="permohonanform-new_master_status_suspect_or_saksi_id-'+new_suspek_increment_val+'"><option value="">--Pilih Option--</option><option value="86">Suspect</option><option value="87">Witness</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+new_suspek_increment_val+'"><select name="PermohonanForm[new_master_status_status_suspek_id]['+new_suspek_increment_val+']" class="form-control" id="new_master_status_status_suspek_id_'+new_suspek_increment_val+'"><option value="">--Pilih Option--</option><option value="60">Tiada maklumat mengenai suspek/saksi</option><option value="61">Identiti suspek(Nama dan KPT) sudah dikenalpasti</option><option value="62">Suspek telah ditahan</option><option value="63">Suspek dibebaskan dengan jaminan</option><option value="64">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="new_ic_'+new_suspek_increment_val+'" class="form-control" name="PermohonanForm[new_ic]['+new_suspek_increment_val+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4"  id="new_add_text_areabox-'+new_suspek_increment_val+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="new_name_'+new_suspek_increment_val+'" class="form-control" name="PermohonanForm[new_name]['+new_suspek_increment_val+']" placeholder="Name"><div class="help-block"></div></div></div></div>');  
 }
 else if(prevVal == "yes" && new_suspek_increment_val < 5)
 { 
-  $('#id_name').append('<div class="row"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+newValStart+' required"><select name="PermohonanForm[new_master_status_suspect_or_saksi_id]['+newValStart+']" class="form-control" id="permohonanform-new_master_status_suspect_or_saksi_id-'+newValStart+'"><option value="">--Pilih Option--</option><option value="86">Suspect</option><option value="87">Witness</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+newValStart+'"><select name="PermohonanForm[new_master_status_status_suspek_id]['+newValStart+']" class="form-control" id="new_master_status_status_suspek_id_'+newValStart+'"><option value="">--Pilih Option--</option><option value="60">Tiada maklumat mengenai suspek/sakhi</option><option value="61">Identiti suspek(Nama dan KPT) sudah dikenalpasti</option><option value="62">Suspek telah ditahan</option><option value="63">Suspek dibebaskan dengan jaminan</option><option value="64">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="new_ic_'+newValStart+'" class="form-control" name="PermohonanForm[new_ic]['+newValStart+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4" id="new_add_text_areabox-'+newValStart+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="new_name_'+newValStart+'" class="form-control" name="PermohonanForm[new_name]['+newValStart+']" placeholder="Name"><div class="help-block"></div></div></div></div>');  
+  $('#id_name').append('<div class="row"><div class="col-lg-12"><div class="form-group field-permohonanform-master_status_suspect_or_saksi_id-'+newValStart+' required"><select name="PermohonanForm[new_master_status_suspect_or_saksi_id]['+newValStart+']" class="form-control" id="permohonanform-new_master_status_suspect_or_saksi_id-'+newValStart+'"><option value="">--Pilih Option--</option><option value="86">Suspect</option><option value="87">Witness</option></select><div class="help-block"></div></div></div><div class="row"><div class="form-group field-permohonanform-master_status_status_suspek_id-'+newValStart+'"><select name="PermohonanForm[new_master_status_status_suspek_id]['+newValStart+']" class="form-control" id="new_master_status_status_suspek_id_'+newValStart+'"><option value="">--Pilih Option--</option><option value="60">Tiada maklumat mengenai suspek/saksi</option><option value="61">Identiti suspek(Nama dan KPT) sudah dikenalpasti</option><option value="62">Suspek telah ditahan</option><option value="63">Suspek dibebaskan dengan jaminan</option><option value="64">Lain-lain sila nyatakan</option></select><div class="help-block"></div></div></div><div class="row"><div class="col-sm-4"><div class="form-group field-permohonanform-ic-0"><input type="text" id="new_ic_'+newValStart+'" class="form-control" name="PermohonanForm[new_ic]['+newValStart+']" placeholder="IC"><div class="help-block"></div></div></div><div class="col-sm-4" id="new_add_text_areabox-'+newValStart+'"><div class="form-group field-permohonanform-name-0"><input type="text" id="new_name_'+newValStart+'" class="form-control" name="PermohonanForm[new_name]['+newValStart+']" placeholder="Name"><div class="help-block"></div></div></div></div>');  
   ++newValStart;
   ++new_suspek_increment_val;
 }
@@ -557,7 +609,7 @@ var others_1 = 1;var others_2 = 1;var others_3 = 1;var others_4 = 1;var others_5
 $('#permohonanform-master_status_status_suspek_id-0').change(function(){ alert(this.value+' - '+others_1);  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_1 < 2)
   { 
-    $('#add_text_areabox-0').after('<div class="col-lg-8" id="status_suspek_others_0"><textarea class="form-control" name="PermohonanForm[others][0]"></textarea></div><div class="clearfix" id="clearfix_0"></div>');
+    $('#add_text_areabox-0').after('<div class="col-lg-12" id="status_suspek_others_0"><textarea class="form-control" name="PermohonanForm[others][0]"></textarea></div><div class="clearfix" id="clearfix_0"></div>');
     ++others_1;
   }
   else{
@@ -569,7 +621,7 @@ $('#permohonanform-master_status_status_suspek_id-0').change(function(){ alert(t
 });
 $('#permohonanform-master_status_status_suspek_id-1').change(function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_2 < 2){
-$('#add_text_areabox-1').after('<div class="col-lg-8" id="status_suspek_others_1"><textarea  class="form-control" name="PermohonanForm[others][1]"></textarea></div><div class="clearfix"></div><div class="clearfix" id="clearfix_1"></div>');
+$('#add_text_areabox-1').after('<div class="col-lg-12" id="status_suspek_others_1"><textarea  class="form-control" name="PermohonanForm[others][1]"></textarea></div><div class="clearfix"></div><div class="clearfix" id="clearfix_1"></div>');
 ++others_2;
   }
   else{
@@ -581,7 +633,7 @@ $('#add_text_areabox-1').after('<div class="col-lg-8" id="status_suspek_others_1
 });
 $('#permohonanform-master_status_status_suspek_id-2').change(function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_3 < 2){
-$('#add_text_areabox-2').after('<div class="col-lg-8" id="status_suspek_others_2"><textarea class="form-control" name="PermohonanForm[others][2]"></textarea></div><div class="clearfix"  id="clearfix_2"></div>');
+$('#add_text_areabox-2').after('<div class="col-lg-12" id="status_suspek_others_2"><textarea class="form-control" name="PermohonanForm[others][2]"></textarea></div><div class="clearfix"  id="clearfix_2"></div>');
 ++others_3;
   }
   else{
@@ -593,7 +645,7 @@ $('#add_text_areabox-2').after('<div class="col-lg-8" id="status_suspek_others_2
 });
 $('#permohonanform-master_status_status_suspek_id-3').change( function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64 && others_4 < 2){
-$('#add_text_areabox-3').after('<div class="col-lg-8"  id="status_suspek_others_3"><textarea class="form-control" name="PermohonanForm[others][3]"></textarea></div><div class="clearfix"  id="clearfix_3"></div>');
+$('#add_text_areabox-3').after('<div class="col-lg-12"  id="status_suspek_others_3"><textarea class="form-control" name="PermohonanForm[others][3]"></textarea></div><div class="clearfix"  id="clearfix_3"></div>');
 ++others_4;
   }
   else{
@@ -605,7 +657,7 @@ $('#add_text_areabox-3').after('<div class="col-lg-8"  id="status_suspek_others_
 });
 $('#permohonanform-master_status_status_suspek_id-4').change( function() {  var newIDInfo =  ($('#id_name > div').length); newIdVal = (newIDInfo / 2)-1; //alert($('select[name="PermohonanForm[master_status_status_suspek_id][0]"]').val());
   if(this.value == 64  && others_5 < 2){
-$('#add_text_areabox-4').after('<div class="col-lg-8"  id="status_suspek_others_4"><textarea class="form-control" name="PermohonanForm[others][4]"></textarea></div><div class="clearfix"  id="clearfix_4"></div>');
+$('#add_text_areabox-4').after('<div class="col-lg-12"  id="status_suspek_others_4"><textarea class="form-control" name="PermohonanForm[others][4]"></textarea></div><div class="clearfix"  id="clearfix_4"></div>');
 ++others_5;
   }
   else{
@@ -622,7 +674,7 @@ var new_others_1 = 1;var new_others_2 = 1;var new_others_3 = 1;var new_others_4 
 
 $('#id_name').on('change','#new_master_status_status_suspek_id_0', function() {  
   if(this.value == 64  && new_others_1 < 2){
-$('#new_add_text_areabox-0').after('<div class="col-lg-8" id="new_status_suspek_others_0"><textarea  class="form-control" name="PermohonanForm[new_others][0]"></textarea></div><div class="clearfix" id="clearfix_0"></div>');
+$('#new_add_text_areabox-0').after('<div class="col-lg-12" id="new_status_suspek_others_0"><textarea  class="form-control" name="PermohonanForm[new_others][0]"></textarea></div><div class="clearfix" id="clearfix_0"></div>');
 ++new_others_1;
   }
   else{
@@ -636,7 +688,7 @@ $('#new_add_text_areabox-0').after('<div class="col-lg-8" id="new_status_suspek_
 
 $('#id_name').on('change','#new_master_status_status_suspek_id_1', function() { 
   if(this.value == 64  && new_others_2 < 2){
-$('#new_add_text_areabox-1').after('<div class="col-lg-8" id="new_status_suspek_others_1"><textarea class="form-control" name="PermohonanForm[new_others][1]"></textarea></div><div class="clearfix" id="clearfix_1"></div>');
+$('#new_add_text_areabox-1').after('<div class="col-lg-12" id="new_status_suspek_others_1"><textarea class="form-control" name="PermohonanForm[new_others][1]"></textarea></div><div class="clearfix" id="clearfix_1"></div>');
 ++new_others_2;
   }
   else{
@@ -649,7 +701,7 @@ $('#new_add_text_areabox-1').after('<div class="col-lg-8" id="new_status_suspek_
 
 $('#id_name').on('change','#new_master_status_status_suspek_id_2', function() { 
   if(this.value == 64  && new_others_3 < 2){
-$('#new_add_text_areabox-2').after('<div class="col-lg-8" id="new_status_suspek_others_2"><textarea  class="form-control" name="PermohonanForm[new_others][2]"></textarea></div><div class="clearfix" id="clearfix_2"></div>');
+$('#new_add_text_areabox-2').after('<div class="col-lg-12" id="new_status_suspek_others_2"><textarea  class="form-control" name="PermohonanForm[new_others][2]"></textarea></div><div class="clearfix" id="clearfix_2"></div>');
 ++new_others_3;
   }
   else{
@@ -662,7 +714,7 @@ $('#new_add_text_areabox-2').after('<div class="col-lg-8" id="new_status_suspek_
 
 $('#id_name').on('change','#new_master_status_status_suspek_id_3', function() { 
   if(this.value == 64  && new_others_4 < 2){
-$('#new_add_text_areabox-3').after('<div class="col-lg-8" id="new_status_suspek_others_3"><textarea  class="form-control" name="PermohonanForm[new_others][3]"></textarea></div><div class="clearfix" id="clearfix_3"></div>');
+$('#new_add_text_areabox-3').after('<div class="col-lg-12" id="new_status_suspek_others_3"><textarea  class="form-control" name="PermohonanForm[new_others][3]"></textarea></div><div class="clearfix" id="clearfix_3"></div>');
 ++new_others_4;
   }
   else{
@@ -675,7 +727,7 @@ $('#new_add_text_areabox-3').after('<div class="col-lg-8" id="new_status_suspek_
 
 $('#id_name').on('change','#new_master_status_status_suspek_id_4', function() { 
   if(this.value == 64  && new_others_5 < 2){
-$('#new_add_text_areabox-4').after('<div class="col-lg-8" id="new_status_suspek_others_4"><textarea  class="form-control" name="PermohonanForm[new_others][4]"></textarea></div><div class="clearfix" id="clearfix_4"></div>');
+$('#new_add_text_areabox-4').after('<div class="col-lg-12" id="new_status_suspek_others_4"><textarea  class="form-control" name="PermohonanForm[new_others][4]"></textarea></div><div class="clearfix" id="clearfix_4"></div>');
 ++new_others_5;
   }
   else{
@@ -690,7 +742,7 @@ $('#new_add_text_areabox-4').after('<div class="col-lg-8" id="new_status_suspek_
 
 $('#new_master_status_status_suspek_id_2').change( function() { 
   if(this.value == 64  && new_others_3 < 2){
-$('#new_add_text_areabox-2').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_2" class="form-control" name="PermohonanForm[new_others][2]"></textarea></div><div class="clearfix"></div>');
+$('#new_add_text_areabox-2').after('<div class="col-lg-12"><textarea id="new_status_suspek_others_2" class="form-control" name="PermohonanForm[new_others][2]"></textarea></div><div class="clearfix"></div>');
 ++new_others_3;
   }
   else{
@@ -701,7 +753,7 @@ $('#new_add_text_areabox-2').after('<div class="col-lg-8"><textarea id="new_stat
 
 $('#new_master_status_status_suspek_id_3').change( function() { 
   if(this.value == 64  && new_others_4 < 2){
-$('#new_add_text_areabox-3').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_3" class="form-control" name="PermohonanForm[new_others][3]"></textarea></div><div class="clearfix"></div>');
+$('#new_add_text_areabox-3').after('<div class="col-lg-12"><textarea id="new_status_suspek_others_3" class="form-control" name="PermohonanForm[new_others][3]"></textarea></div><div class="clearfix"></div>');
 ++new_others_4;
   }
   else{
@@ -712,7 +764,7 @@ $('#new_add_text_areabox-3').after('<div class="col-lg-8"><textarea id="new_stat
 
 $('#new_master_status_status_suspek_id_4').change( function() { 
   if(this.value == 64  && new_others_5 < 2){
-$('#new_add_text_areabox-4').after('<div class="col-lg-8"><textarea id="new_status_suspek_others_4" class="form-control" name="PermohonanForm[new_others][4]"></textarea></div><div class="clearfix"></div>');
+$('#new_add_text_areabox-4').after('<div class="col-lg-12"><textarea id="new_status_suspek_others_4" class="form-control" name="PermohonanForm[new_others][4]"></textarea></div><div class="clearfix"></div>');
 ++new_others_5;
   }
   else{
