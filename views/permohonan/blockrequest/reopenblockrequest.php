@@ -10,14 +10,34 @@ use Yii;
 ?>
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Block Request</h1>
+<!-- ============================================================== -->
+		<!-- Bread crumb and right sidebar toggle -->
+		<!-- ============================================================== -->
+		<div class="row page-titles">
+			<div class="col-md-5 col-8 align-self-center">
+				<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
+        <nav aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
+					<li class="breadcrumb-item active">Permohonan Penyekatan</li>
+				</ol>
+        </nav>
+			</div>
+		</div>
+
+   <!-- <h1 style="padding-top: 1.5rem;">Permintaan Sekatan</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Home</a></li>
-            <li class="breadcrumb-item active">Block Request</li>
+            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Permintaan Sekatan</li>
             
         </ol>
-    </nav>
+    </nav>-->
+
+    <div class="row">
+			<div class="col-lg-12">
+				<div class="card card-outline-info">
+
     <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
@@ -25,101 +45,121 @@ use Yii;
                                         ?>
                                         <?php endif; ?>  
                                     </div>
-        <div class="row">`
        
-            <div class="col-lg-5">
-<?php //echo $mediaSocialResponse['case_no'];exit;?>
-           <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+  <div class="form-body">
+<h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+<hr>
+<?php $form = ActiveForm::begin(['enableClientValidation' => true,'options' => ['enctype' => 'multipart/form-data']]); ?>
            <?= $form->field($model, 'master_case_info_type_id')->hiddenInput(['value' => $mediaSocialResponse['master_case_info_type_id']])->label(false); ?>
-           <?=  Html::hiddenInput('BlockRequestForm[id]', $mediaSocialResponse['id'],["id" => "permohonanId"]); ?>
            <?=  Html::hiddenInput('BlockRequestForm[caseInfoID]', $mediaSocialResponse['id']); ?> 
-           
-           
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No Kertas Siasatan </label>
-                <div class="col-sm-8">
-                <?php  $model->investigation_no = $mediaSocialResponse['investigation_no']; ?>
-                <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No Kertas Siasata','readonly' => true])->label(false) ?> 
-                </div>
-            </div>
+           <?=  Html::hiddenInput('BlockRequestForm[id]', $mediaSocialResponse['id'],["id" => "permohonanId"]); ?>          
+              <!--no. Laporan Polis-->
+              <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="control-label">No. Permohonan <span class="text-danger"></span></label>
+                      <div class="controls">
+                      <?= Html::input('text', 'case_no', $mediaSocialResponse['case_no'], ['class'=> 'form-control','readonly' => true]) ?>
+                      </div>
+                  </div>
+              </div>
 
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Permohonan </label>
-                <div class="col-sm-8">
-                <?= Html::input('text', 'case_no', $mediaSocialResponse['case_no'], ['class'=> 'form-control','readonly' => true]) ?>
-                
-                </div>
+              <!--No. Kertas Siasatan-->
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="control-label">No. Kertas siasatan <span class="text-danger">*</span></label>
+                      <div class="controls">
+                      <?= Html::input('text', 'investigation_no', $mediaSocialResponse['investigation_no'], ['class'=> 'form-control','readonly' => true]) ?>
+                      </div>
+                  </div>
+              </div>
+              </div>
+
+<!--Kesalahan-->
+              <label class="control-label">Kesalahan<span class="text-danger">*</span></label>
+      <h5>Pilih Kesalahan</h5>
+      <div class="row">
+          <div class="col-md col-sm">
+             <?= $form->field($model, 'offence_preselected')->dropDownList($offences,array('id'=>'mySideToSideSelect','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
+            <div class='control-label count-from'  style="margin:10px;">
             </div>
-            
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">Kesalahan</legend>
-                <div class="col-sm-8">
-                <?php 
-                $offencesList = array();
-                $i = 0;
-                foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
-                  $i++;
-                  $offencesList[$offenceInfo['offence_id']] = array("selected"=>true);
+          </div>
+      <div class="col-md-1 col-sm-12" style="margin: auto;">
+      
+      <button type="button" id="add_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+      <button type="button" id="remove_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+		
+	
+        
+      </div> 
+      <div class="col-md col-sm">
+        
+      <?= $form->field($model, 'offence')->dropDownList($prevSelectedOffences,array('id' => 'mySideToSideSelect_to','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan','options' => $offencesListRes))->label(false); ?>
                   
-                endforeach;
-                ?>
-                <?= $form->field($model, 'offence')->dropDownList($offences,array('multiple'=>'multiple','prompt' => '--Pilih Kesalahan--','options' => $offencesList))->label(false); ?>
-                </div>
-           </div>
-
-
-            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Ringkasan Kes </label>
-                <div class="col-sm-8">
-                <?php  $model->case_summary = $mediaSocialResponse['case_summary']; ?>
-                <?= $form->field($model, 'case_summary')->textarea()->label(false); ?>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <legend class="col-form-label col-sm-4 pt-0">URL</legend>
-                <div class="pull-right">
-                <button type="button" id="add" class="add-item btn btn-success btn-xs">+</button>
-            </div>
-            <div class="col-sm-8" id="url_input_append">
-                <?php
-                //for($i=0;$i<=4;$i++)
-                //{
-                    $k = 0;
-                  foreach($mediaSocialResponse['case_info_url_involved'] as $key => $URLDbInfo):
-                  $model->master_social_media_id[$key] = $URLDbInfo['master_social_media_id'];
-                  $model->url[$key] = $URLDbInfo['url'];
-                  ?>
-                  <div class="row">
-                  <?=  Html::hiddenInput('BlockRequestForm[caseInfoURLInvolvedId]['.$key.']', $URLDbInfo['id']); ?>
-                  <?php
-                echo $form->field($model, 'master_social_media_id['.$key.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$k))->label(false);
-                echo $form->field($model, 'url['.$key.']')->textInput(['id' => 'social_media_URL_'.$k])->label(false); 
-                ?>
-                </div>
-                <?php
-                $k++;
-                endforeach;
-                //}
-                ?> 
-            </div>
-            
-        </div>
-
-
-    
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+      </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-            </div>
-        </div>
-    </div>
+ <!--Ringkasan Kes-->
+              <div class="row">
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <label class="control-label"> Ringkasan Kes<span class="text-danger">*</span></label>
+                      <div class="controls">
+                      <?php  $model->case_summary = $mediaSocialResponse['case_summary']; ?>
+                      <?= $form->field($model, 'case_summary')->textarea(['class' => 'form-control','rows' => "5"])->label(false); ?>
+                      </div>
+                  </div>
+              </div>
+              </div>
+<br>
+  
+  <!--URL--> 
+                      <div class="row">
+                      <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Link (URL)</label>
+                                    <button type="button" class="btn btn-info m-b-20" id="add">
+	                                     <i class="fa fa-plus text"></i>
+	                                  </button> 
+                                    <div class="form-group">
+                                    
+                                  <div id="url_input_append">
+                                    <?php
+                                    for($i=0;$i<=4;$i++)
+                                    {
+                                      ?>
+                                      <div class="row">
+                                      <?php
+                                    echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','id' => 'social_media_'.$i))->label(false);
+                                    echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
+                                    ?>
+                                    </div>
+                                    <?php
+                                    }
+                                    ?> 
+                                  </div>
+                                    </div>
+                                </div>
+                      </div>
+                      </div>
+              <!--/button--> <br>
+                      <div class="row">
+                        <div class="col-md-12 col-12">
+                            <div class="text-right">
+                            <?= Html::submitButton('Hantar', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
+                                <a href="../block-request-list"
+                                    class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
+                                    data-placement="left" title=""
+                                    data-original-title="Click to cancel and back to the main page"><i
+                                        class="ti-close"></i>
+                                    Batal</a>
+                                    
+                            </div>
+                        </div>
+                    </div>
+                    <?php ActiveForm::end(); ?>
 </div>
-<?php 
-
-?>
+</div>
+                                        </div></div>
 
 <?php
 if(!empty($mediaSocialResponse['surat_rasmi']))
@@ -133,7 +173,12 @@ $isLaporanPoliceExists = 1;
 
 $script = <<< JS
 $(document).ready(function() { 
-  
+  $("#add_options").click(function(){
+    $("#mySideToSideSelect option:selected").remove().appendTo($("#mySideToSideSelect_to"));
+})
+$("#remove_options").click(function(){
+    $("#mySideToSideSelect_to option:selected").remove().appendTo($("#mySideToSideSelect"));
+}) 
 
   var newURLVal = 0;
 $('#add').click(function(){ var newID =  ( $('#url_input_append > div').length);
