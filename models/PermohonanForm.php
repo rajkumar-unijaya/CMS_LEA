@@ -5,8 +5,8 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\httpclient\Client;
+use app\components\validator\Domaincheck;
 use app\components\validator\Reportno;
-use app\components\validator\DomainCheck;
 
 /**
  * EmailForm is the model behind the login form.
