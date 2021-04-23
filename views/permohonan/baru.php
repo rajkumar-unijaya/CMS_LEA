@@ -80,7 +80,7 @@ use Yii;
                   <div class="form-group">
                       <label class="control-label">Nama<span class="text-danger">*</span></label>
                       <div class="controls">
-                      <input type="text" id="nama" class="form-control" name="nama" data-validation-required-message="This field is required" required>
+                      <input type="text" id="nama" class="form-control" name="nama" placeholder="Nama">
                       </div>
                   </div>
               </div>
@@ -88,7 +88,7 @@ use Yii;
                   <div class="form-group">
                       <label class="control-label">E-mel<span class="text-danger">*</span></label>
                       <div class="controls">
-                      <input type="text" id="emel" class="form-control" name="emel" data-validation-required-message="This field is required" required>
+                      <input type="text" id="emel" class="form-control" name="emel" placeholder="E-mel">
                       </div>
                   </div>
               </div>
@@ -98,7 +98,7 @@ use Yii;
                   <div class="form-group">
                       <label class="control-label">No. Telefon <span class="text-danger">*</span></label>
                       <div class="controls">
-                      <input type="text" id="notelefon" class="form-control" name="notelefon" data-validation-required-message="This field is required" required>
+                      <input type="text" id="notelefon" class="form-control" name="notelefon" placeholder="No. Telefon">
                       </div>
                   </div>
               </div>
@@ -156,9 +156,10 @@ use Yii;
            <div class="row">
            <div class="col-md-6">
                 <label for="inputPassword3" >Ringkasan Kes </label>
-                
+                <div class="controls">
                 <?= $form->field($model, 'case_summary')->textarea()->label(false); ?>
                 <small class="text-muted" id="description">(maksimum 2000 character)</small>
+                </div>
             </div>
             </div>
         <!--/span-->
@@ -175,54 +176,80 @@ use Yii;
             <br>
     <!--/span-->
     <div class="form-group">
-            <div class="row">
-                <div class="col-md-6" id="id_name">
-               <?= $form->field($model, 'master_status_suspect_or_saksi_id[0]')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek or Saksi--'))->label(false); ?>
-                </div>
-            </div>       
+    <div class="row">
+						<div class="col-md-6">
+							  <div class="form-group">
+								   
+								      <select class="custom-select" id="inquiry">
+									        <option selected="">--Pilih Suspek / Saksi--</option>
+									        <option value="1">Suspek</option>
+									        <option value="2">Saksi</option>	
+								      </select>
+							  </div>
+						  </div>
+              </div>     
                   <!--/span--><br>
-          <div class="row">         
-            <div class="col-md-6">
-              <?= $form->field($model, 'master_status_status_suspek_id[0]')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Pilihan--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
-            </div>
-              <div class="col-md-6">
-                <input type="text" id="lainlain" class="form-control" name="lain" placeholder="Lain-lain">
-              </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            
+                              <select class="custom-select" id="inquiry">
+                                  <option selected="">--Pilih Status--</option>
+                                  <option value="60">Tiada maklumat mengenai suspek/saksi</option>
+                                  <option value="61">Identiti suspek(Nama dan KPT) sudah dikenalpasti, tetapi belum ditahan</option>
+                                  <option value="62">Suspek telah ditahan</option>
+                                  <option value="63">Suspek dibebaskan dengan jaminan</option>
+                                  <option value="64">Lain-lain sila nyatakan</option>	
+                              </select>
+							            </div>
+						          </div>
+                    <div class="col-md-6">
+                      <input type="text" id="lainlain" class="form-control" name="lain" placeholder="Lain-lain">
+                    </div>
           </div>
     <!--/span--><br>
                 <div class="row">
                     <div class="col-md-6">
-                    <?= $form->field($model, 'ic[0]')->textInput(['placeholder' => 'No. Kad Pengenalan'])->label(false);?> 
+                    <input type="text" id="nama" class="form-control" name="ic" placeholder="No. Kad Pengenalan">
                     </div>
-                    <div class="col-md-6" id="add_text_areabox-0"> 
-                    <?= $form->field($model, 'name[0]')->textInput(['placeholder' => 'Nama'])->label(false);?>  
+                    <div class="col-md-6"> 
+                    <input type="text" id="nama" class="form-control" name="nama" placeholder="Nama"> 
                     </div>  
                 </div>
     </div>
     <!--/span-->
-    <br>
-    <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
+    <!-- Surat Rasmi-->         
+  <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
       <hr>
-            <div class="row">
-                    <div class="col-md-6">
-                    <label>Surat Rasmi</label>
-                <?=  $form->field($model, 'surat_rasmi')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf'); ?>
-                </div>
-            </div>
-
-    <!--/span--><br>
-            <div class="row">
-                    <div class="col-md-6">
-                    <label>Laporan Polis</label>
-                <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false)->hint('Lampiran hendaklah png | jpg | jpeg | pdf');?>   
-                </div>
-            </div>
-    <!--/span--><br>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+					  	<label>Surat Rasmi</label>
+                  
+						    <?=  $form->field($model, 'surat_rasmi')->fileInput()->label(false); ?>
+                <br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+						      <div id="fileList"></div>                     
+				  	</div>
+          </div>
+</div>
+  <!--Laporan Polis-->   
+  <div class="row">       
+          <div class="col-md-6">
+            <div class="form-group">
+					  	<label>Laporan Polis</label>
+						    <?=  $form->field($model, 'laporan_polis')->fileInput()->label(false); ?>
+                <br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+						      <div id="fileList"></div>
+               </div>      
+				  	</div>
+          </div>
+        
+<br>
             <div class="row">
                     <div class="col-md-6">
                 <label>Lampiran URL</label>
-                <?= $form->field($model, 'attachmentURL')->textInput(['placeholder' => 'URL'])->label(false) ?>
-                </div>
+                <input type="text" id="nama" class="form-control" name="nama" placeholder="Lampiran">                
+                 </div>
             </div>
 
                 <!--/span-->
@@ -236,21 +263,23 @@ use Yii;
                 <br>
 
                 <div class="row">
-                    <div class="col-md-6" id="url_input_append">
-                        <?php
-                        for($i=0;$i<=4;$i++)
-                        {
-                          ?>
-                          <?php
-                        echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => '--Pilih Social Media--','id' => 'social_media_'.$i))->label(false);
-                        echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
-                        ?>
-                     
-                          <?php
-                          }
-                          ?> 
-                          </div>
-            </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            
+                              <select class="custom-select" id="inquiry">
+                              <option value="">--Pilih Social Media--</option>
+                              <option value="1">twitter</option>
+                              <option value="2">instagram</option>
+                              <option value="3">tumblr</option>
+                              <option value="4">facebook</option>
+                              <option value="5">blog / website</option>
+                              </select>
+							            </div>
+						          </div>
+                    <div class="col-md-4">
+                      <input type="text" id="lainlain" class="form-control" name="lain">
+                    </div>
+          </div>
             
               <!--/span--><br>
               <h4 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h4>
