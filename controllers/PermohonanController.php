@@ -1427,6 +1427,9 @@ class PermohonanController extends Controller
         $newOffences = array();
         $newSelectedOffences = array();
         $prevDeletedOffences = array();
+        $prevSelectedOffences = array();
+        $removePrevSelectedOffences = array();
+        $offencesListRes = array();
 
         /******
          * Get offence master data from the offence table using api service.
@@ -1605,12 +1608,28 @@ class PermohonanController extends Controller
                 }
             
 		}    
+        
         if(count($responses->data['records']) > 0)
         {
             $mediaSocialResponse = $responses->data['records'][0];
+                foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
+                  if(array_key_exists($offenceInfo['offence_id'], $filterOffenceResponse))
+                  {
+                    $prevSelectedOffences[$offenceInfo['offence_id']] = $filterOffenceResponse[$offenceInfo['offence_id']];
+                    $offencesListRes[$offenceInfo['offence_id']] = array("selected"=>true);
+                  }
+                endforeach;
+
+                foreach($filterOffenceResponse as $key => $offenceInfo):
+                    if(array_key_exists($key, $prevSelectedOffences))
+                    {
+                        unset($filterOffenceResponse[$key]);
+                    }
+                      
+                  endforeach;
+                  
         }
-        
-        return $this->render('blockrequest/editblockrequest', ['model'=>$model,"mediaSocialResponse" => $mediaSocialResponse,"newCase" => $newCase,"offences" => $filterOffenceResponse,"masterSocialMedia" => $masterSocialMedia]);
+        return $this->render('blockrequest/editblockrequest', ['model'=>$model,"mediaSocialResponse" => $mediaSocialResponse,"newCase" => $newCase,"offences" => $filterOffenceResponse,"masterSocialMedia" => $masterSocialMedia,"prevSelectedOffences" => $prevSelectedOffences,"offencesListRes" => $offencesListRes]);
        
         
     }
