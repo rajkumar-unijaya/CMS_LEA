@@ -22,10 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <?php if(Yii::$app->session->hasFlash('failed')):
                                         echo Yii::$app->session->getFlash('failed')[0];
                                         ?>
-
-                                       
                                         <?php endif; ?>  
-
                                     </div>
                                     <div class="card-body">
                                     
