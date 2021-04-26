@@ -16,45 +16,62 @@ use Yii;
 </div> -->
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">MNP Search</h1>
+    <h1 style="padding-top: 1.5rem;">MNP Carian</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../dashboard/index">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">MNP Search</li>
+            <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
+            <li class="breadcrumb-item active" aria-current="page">MNP Carian</li>
         </ol>
     </nav>
 
-
-    <div class="card-body">
-        
-            <div class="input-group-btn">
-                <?php $form = ActiveForm::begin(['id' => 'mnp-form']); ?>
+    <div class="row">
+    <!-- Column -->
+    <div class="col-lg-12">
+<div class="card-body">
                 <div class="row">
-                 <div>
-                    <?= $form->field($model, 'phone_number')->textInput(['placeholder' => 'Enter Phone Number', 'type' => 'number']); ?>
+                    <div class="col-md-4 col-sm-12 m-b-10">
+                        <form class="example" action="">
+                        <input type="text" class="form-control" placeholder="Masukkan No. Telefon" name="search">
+                        </div>
+                        <div class="col-md-4 col-sm-12 m-b-10">
+                        <button type="submit"class="btn btn-info btn-lg"><i class="fa fa-search"></i> Carian</button>
+                        </form>
+                    </div>
+                    </div>
+           <!-- <div class="input-group-btn">
+                <?//php $form = ActiveForm::begin(['id' => 'mnp-form']); ?>
+                <div class="row">
+                        <div>
+                            <?//= $form->field($model, 'phone_number')->textInput(['placeholder' => 'Enter Phone Number', 'type' => 'number']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?//= Html::submitButton('<i class="fa fa-search"></i> &nbsp; Search', [
+                                //'class' => 'btn btn-primary'
+                            //]) ?>
+                        </div>
                 </div>
-                <div class="form-group">
-                    <?= Html::submitButton('<i class="fa fa-search"></i> &nbsp; Search', [
-                        'class' => 'btn btn-primary'
-                    ]) ?>
-                </div>
-                </div>
-                <?= Html::img('../images/loader.gif',["id" => "loader"]);?>
-                <?php ActiveForm::end(); ?>
-            </div>
-        <div><b>MNP Search Results :</b><br><br></div>
+                <?//= Html::img('../images/loader.gif',["id" => "loader"]);?>
+                <?//php ActiveForm::end(); ?>
+            </div>-->
+            <br>
+            <div class="row">
+            <h3>Keputusan Carian MNP :</h3>
+            </div> 
+            <br>
+            
+
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th style="width: 20%;">Item</th>
-                            <th style="width: 100%;">Detail</th>
+                            <th style="width: 20%;">Perkara</th>
+                            <th style="width: 100%;">Maklumat</th>
                             
                         </tr>
                     </thead>
                     <tbody>
                             <tr>
-                                <td><strong>Phone No.</strong></td>
+                                <td><strong>No. Telefon</strong></td>
                                 <td id="phone_no">-</td>
                             </tr>
                             <tr>
@@ -70,20 +87,24 @@ use Yii;
                                 <td  id="telco">-</td>
                             </tr>
                             <tr>
-                                <td><strong>Contact Information</strong></td>
+                                <td><strong>Informasi</strong></td>
                                 <td  id="contact_info">-</td>
                             </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div><br><br><b>MNTL Search Results :</b><br><br></div>
+
+<br>
+            <div>
+                <h3>Keputusan Carian MNTL :</h3></div>
+           <br>
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th style="width: 20%;">Item</th>
-                            <th>Detail</th>
+                            <th style="width: 20%;">Perkara</th>
+                            <th>Maklumat</th>
                             
                         </tr>
                     </thead>
@@ -96,14 +117,14 @@ use Yii;
                             <tr>
                                 <td><strong>Telco</strong></td>
                                 <td id="telco_info">-</td>
-                                <td  id="date_registered_blink"><p id="blink"><a id="link_val" href="">New Request</a></p></td>
+                                <td  id="date_registered_blink"><a id="link_val" href="">Permohonan Baru</a></p></td>
                             </tr>
                             <tr>
                                 <td><strong>Nama</strong></td>
                                 <td id="name">-</td>
                             </tr>
                             <tr>
-                                <td><strong>IC/Pasport</strong></td>
+                                <td><strong>No. Kad Pengenalan / Pasport</strong></td>
                                 <td  id="ic">-</td>
                             </tr>
                             <tr>
@@ -138,7 +159,7 @@ use Yii;
         
     </div>
 </div>
-
+</div>
 <?php
 //echo"<pre>";print_r($masterSocialMedia);
 $script = <<< JS

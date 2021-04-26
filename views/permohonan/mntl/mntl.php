@@ -14,8 +14,8 @@ use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
     <h1 style="padding-top: 1.5rem;">Permohonan Baru MNTL</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="../crawler/mntl-list">MNTL</a></li>
+            <li class="breadcrumb-item"><a href="#">Laman Utama</a></li>
+            <li class="breadcrumb-item"><a href="../crawler/mntl-list">Permohonan Baru MNTL</a></li>
             
         </ol>
     </nav>
@@ -26,7 +26,7 @@ use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
                                         ?>
                                         <?php endif; ?>  
                                     </div>
-        <div class="row">`
+        <div class="row">
        
             <div class="col-lg-5">
 
@@ -37,10 +37,10 @@ use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
               <div class="col-sm-8">
                     <?= $form->field($model, 'for_self')->radioList($newCase,array('class'=>'for_self'))->label(false); ?>
                     <div id="choose_forself">
-                    <?= $form->field($model, 'email')->textInput(['placeholder' => 'email'])
+                    <?= $form->field($model, 'email')->textInput(['placeholder' => 'E-mel'])
                                     ->label(false) ?>
                     <div class="help-block-email" id="invalid_email"></div>
-                    <?= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. telephone'])
+                    <?= $form->field($model, 'no_telephone')->textInput(['placeholder' => 'No. Telefon'])
                                     ->label(false) ?>                
                     </div> 
               </div>
@@ -48,38 +48,38 @@ use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
 
 
            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No Laporan Polis </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Laporan Polis </label>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No Laporan Polis'])->label(false) ?>   
+                <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No. Laporan Polis'])->label(false) ?>   
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">No Kertas Siasatan </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Kertas Siasatan </label>
                 <div class="col-sm-8">
-                <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No Kertas Siasata'])->label(false) ?> 
+                <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No. Kertas Siasatan'])->label(false) ?> 
                 </div>
             </div>
 
             
            <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Phone Number </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">No. Telefon </label>
                 <div class="col-sm-8">
                 <?php  if(isset($phone_telco['phone_no']) && !empty($phone_telco['phone_no'])){$model->phone_number = $phone_telco['phone_no']; }?>
-                <?= $form->field($model, 'phone_number')->textInput(['placeholder' => 'Phone Number'])->label(false) ?>   
+                <?= $form->field($model, 'phone_number')->textInput(['placeholder' => 'No. Telefon'])->label(false) ?>   
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Telco Name </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">Nama Telco</label>
                 <div class="col-sm-8">
                 <?php  if(isset($phone_telco['telco']) && !empty($phone_telco['telco'])){$model->telco_name = $phone_telco['telco'];} ?>
-                <?= $form->field($model, 'telco_name')->textInput(['placeholder' => 'Telco Name','readonly'=> true])->label(false) ?>   
+                <?= $form->field($model, 'telco_name')->textInput(['placeholder' => 'Nama Telco','readonly'=> true])->label(false) ?>   
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Search from </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">Tarikh daripada</label>
                 <div class="col-sm-8">
                 <?=  $form->field($model, 'date1',['inputOptions' => [
 'autocomplete' => 'off']])->widget(\yii\jui\DatePicker::className(),
@@ -97,7 +97,7 @@ use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
 
 
             <div class="row mb-3">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">Search until </label>
+                <label for="inputPassword3" class="col-sm-4 col-form-label">Tarikh sehingga  </label>
                 <div class="col-sm-8">
                 <?=  $form->field($model, 'date2',['inputOptions' => [
 'autocomplete' => 'off']])->widget(\yii\jui\DatePicker::className(),
