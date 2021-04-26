@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use Yii;
+use wbraganca\dynamicform\DynamicFormWidget;
 ?>
 
 <div class="container-fluid">
@@ -49,7 +50,7 @@ use Yii;
   <div class="form-body">
 <h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
 <hr>
-<?php $form = ActiveForm::begin(['enableClientValidation' => true,'options' => ['enctype' => 'multipart/form-data']]); ?>
+<?php $form = ActiveForm::begin(['enableClientValidation' => true,'id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
            <?= $form->field($model, 'master_case_info_type_id')->hiddenInput(['value' => $mediaSocialResponse['master_case_info_type_id']])->label(false); ?>
            <?=  Html::hiddenInput('BlockRequestForm[caseInfoID]', $mediaSocialResponse['id']); ?> 
            <?=  Html::hiddenInput('BlockRequestForm[id]', $mediaSocialResponse['id'],["id" => "permohonanId"]); ?>          
@@ -69,7 +70,7 @@ use Yii;
                   <div class="form-group">
                       <label class="control-label">No. Kertas siasatan <span class="text-danger">*</span></label>
                       <div class="controls">
-                      <?= Html::input('text', 'investigation_no', $mediaSocialResponse['investigation_no'], ['class'=> 'form-control','readonly' => true]) ?>
+                      <?= Html::input('text', 'BlockRequestForm[investigation_no]', $mediaSocialResponse['investigation_no'], ['class'=> 'form-control','readonly' => true]) ?>
                       </div>
                   </div>
               </div>
@@ -113,35 +114,66 @@ use Yii;
 <br>
   
   <!--URL--> 
-                      <div class="row">
-                      <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label">Link (URL)</label>
-                                    <button type="button" class="btn btn-info m-b-20" id="add">
-	                                     <i class="fa fa-plus text"></i>
-	                                  </button> 
-                                    <div class="form-group">
-                                    
-                                  <div id="url_input_append">
-                                    <?php
-                                    for($i=0;$i<=4;$i++)
-                                    {
-                                      ?>
-                                      <div class="row">
-                                      <?php
-                                    echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','id' => 'social_media_'.$i))->label(false);
-                                    echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
-                                    ?>
-                                    </div>
-                                    <?php
-                                    }
-                                    ?> 
-                                  </div>
-                                    </div>
-                                </div>
-                      </div>
-                      </div>
-              <!--/button--> <br>
+  <!-- rams start --><div class="row"> 
+  <div class="col-sm-6">
+  <!--<div class="panel panel-default">
+        <div class="panel-body">-->
+        <?php DynamicFormWidget::begin([
+                'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
+                'widgetBody' => '.container-items', // required: css class selector
+                'widgetItem' => '.item', // required: css class
+                'limit' => 15, // the maximum times, an element can be cloned (default 999)
+                'min' => 1, // 0 or 1 (default 1)
+                'insertButton' => '.add-item', // css class
+                'deleteButton' => '.remove-item', // css class
+                'model' => $modelUrl[0],
+                'formId' => 'dynamic-form',
+                'formFields' => [
+                    'master_social_media_id',
+                    'url',
+                    
+                ],
+            ]); ?>
+
+<div class="panel panel-default">
+        <div class="panel-heading">
+            URL
+            <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> URL</button>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body container-items"><!-- widgetContainer -->
+            <?php 
+            //foreach ($modelsAddress as $index => $modelAddress):
+            foreach ($modelUrl as $index => $modelurl): ?>
+                <div class="item panel panel-default"><!-- widgetBody -->
+                    <div class="panel-heading">
+                        <span class="panel-title-address">URL: <?= ($index + 1) ?></span>
+                        <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <?= Html::hiddenInput('PermohonanUrl['.$index.'][caseInfoURLInvolvedId]', $modelurl['id']);?>
+                                <?= $form->field($modelurl, "[{$index}]master_social_media_id")->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','options' => array($modelurl['master_social_media_id'] => array('selected'=>true))))->label(false);?> 
+                            </div>
+                            <div class="col-sm-6">
+                                <?= $form->field($modelurl, "[{$index}]url")->textInput(['value' => $modelurl['url'] ? $modelurl['url'] : ''])->label(false); ?>
+                            </div>
+                        </div><!-- end:row -->
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+                                       <?php DynamicFormWidget::end(); ?>
+                                       </div>
+                                       </div>
+
+          <br>  
+    <!--</div>
+    </div>-->
+    <!-- rams end -->
                       <div class="row">
                         <div class="col-md-12 col-12">
                             <div class="text-right">
@@ -173,129 +205,83 @@ $isLaporanPoliceExists = 1;
 
 $script = <<< JS
 $(document).ready(function() { 
+  $(".dynamicform_wrapper").on("afterInsert", function(e, item) { 
+    $(".dynamicform_wrapper .panel-title-address").each(function(index) {
+        $(this).html("URL: " + (index + 1))
+    });
+});
+
+$(".dynamicform_wrapper").on("afterDelete", function(e) { 
+    $(".dynamicform_wrapper .panel-title-address").each(function(index) {
+        $(this).html("URL: " + (index + 1))
+    });
+});
+
+$(".dynamicform_wrapper").on("beforeDelete", function(e, item) {
+    if (! confirm("Are you sure you want to delete this item?")) {
+        return false;
+    }
+    return true;
+});
+var URL_obj = [{id:39, name:"https://twitter.com/"}, {id:40, name:"https://www.instagram.com/"}, {id:41, name:"https://www.tumblr.com/"}, {id:42, name:"https://www.facebook.com/"}, {id:99, name:"https://www.youtube.com/"}, {id:100, name:"https://www.tiktok.com/"}];
+
+$(".dynamicform_wrapper").on("beforeInsert", function(e, item) { 
+
+  $('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[0][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[0][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[0][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[0][url]"]').val(item_val.name);}
+});
+  $('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[1][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[1][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[1][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[1][url]"]').val(item_val.name);}
+});
+
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[2][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[2][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[2][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[2][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[3][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[3][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[3][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[3][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[4][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[4][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[4][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[4][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[5][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[5][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[5][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[5][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[6][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[6][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[6][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[6][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[7][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[7][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[7][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[7][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[8][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[8][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[8][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[8][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[9][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[9][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[9][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[9][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[10][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[10][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[10][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[10][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[11][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[11][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[11][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[11][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[12][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[12][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[12][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[12][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[13][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[13][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[13][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[13][url]"]').val(item_val.name);}
+});
+$('.dynamicform_wrapper').on('change','select[name="PermohonanUrl[14][master_social_media_id]"]', function() { 
+  if(URL_obj.find(item => item.id == $('select[name="PermohonanUrl[14][master_social_media_id]"]').val())){ var item_val = URL_obj.find(item => item.id == $('select[name="PermohonanUrl[14][master_social_media_id]"]').val()); $('input[name="PermohonanUrl[14][url]"]').val(item_val.name);}
+});
+    //console.log("beforeInsert");
+});
   $("#add_options").click(function(){
     $("#mySideToSideSelect option:selected").remove().appendTo($("#mySideToSideSelect_to"));
 })
 $("#remove_options").click(function(){
     $("#mySideToSideSelect_to option:selected").remove().appendTo($("#mySideToSideSelect"));
 }) 
-
-  var newURLVal = 0;
-$('#add').click(function(){ var newID =  ( $('#url_input_append > div').length);
-if(newID < 15)
-{
-  $('#url_input_append').append('<div class="row"><div class="form-group field-permohonanform-master_social_media_id"><select id="new_social_media_'+newURLVal+'" class="form-control" name="BlockRequestForm[new_master_social_media_id]['+newURLVal+']"><option value="">--Pilih Social Media--</option><option value="39">twitter</option><option value="40">instagram</option><option value="41">tumblr</option><option value="42">facebook</option><option value="43">blog / website</option><option value="99">Yourtube</option><option value="100">Tiktok</option><option value="101">Others</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newURLVal+'"><input type="text" id="new_social_media_URL_'+newURLVal+'" class="form-control" name="BlockRequestForm[new_url]['+newURLVal+']"><div class="help-block"></div></div></div>');
-  ++newURLVal;
-}
-else{
-  alert("Can't create new field");
-  return false;
-}
-});
-
-var URL_obj = [{id:39, name:"https://twitter.com/"}, {id:40, name:"https://www.instagram.com/"}, {id:41, name:"https://www.tumblr.com/"}, {id:42, name:"https://www.facebook.com/"}, {id:99, name:"https://www.youtube.com/"}, {id:100, name:"https://www.tiktok.com/"}];
-$('#social_media_0').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_0").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_0").val()); $("#social_media_URL_0").val(item_val.name);}
-});
-$('#social_media_1').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_1").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_1").val()); $("#social_media_URL_1").val(item_val.name);}
-});
-$('#social_media_2').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_2").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_2").val()); $("#social_media_URL_2").val(item_val.name);}
-});
-$('#social_media_3').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_3").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_3").val()); $("#social_media_URL_3").val(item_val.name);}
-});
-$('#social_media_4').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_4").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_4").val()); $("#social_media_URL_4").val(item_val.name);}
-});
-
-$('#social_media_5').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_5").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_5").val()); $("#social_media_URL_5").val(item_val.name);}
-});
-$('#social_media_6').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_6").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_6").val()); $("#social_media_URL_6").val(item_val.name);}
-});
-$('#social_media_7').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_7").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_7").val()); $("#social_media_URL_7").val(item_val.name);}
-});
-$('#social_media_8').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_8").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_8").val()); $("#social_media_URL_8").val(item_val.name);}
-});
-$('#social_media_9').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_9").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_9").val()); $("#social_media_URL_9").val(item_val.name);}
-});
-$('#social_media_10').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_10").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_10").val()); $("#social_media_URL_10").val(item_val.name);}
-});
-$('#social_media_11').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_11").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_11").val()); $("#social_media_URL_11").val(item_val.name);}
-});
-$('#social_media_12').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_12").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_12").val()); $("#social_media_URL_12").val(item_val.name);}
-});
-$('#social_media_13').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_13").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_13").val()); $("#social_media_URL_13").val(item_val.name);}
-});
-$('#social_media_14').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_14").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_14").val()); $("#social_media_URL_14").val(item_val.name);}
-});
-$('#social_media_15').on('change',function() {   
-  if(URL_obj.find(item => item.id == $("#social_media_15").val())){ var item_val = URL_obj.find(item => item.id == $("#social_media_15").val()); $("#social_media_URL_15").val(item_val.name);}
-});
-
-//new
-
-$('#url_input_append').on('change','#new_social_media_0', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_0").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_0").val()); $("#new_social_media_URL_0").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_1', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_1").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_1").val()); $("#new_social_media_URL_1").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_2', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_2").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_2").val()); $("#new_social_media_URL_2").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_3', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_3").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_3").val()); $("#new_social_media_URL_3").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_4', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_4").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_4").val()); $("#new_social_media_URL_4").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_5', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_5").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_5").val()); $("#new_social_media_URL_5").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_6', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_6").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_6").val()); $("#new_social_media_URL_6").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_7', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_7").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_7").val()); $("#new_social_media_URL_7").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_8', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_8").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_8").val()); $("#new_social_media_URL_8").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_9', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_9").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_9").val()); $("#new_social_media_URL_9").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_10', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_10").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_10").val()); $("#new_social_media_URL_10").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_11', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_11").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_11").val()); $("#new_social_media_URL_11").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_12', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_12").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_12").val()); $("#new_social_media_URL_12").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_13', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_13").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_13").val()); $("#new_social_media_URL_13").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_14', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_14").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_14").val()); $("#new_social_media_URL_14").val(item_val.name);}
-});
-$('#url_input_append').on('change','#new_social_media_15', function() { 
-  if(URL_obj.find(item => item.id == $("#new_social_media_15").val())){ var item_val = URL_obj.find(item => item.id == $("#new_social_media_15").val()); $("#new_social_media_URL_15").val(item_val.name);}
-});
-
-    var valid = true;
+var valid = true;
 
 });
 JS; $this->registerJs($script, \yii\web\View::POS_END);
