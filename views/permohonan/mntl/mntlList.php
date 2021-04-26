@@ -3,11 +3,11 @@ use yii\helpers\Html;
 $responses = $responses->data;
 ?>
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">MNTL List</h1>
+    <h1 style="padding-top: 1.5rem;">Senarai MNTL</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../dashboard/index">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">List</li>
+            <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Senarai MNTL</li>
         </ol>
     </nav>
     <div id="success" class="info noticationMsg">
@@ -18,21 +18,21 @@ $responses = $responses->data;
     <div class="card-body">
         <div style="float:right;margin-bottom: 10px;">
             <a href="../permohonan/mntl">
-                <button type="button" class="btn btn-primary">New Request</button>
+                <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> Permohonan Baru</button>
             </a>
         </div>
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="display nowrap table table-hover table-striped table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>No Laporan Polis</th>
-                        <th>No Kertas Siasatan</th>
+                        <th>No.</th>
+                        <th>No. Laporan Polis</th>
+                        <th>No. Kertas Siasatan</th>
                         <th>No. TP</th>
-                        <th>Phone Number</th>
-                        <th>Telco Name</th>
-                        <th>Date1</th>
-                        <th>Date2</th>
+                        <th>No. Telefon</th>
+                        <th>Nama Telco</th>
+                        <th>Tarikh 1</th>
+                        <th>Tarikh 2</th>
                         
                     </tr>
                 </thead>
