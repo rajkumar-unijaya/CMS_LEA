@@ -16,11 +16,11 @@ use Yii;
 </div> -->
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">MNP Carian</h1>
+    <h1 style="padding-top: 1.5rem;"> Carian MNP</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
-            <li class="breadcrumb-item active" aria-current="page">MNP Carian</li>
+            <li class="breadcrumb-item active" aria-current="page">Carian MNP </li>
         </ol>
     </nav>
 
