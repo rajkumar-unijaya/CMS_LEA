@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     
-   <div class="row justify-content-center">
+   <div class="row justify-content-center-login">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4 titleColor">CMS 2.0</h3></div>
@@ -25,19 +25,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <?php endif; ?>  
                                     </div>
                                     <div class="card-body">
-                                    
-                                    <div class="float-left mb-2">
-                                   
-                                        
-                                   
-                                        <h4>Log In - LEA</h4>
-                                    </div>
+                                    <h4 class="text-center text-muted m-t-10 m-b-40"> Selamat Datang ke Log Masuk CMS LEA</h4>
+                                    <br>
                                     <?php 
                                     $action = Url::to(['/auth/login']);
                                     $form =  ActiveForm::begin(['action' => $action, 'method' => 'post','id' => 'emailForm','enableClientValidation' => true])
                                     ?>
-                                    <input id="model-field" name="EmailForm[type]" type="hidden" value="1">
-                                        <div class="form-group"><?= $form->field($model, 'email')->label(false)->textInput(['id' => 'email','placeholder' => "Enter Your Email"]) ?>
+                                  
+                                    <input id="model-field" name="EmailForm[type]" type="hidden" value="1"> 
+                                        <div class="form-group"><?= $form->field($model, 'email')->label(false)->textInput(['id' => 'email','placeholder' => "Masukkan E-mel Anda"]) ?>
                                         <!--<div class="input-group input-group-md">
                                             <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fa fa-envelope"></i></span>
@@ -67,14 +63,14 @@ $(document).ready(function() {
         if($("#email").val() == "" || $("#email").val().length == 0)
         { 
             $("#failed").hide();
-            $(".help-block").html('Enter your email address');
+            $(".help-block").html('Masukkan E-mel Anda');
             valid = false;
             return valid;
         }
         else if(validateEmail($("#email").val()) === false)
         { 
             $("#failed").hide();
-            $(".help-block").html('Enter valid email address');
+            $(".help-block").html('Masukkan E-mel Yang Sah');
             valid = false;
             return valid;
         }

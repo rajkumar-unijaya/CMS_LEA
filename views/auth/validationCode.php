@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     
-   <div class="row justify-content-center">
+   <div class="row justify-content-center-login">
                             <div class="col-lg-5">
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-body">
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                              echo "OTP telah dihantar ke peranti <b>". implode(" and ",Yii::$app->session->getFlash('otpDeviceList'))."</b> berjaya<br>";
                                             endif;
                                             ?> 
-                                        Sekiranya anda tidak terima kod, sila kik<br/> <strong>(HANTAR SEMULA)</strong> 
+                                        Sekiranya anda tidak terima kod, sila klik<br/> <strong>(HANTAR SEMULA)</strong> 
                                     </div>  
                                            <div class="form-group col text-center mt-5">
                                                 <input type="submit" value = "Sahkan" id="submit" class="btn btn-primary">
@@ -163,7 +163,7 @@ var xhttp = new XMLHttpRequest();
             $("#resend").hide();
             timer(300);
             $("#timer").show();
-        document.getElementById("success").innerHTML = 'Please check your email for OTP';
+        document.getElementById("success").innerHTML = 'Sila periksa E-mel anda untuk Kod OTP';
         document.getElementById("success").style.color = 'green';
         $('#failed').hide();
         $('#success').show();
@@ -192,14 +192,14 @@ if(document.getElementById("validation1").value.match(/^\d+$/)) {
   }
   else{
     $('#success').hide();
-    $('#failed').html("Enter one number only");
+    $('#failed').html("Masukkan Satu Nombor Sahaja");
     this.select();
     $("#validation1").val("");
   }
 }
 else{
   $('#success').hide();
-  $('#failed').html("Enter number only");
+  $('#failed').html("Masukkan Nombor Sahaja");
   this.select();$("#validation1").val("");
 }
 });
@@ -216,14 +216,14 @@ else if(document.getElementById("validation2").value.match(/^\d+$/)) {
   }
   else{ 
     $('#success').hide();
-    $('#failed').html("Enter one number only");
+    $('#failed').html("Masukkan Satu Nombor Sahaja");
     this.select();
     $("#validation2").val("");
   }
 }
 else{
   $('#success').hide();
-  $('#failed').html("Enter number only");
+  $('#failed').html("Masukkan Nombor Sahaja");
   this.select();$("#validation2").val("");
 }
 });
@@ -239,14 +239,14 @@ else if(document.getElementById("validation3").value.match(/^\d+$/)) {
   }
   else{
     $('#success').hide();
-    $('#failed').html("Enter one number only");
+    $('#failed').html("Masukkan Satu Nombor Sahaja");
     this.select();
     $("#validation3").val("");
   }
 }
 else{
   $('#success').hide();
-  $('#failed').html("Enter number only");
+  $('#failed').html("Masukkan Nombor Sahaja");
   this.select();$("#validation3").val("");
 }
 });
@@ -263,14 +263,14 @@ else if(document.getElementById("validation4").value.match(/^\d+$/)) {
   }
   else{
     $('#success').hide();
-    $('#failed').html("Enter one number only");
+    $('#failed').html("Masukkan Satu Nombor Sahaja");
     this.select();
     $("#validation4").val("");
   }
 }
 else{
   $('#success').hide();
-  $('#failed').html("Enter number only");
+  $('#failed').html("Masukkan Nombor Sahaja");
   this.select();$("#validation4").val("");
 }
 });
@@ -286,14 +286,14 @@ else if(document.getElementById("validation5").value.match(/^\d+$/)) {
   }
   else{
     $('#success').hide();
-    $('#failed').html("Enter one number only");
+    $('#failed').html("Masukkan Satu Nombor Sahaja");
     this.select();
     $("#validation5").val("");
   }
 }
 else{
   $('#success').hide();
-  $('#failed').html("Enter number only");
+  $('#failed').html("Masukkan Nombor Sahaja");
   this.select();$("#validation5").val("");
 }
 });
@@ -309,14 +309,14 @@ else if(document.getElementById("validation6").value.match(/^\d+$/)) {
   }
   else{
     $('#success').hide();
-    $('#failed').html("Enter one number only");
+    $('#failed').html("Masukkan Satu Nombor Sahaja");
     this.select();
     $("#validation6").val("");
   }
 }
 else{
   $('#success').hide();
-  $('#failed').html("Enter number only");
+  $('#failed').html("Masukkan Nombor Sahaja");
   this.select();$("#validation6").val("");
 }
 });

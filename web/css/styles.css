@@ -6084,9 +6084,20 @@ a.close.disabled {
 }
 
 .bg-primary {
-  background-color: #007bff !important;
+  /*background-color: #007bff !important;*/
+  background: #009efb;
+    /* Old browsers */
+    background: -moz-linear-gradient(left, #009efb 0%, #660fb5 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #009efb 0%, #660fb5 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #009efb 0%, #660fb5 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
-
+.bg-primarybox {
+  background-color: #007bff !important;
+ 
+}
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {
@@ -6094,7 +6105,8 @@ button.bg-primary:focus {
 }
 
 .bg-secondary {
-  background-color: #6c757d !important;
+  /*background-color: #6c757d !important; */
+  background-color: #3babd6 !important;
 }
 
 a.bg-secondary:hover, a.bg-secondary:focus,
@@ -6631,8 +6643,12 @@ button.bg-dark:focus {
   justify-content: flex-end !important;
 }
 
+.justify-content-center-login {
+  padding-top: 200px;
+  justify-content: center !important; 
+}
 .justify-content-center {
-  justify-content: center !important;
+  justify-content: center !important; 
 }
 
 .justify-content-between {
