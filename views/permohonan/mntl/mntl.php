@@ -114,7 +114,7 @@ use yii\jui\DatePicker; //echo"<pre>";print_r($phone_telco);exit;
             </div>
             
             <div class="form-group cl-md-4">
-                <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+                <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
             </div>
            
         </div>

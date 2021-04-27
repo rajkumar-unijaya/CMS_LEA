@@ -15,14 +15,14 @@ use wbraganca\dynamicform\DynamicFormWidget;
 		<!-- Bread crumb and right sidebar toggle -->
 		<!-- ============================================================== -->
 		<div class="row page-titles">
-			<div class="col-md-5 col-8 align-self-center">
+			<div class="col-lg-12 col-8 align-self-center">
 				<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
-        <nav aria-label="breadcrumb">
-				<ol class="breadcrumb">
-					<li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
-					<li class="breadcrumb-item active">Permohonan Penyekatan</li>
-				</ol>
-        </nav>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
+              <li class="breadcrumb-item active">Permohonan Penyekatan</li>
+            </ol>
+          </nav>
 			</div>
 		</div>
 
@@ -84,18 +84,18 @@ use wbraganca\dynamicform\DynamicFormWidget;
               <label class="control-label">Kesalahan<span class="text-danger">*</span></label>
               <h5>Pilih Kesalahan</h5>
       <div class="row">
-          <div class="col-md col-sm">
-             <?= $form->field($model, 'offence_preselected')->dropDownList($offences,array('id'=>'mySideToSideSelect','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
-            <div class='control-label count-from'  style="margin:10px;">
-            </div>
-          </div>
-          <div class="col-md-1 col-sm-12" style="margin: auto;">
-              <button type="button" id="add_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
-              <button type="button" id="remove_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
-          </div> 
-          <div class="col-md col-sm">
-           <?= $form->field($model, 'offence')->dropDownList($prevSelectedOffences,array('id' => 'mySideToSideSelect_to','class' => 'form-control','size' => 10,'multiple'=>'multiple','options' => $offencesListRes))->label(false); ?>
-          </div>
+                  <div class="col-md col-sm">
+                    <?= $form->field($model, 'offence_preselected')->dropDownList($offences,array('id'=>'mySideToSideSelect','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
+                          <div class='control-label count-from'  style="margin:10px;">
+                          </div>
+                  </div>
+                <div class="col-md-1 col-sm-12" style="margin: auto;">
+                    <button type="button" id="add_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                    <button type="button" id="remove_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                </div> 
+                <div class="col-md col-sm">
+                <?= $form->field($model, 'offence')->dropDownList($prevSelectedOffences,array('id' => 'mySideToSideSelect_to','class' => 'form-control','size' => 10,'multiple'=>'multiple','options' => $offencesListRes))->label(false); ?>
+                </div>
        </div>
        <br>
  <!--Ringkasan Kes-->
@@ -111,6 +111,66 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 </div>
               </div>
 <br>
+  <!-- Surat Rasmi-->         
+  <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
+      <hr>
+        <div class="row">
+          <div class="col-md-6">
+                  <div class="form-group">
+                      <label>Surat Rasmi</label><br>
+                          <div class="col-sm-0" id="suratRasmiAttachmentIsNull">
+                            <?= $form->field($model, 'surat_rasmi')->fileInput()->label(false);?>  
+                          </div>
+                       <small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+                              <div id="fileList">
+                              </div> 
+                              </div>
+                              <div class="row">
+                              <div id="suratRasmiAttachmentNotNull">
+                                  <div class="col-sm-4" id="surat_rasmi_img_del">
+                                      <input type="hidden" id="suratRasmiImagePath" name="BlockRequestForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
+                                      <?= Html::button("Padam",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
+                                  </div>
+                            
+                                  <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
+                                        <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
+                                  </div>
+                              </div>                    
+                        
+                  </div>
+            </div>
+            </div>
+        <br>
+  <!--Laporan Polis-->   
+  <div class="row">       
+            <div class="col-md-6">
+                <div class="form-group">
+                        <label>Laporan Polis</label>
+                        <br>
+                          <div class="col-sm-0" id="laporanPolisAttachmentIsNull">
+                            <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false);?>
+                          </div>
+                           <small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+                                      <div id="fileList">
+                                      </div>
+                                      </div>
+                              <div class="row">
+                            <div id="laporanPolisAttachmentNotNull">
+                                    <div class="col-sm-4" id="laporan_polis_img_del">
+                                      <input type="hidden" id="loparanImagePath" name="BlockRequestForm[laporan_polis_last_attachment]" value="<?php echo $mediaSocialResponse['laporan_polis'];?>"> 
+                                      <?= Html::button("Padam",['class'=>'btn btn-primary',"id" => "laporanPolisDeleteImg"]);?>
+                                    </div>
+                          
+                        
+                                    <div class="col-sm-4 text-right" id="laporan_polis_img_download">
+                                        <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
+                                    </div>
+                            </div>
+                             
+                </div>
+            </div>
+    </div>
+    <br>
 <!--URL--> 
   <!-- rams start --><div class="row"> 
   <div class="col-sm-6">
@@ -136,7 +196,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 <div class="panel panel-default">
         <div class="panel-heading">
             URL
-            <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> URL</button>
+            <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> </button>
             <div class="clearfix"></div>
         </div>
         <div class="panel-body container-items"><!-- widgetContainer -->
@@ -180,60 +240,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <!--</div>
     </div>-->
     <!-- rams end -->
-  <!-- Surat Rasmi-->         
-  <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
-      <hr>
-        <div class="row">
-          <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Surat Rasmi</label><br>
-                      <div class="col-sm-0" id="suratRasmiAttachmentIsNull">
-                        <?= $form->field($model, 'surat_rasmi')->fileInput()->label(false);?>
-                        
-                      </div>
-                      <small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
-                        <div id="fileList"></div> 
-                              <div id="suratRasmiAttachmentNotNull">
-                                  <div class="col-sm-4" id="surat_rasmi_img_del">
-                                      <input type="hidden" id="suratRasmiImagePath" name="BlockRequestForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
-                                      <?= Html::button("Padam",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
-                                  </div>
-                            
-                                  <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
-                                        <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
-                                  </div>
-                              </div>                    
-                        </div>
-                </div>
-          </div>
-        </div>
-        <br>
-  <!--Laporan Polis-->   
-  <div class="row">       
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Laporan Polis</label>
-                    <br>
-                      <div class="col-sm-0" id="laporanPolisAttachmentIsNull">
-                        <?= $form->field($model, 'laporan_polis')->fileInput(['accept' => 'image/*'])->label(false);?>
-                      </div>
-                           <small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
-                        <div id="fileList"></div>
-                            <div id="laporanPolisAttachmentNotNull">
-                                    <div class="col-sm-4" id="laporan_polis_img_del">
-                                      <input type="hidden" id="loparanImagePath" name="BlockRequestForm[laporan_polis_last_attachment]" value="<?php echo $mediaSocialResponse['laporan_polis'];?>"> 
-                                      <?= Html::button("Delete",['class'=>'btn btn-primary',"id" => "laporanPolisDeleteImg"]);?>
-                                    </div>
-                          
-                        
-                                    <div class="col-sm-4 text-right" id="laporan_polis_img_download">
-                                        <?= Html::button("Download | View",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
-                                    </div>
-                            </div>
-                        </div>      
-                </div>
-            </div>
-    </div>
+
         
 <br>
 
@@ -241,7 +248,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                       <div class="row">
                         <div class="col-md-12 col-12">
                             <div class="text-right">
-                                <?= Html::submitButton('Hantar', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
+                                <?= Html::submitButton('Simpan', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
                                     <a href="../block-request-list"
                                         class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
                                         data-placement="left" title=""
@@ -255,7 +262,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
                     <?php ActiveForm::end(); ?>
 </div>
 </div>
-                                        </div></div>
+</div>
+                                        </div>
+                                        </div>
+                                        </div>
 <?php 
 
 ?>

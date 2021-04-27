@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'e906268c90c32470b703263c48863e99f0f32508',
+    'reference' => 'b66b74d6807285af96792c00caab78a4735de542',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -760,6 +760,15 @@ private static $installed = array (
       ),
       'reference' => '75a63c33a8577608444246075ea0af0d052e452a',
     ),
+    'wbraganca/yii2-dynamicform' => 
+    array (
+      'pretty_version' => 'v2.0.2',
+      'version' => '2.0.2.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '9b761d708aa6c06c1219e1c2ed321f7cb205b09f',
+    ),
     'webmozart/assert' => 
     array (
       'pretty_version' => '1.10.0',
@@ -785,7 +794,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'e906268c90c32470b703263c48863e99f0f32508',
+      'reference' => 'b66b74d6807285af96792c00caab78a4735de542',
     ),
     'yiisoft/yii2-bootstrap' => 
     array (

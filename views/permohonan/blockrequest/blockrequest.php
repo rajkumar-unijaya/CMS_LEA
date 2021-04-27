@@ -15,7 +15,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 		<!-- Bread crumb and right sidebar toggle -->
 		<!-- ============================================================== -->
 		<div class="row page-titles">
-			<div class="col-md-5 col-8 align-self-center">
+			<div class="col-lg-12 col-8 align-self-center">
 				<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
         <nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
@@ -181,7 +181,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 <br>
   <!--URL--> 
   <!-- rams start --><div class="row"> 
-  <div class="col-sm-6">
+  <div class="col-sm-8">
   <!--<div class="panel panel-default">
         <div class="panel-body">-->
              <?php DynamicFormWidget::begin([

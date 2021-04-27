@@ -88,7 +88,7 @@ DashboardAsset::register($this);
                                     data-parent="#sidenavAccordionPages">
                                     <nav class="sb-sidenav-menu-nested nav">
                                         <a class="nav-link" href="../permohonan/mntl-list">Senarai</a>
-                                        <a class="nav-link" href="../permohonan/search">MNP Carian</a>
+                                        <a class="nav-link" href="../permohonan/search">Carian MNP</a>
                                     </nav>
                                     </div>
                                     

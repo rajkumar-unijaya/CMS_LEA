@@ -22,7 +22,7 @@ $this->title = 'Blocking Request';
 
 
     <div style="text-align: right;padding:10px;">
-        <a href="../permohonan/block-request"><button type="button" class="btn btn-primary"><i class="fa fa-plus"></i>Permohonan Baru
+        <a href="../permohonan/block-request"><button type="button" class="btn btn-primary"><i class="fa fa-plus"></i> Permohonan Baru
             </button></a>
     </div>
     <div class="card-body">
