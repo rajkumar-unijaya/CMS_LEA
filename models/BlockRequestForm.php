@@ -29,6 +29,8 @@ class BlockRequestForm extends Model
     //public $attachmentURL;
     public $master_social_media_id;
     public $url;
+    public $address_line1;
+    public $address_line2;
     
     
     
@@ -62,7 +64,9 @@ class BlockRequestForm extends Model
             ['investigation_no','required','message'=>'Masukkan No Kertas Siasatan'],
             [['offence'], 'required','message'=>'Pilih kesalahan'],
             [['case_summary'], 'required','message'=>'Masukkan Ringkasan Kes'],  
-            [['surat_rasmi'], 'file','skipOnEmpty' => true,  'extensions' => 'png, jpg,jpeg,pdf','message'=>'valid Surat Rasmi']
+            [['surat_rasmi'], 'file','skipOnEmpty' => true,  'extensions' => 'png, jpg,jpeg,pdf','message'=>'valid Surat Rasmi'],
+            [['address_line1'], 'required','message'=>'asd1'],  
+            [['address_line2'], 'required','message'=>'asd2'],  
             
             
         ];
@@ -70,7 +74,7 @@ class BlockRequestForm extends Model
 
     public function scenarios() {
         $scenarios = parent::scenarios(); 
-        $scenarios['createBlockRequest'] = ['for_self','surat_rasmi','selfName','email','no_telephone','report_no','investigation_no','offence','case_summary'];
+        $scenarios['createBlockRequest'] = ['for_self',/*'surat_rasmi','selfName','email','no_telephone',*/'report_no','investigation_no','offence','case_summary'/*,'address_line1','address_line2'*/];
         $scenarios['editBlockRequest'] = ['investigation_no','offence','case_summary'];
         $scenarios['reOpenBlockRequest'] = ['investigation_no','offence','case_summary'];
         return $scenarios;
