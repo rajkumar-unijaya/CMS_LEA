@@ -13,6 +13,7 @@ use app\models\PermohonanMNTLForm;
 use app\models\SearchForm;
 use app\models\LeaForm;
 use app\models\PermohonanUrl;
+use app\models\PermohonanStatusSuspekSaksi;
 
 
 
@@ -301,9 +302,10 @@ class PermohonanController extends Controller
      */
     public function actionBaru()
     { 
-
         $this->layout =  'main';
         $model = new PermohonanForm();
+        $modelStatusSuspekSaksi = [new PermohonanStatusSuspekSaksi];
+        $modelUrl = [new PermohonanUrl];
         $model->scenario='create';
         $session = Yii::$app->session;
         $masterCaseInfoTypeId = array_search("Social Media",Yii::$app->mycomponent->getMasterData('master_case_info_type'));
@@ -391,35 +393,46 @@ class PermohonanController extends Controller
             $caseInfo['master_status_purpose_of_application_id'] = implode(",",$data['PermohonanForm']['application_purpose']);
             $caseInfo['purpose_of_application_info'] = $data['PermohonanForm']['application_purpose_info'];
             }
-           
-        if(!empty($data['PermohonanForm']['master_status_status_suspek_id'][0]))
+            
+        if(count($data['PermohonanStatusSuspekSaksi']) > 0)
         {
-            for($i=0;$i<=count($data['PermohonanForm']['master_status_status_suspek_id'])-1;$i++)
+            $i = 0;
+            foreach($data['PermohonanStatusSuspekSaksi'] as $permohonanStatusSuspekSaksi)
             {
-                $caseStatusSuspek[$i]['master_status_suspect_or_saksi_id']  = $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i] ? $data['PermohonanForm']['master_status_suspect_or_saksi_id'][$i]: 0;
-                $caseStatusSuspek[$i]['master_status_status_suspek_id']  = $data['PermohonanForm']['master_status_status_suspek_id'][$i] ? $data['PermohonanForm']['master_status_status_suspek_id'][$i] : 0;
-                $caseStatusSuspek[$i]['ic']  = $data['PermohonanForm']['ic'][$i] ? $data['PermohonanForm']['ic'][$i] : 0;
-                $caseStatusSuspek[$i]['name']  = $data['PermohonanForm']['name'][$i] ? $data['PermohonanForm']['name'][$i] : "NULL";
-                $caseStatusSuspek[$i]['created_by'] = $session->get('userId');
-                //$caseStatusSuspek[$i]['created_by'] = 1;
-                if(isset($data['PermohonanForm']['others'][$i]) && !empty($data['PermohonanForm']['others'][$i]))
+                if(!empty($permohonanStatusSuspekSaksi['master_status_suspect_or_saksi_id']) && !empty($permohonanStatusSuspekSaksi['master_status_status_suspek_id']))
                 {
-                    $caseStatusSuspek[$i]['others']  = $data['PermohonanForm']['others'][$i];
+                $caseStatusSuspek[$i]['master_status_suspect_or_saksi_id']  = $permohonanStatusSuspekSaksi['master_status_suspect_or_saksi_id'];
+                $caseStatusSuspek[$i]['master_status_status_suspek_id']  = $permohonanStatusSuspekSaksi['master_status_status_suspek_id'];
+                $caseStatusSuspek[$i]['ic']  = $permohonanStatusSuspekSaksi['ic'];
+                $caseStatusSuspek[$i]['name']  = $permohonanStatusSuspekSaksi['name'];
+                $caseStatusSuspek[$i]['created_by'] = $session->get('userId');
+                if(isset($permohonanStatusSuspekSaksi['others']) && !empty($permohonanStatusSuspekSaksi['others']))
+                {
+                    $caseStatusSuspek[$i]['others']  = $permohonanStatusSuspekSaksi['others'];
                 }
+                $i++;
+                }
+                
                 
             }
         }
-            for($i=0;$i<=count($data['PermohonanForm']['url'])-1;$i++)
+        
+        if(!empty($data['PermohonanUrl']))
+        {
+            $j=0;
+            foreach($data['PermohonanUrl'] as $permohonanURLInfo)
             { 
-                if(!empty($data['PermohonanForm']['master_social_media_id'][$i]))
+                if(!empty($permohonanURLInfo['master_social_media_id']) && !empty($permohonanURLInfo['url']))
                 {
-                    $caseInvolvedURL[$i]["master_social_media_id"]  = $data['PermohonanForm']['master_social_media_id'][$i] ? $data['PermohonanForm']['master_social_media_id'][$i] : 0;
-                    $caseInvolvedURL[$i]["url"]  = $data['PermohonanForm']['url'][$i] ? $data['PermohonanForm']['url'][$i] : "NULL";
-                    $caseInvolvedURL[$i]['created_by'] = $session->get('userId');
-                    //$caseInvolvedURL[$i]['created_by'] = 1;
+                    $caseInvolvedURL[$j]["master_social_media_id"]  = $permohonanURLInfo['master_social_media_id'];
+                    $caseInvolvedURL[$j]["url"]  = $permohonanURLInfo['url'];
+                    $caseInvolvedURL[$j]['created_by'] = $session->get('userId');
+                    $j++;
+                    
                 }
-                
             }
+                
+        }
             $offences = $data['PermohonanForm']['offence'];
 
             
@@ -470,8 +483,8 @@ class PermohonanController extends Controller
                 }
             
 		}
-        return $this->render('baru',['model'=>$model,"masterStatusSuspect" => $masterStatusSuspect,"purposeOfApplication" => $purposeOfApplication,"newCase" => $newCase,"offences" => $filterOffenceResponse,"suspectOrSaksi" => $suspectOrSaksi,"masterSocialMedia" => $masterSocialMedia,"masterCaseInfoTypeId" => $masterCaseInfoTypeId]);
-        
+        return $this->render('baru',['model'=>$model,"modelUrl" => $modelUrl,"modelStatusSuspekSaksi" => $modelStatusSuspekSaksi,"masterStatusSuspect" => $masterStatusSuspect,"purposeOfApplication" => $purposeOfApplication,"newCase" => $newCase,"offences" => $filterOffenceResponse,"suspectOrSaksi" => $suspectOrSaksi,"masterSocialMedia" => $masterSocialMedia,"masterCaseInfoTypeId" => $masterCaseInfoTypeId]);
+       
     }
 
 

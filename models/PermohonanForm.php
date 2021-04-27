@@ -24,6 +24,7 @@ class PermohonanForm extends Model
     public $report_no;
     public $investigation_no;
     public $offence;
+    public $offence_preselected;
     public $case_summary;
     public $master_status_suspect_or_saksi_id;
     public $master_status_status_suspek_id;
