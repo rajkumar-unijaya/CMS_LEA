@@ -17,16 +17,15 @@ $this->title = 'Media Sosial';
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Sosial Media Senaraikan</li>
+            <li class="breadcrumb-item active" aria-current="page">Sosial Media</li>
         </ol>
     </nav>
     <div style="text-align: right;padding:10px;">
-        <a href="../permohonan/baru"><button type="button" class="btn btn-primary">Permohonan Baru
-            </button></a>
+        <a href="../permohonan/baru"><button type="button" class="btn btn-primary"> <i class="fa fa-plus"></i> Permohonan Baru</button></a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="display nowrap table table-hover table-striped table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>No</th>

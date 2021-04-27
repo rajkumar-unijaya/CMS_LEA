@@ -65,9 +65,9 @@ DashboardAsset::register($this);
                             </div> --
                         </a> -->
 
-                        <a class="nav-link" href="../dashboard">&nbsp;&nbsp;Dashboard</a>
+                        <a class="nav-link" href="../dashboard"><i class="fa fa-home "></i>	&nbsp;&nbsp;Dashboard</a>
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePermohonanPages" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fa fa-book-open"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa fa-file"></i></div>
                             Permohonan
                             <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                         </a>
@@ -76,7 +76,7 @@ DashboardAsset::register($this);
 
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <!--<a class="nav-link" href="../permohonan/mediasosial">Melalui Media Sosial</a>-->
-                                    <a class="nav-link" href="../permohonan/mediasosial">Sosial Media</a>
+                                    <a class="nav-link" href="../permohonan/mediasosial"></i>Sosial Media</a>
                                     <a class="nav-link" href="../permohonan/block-request-list">Permohonan Penyekatan</a>
                                     <!--<a class="nav-link" href="../permohonan/mntl">MNTL</a>-->
 
@@ -97,7 +97,7 @@ DashboardAsset::register($this);
                             </nav>
                         </div> 
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fa fa-book-open"></i></div>
+                            <div class="sb-nav-link-icon"><i class="fa fa-bar-chart"></i>	</div>
                             Statistik/Laporan
                             <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                         </a>

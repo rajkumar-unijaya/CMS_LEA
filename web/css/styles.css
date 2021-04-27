@@ -2106,7 +2106,7 @@ select.form-control[size], select.form-control[multiple] {
 }
 
 textarea.form-control {
-  height: auto;
+  height: 115px;
 }
 
 .form-group {
@@ -2509,8 +2509,8 @@ fieldset:disabled a.btn {
 
 .btn-success {
   color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
 }
 .btn-success:hover {
   color: #fff;
@@ -2905,7 +2905,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-lg, .btn-group-lg > .btn {
-  padding: 0.5rem 1rem;
+  padding: 0.7rem 1.1rem;
   font-size: 1.25rem;
   line-height: 1.5;
   border-radius: 0.3rem;
@@ -3980,10 +3980,10 @@ input[type=button].btn-block {
 }
 .navbar-brand {
   display: inline-block;
-  padding-top: 0.3125rem;
+  padding-top: 0.9rem;
   padding-bottom: 0.3125rem;
   margin-right: 1rem;
-  font-size: 1.25rem;
+  font-size: 2.0rem;
   line-height: inherit;
   white-space: nowrap;
 }
@@ -10137,7 +10137,7 @@ body {
 }
 .sb-topnav .navbar-brand {
   width: 225px;
-  padding-left: 1rem;
+  padding-left: 4rem;
   padding-right: 1rem;
   margin: 0;
 }

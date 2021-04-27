@@ -363,7 +363,7 @@
         },
         {
             "id": 99,
-            "name": "Yourtube",
+            "name": "Youtube",
             "parent_id": null
         },
         {
@@ -573,12 +573,12 @@
     "master_status_suspect_or_witness": [
         {
             "id": 86,
-            "name": "Suspect",
+            "name": "Suspek",
             "parent_id": null
         },
         {
             "id": 87,
-            "name": "Witness",
+            "name": "Saksi",
             "parent_id": null
         }
     ],
@@ -617,7 +617,7 @@
     "master_suspect": [
         {
             "id": 60,
-            "name": "Tiada maklumat mengenai suspek\/sakhi",
+            "name": "Tiada maklumat mengenai suspek/saksi",
             "parent_id": null
         },
         {
