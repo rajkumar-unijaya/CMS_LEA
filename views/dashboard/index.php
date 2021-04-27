@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h3 class="mt-4"><?= Html::encode($this->title) ?></h3>
                         <div class="row">
                             <div class="col-xl-4 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
+                                <div class="card bg-primarybox text-white mb-4">
                                     <div class="card-body">Jumlah Kes Harian</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="#">Lihat terperinci</a>
