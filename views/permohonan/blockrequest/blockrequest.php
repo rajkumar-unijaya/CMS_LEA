@@ -15,13 +15,12 @@ use wbraganca\dynamicform\DynamicFormWidget;
 		<!-- Bread crumb and right sidebar toggle -->
 		<!-- ============================================================== -->
 		<div class="row page-titles">
-			<div class="col-lg-12 col-8 align-self-center">
+			<div class="col-md-5 col-8 align-self-center">
 				<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
         <nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
-          <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Permohonan Penyekatan</a></li>
-					<li class="breadcrumb-item active">Permohonan Penyekatan Baru</li>
+					<li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
+					<li class="breadcrumb-item active">Permohonan Penyekatan</li>
 				</ol>
         </nav>
 			</div>
@@ -182,7 +181,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 <br>
   <!--URL--> 
   <!-- rams start --><div class="row"> 
-  <div class="col-sm-8">
+  <div class="col-sm-12">
   <!--<div class="panel panel-default">
         <div class="panel-body">-->
              <?php DynamicFormWidget::begin([
@@ -216,10 +215,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
                     <div class="panel-body">
                         
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <?= $form->field($modelUrl, '['.$i.']master_social_media_id')->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','id' => $i.'social_media'))->label(false); ?>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                                 <?= $form->field($modelUrl, '['.$i.']url')->textInput(['id' => $i.'social_media_URL'])->label(false); ?>
                             </div>
                         </div><!-- .row -->
@@ -234,35 +233,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <!--</div>
     </div>-->
     <!-- rams end -->
-                      <!--<div class="row">
-                      <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label">Link (URL)</label>
-                                    <button type="button" class="btn btn-info m-b-20" id="add">
-	                                     <i class="fa fa-plus text"></i>
-	                                  </button> 
-                                    <div class="form-group">
-                                    
-                                  <div id="url_input_append">
-                                    <?php
-                                    for($i=0;$i<=4;$i++)
-                                    {
-                                      ?>
-                                      <div class="row">
-                                      <?php
-                                    echo $form->field($model, 'master_social_media_id['.$i.']')->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','id' => 'social_media_'.$i))->label(false);
-                                    echo $form->field($model, 'url['.$i.']')->textInput(['id' => 'social_media_URL_'.$i])->label(false); 
-                                    ?>
-                                    </div>
-                                    <?php
-                                    }
-                                    ?> 
-                                  </div>
-                                    </div>
-                                </div>
-                      </div>
-                      </div>-->
-              <!--/button--> <br>
+                  <br>
               
                       <div class="row">
                         <div class="col-md-12 col-12">
@@ -364,13 +335,13 @@ $(".dynamicform_wrapper").on("limitReached", function(e, item) {
 
   $("#add_options").click(function(){
     $("#mySideToSideSelect option:selected").remove().appendTo($("#mySideToSideSelect_to"));
-})
+});
 $("#remove_options").click(function(){
     $("#mySideToSideSelect_to option:selected").remove().appendTo($("#mySideToSideSelect"));
-})
+});
   $("#choose_forself").hide();
   $("#application_purpose_info").hide();
-  $('#blockrequestform-for_self').change(function() {  //alert("ramstest = "+$("input[name='BlockRequestForm[for_self]']:checked").val());
+  $('#blockrequestform-for_self').change(function() {  
     if (this.value == 78) {
       $("#choose_forself").show();
     }
