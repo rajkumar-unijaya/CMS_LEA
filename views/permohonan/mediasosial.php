@@ -13,11 +13,12 @@ $this->title = 'Media Sosial';
 <?php endif;?>
 </div>
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Sosial Media</h1>
+ 
+    <h1 style="padding-top: 1.5rem;">Media Sosial</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../dashboard/index">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Sosial Media</li>
+            <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Media Sosial</li>
         </ol>
     </nav>
     <div style="text-align: right;padding:10px;">

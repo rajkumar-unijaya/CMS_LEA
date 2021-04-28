@@ -76,7 +76,7 @@ DashboardAsset::register($this);
 
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <!--<a class="nav-link" href="../permohonan/mediasosial">Melalui Media Sosial</a>-->
-                                    <a class="nav-link" href="../permohonan/mediasosial"></i>Sosial Media</a>
+                                    <a class="nav-link" href="../permohonan/mediasosial"></i>Media Sosial</a>
                                     <a class="nav-link" href="../permohonan/block-request-list">Permohonan Penyekatan</a>
                                     <!--<a class="nav-link" href="../permohonan/mntl">MNTL</a>-->
 

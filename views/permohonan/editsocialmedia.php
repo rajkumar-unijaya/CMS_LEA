@@ -16,11 +16,12 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
 }
 ?>
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Permohonan Baru Sosial Media</h1>
+    <h1 style="padding-top: 1.5rem;">Media Sosial</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Home</a></li>
-            <li class="breadcrumb-item active">Permohonan Baru Sosial Media</a></li>
+        <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
+        <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Media Sosial</a></li>
+            <li class="breadcrumb-item active">Kemaskini Permohonan Media Sosial</a></li>
             
         </ol>
     </nav>

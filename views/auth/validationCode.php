@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <?php endif;?>
                                         </div>
 
+                                    <br>
                                     
                                     
 
@@ -44,10 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>
 
                                     
-                                    
-                                        <h3>Validation Code</h3>
+                                        <h3 class="text-muted m-t-10 m-b-40">Validation Code</h3>
                                     </div>
-                                    
+                                    <br>
                                     <?php 
                                     //$action = Url::to(['/auth/validation-code']);
                                     $form =  ActiveForm::begin(['action' => '',  'id' => 'otpvalidate', 'method' => 'post','enableClientValidation' => true])
@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                            <div class="form-group col text-center mt-5">
                                                 <input type="submit" value = "Sahkan" id="submit" class="btn btn-primary">
                                                 
-                                                <span id="resend" class="btn btn-primary">Resend</span>
+                                                <span id="resend" class="btn btn-primary">Hantar Semula</span>
                                             </div>
                                             <?php  ActiveForm::end() ?>
                                             
@@ -170,7 +170,7 @@ var xhttp = new XMLHttpRequest();
         $("#validation1").val("");$("#validation2").val("");$("#validation3").val("");$("#validation4").val("");$("#validation5").val("");$("#validation6").val("");
         }
         else{
-            document.getElementById("success").innerHTML = 'OTP send failed';
+            document.getElementById("success").innerHTML = 'OTP Gagal dihantar';
             document.getElementById("success").style.color = 'red';
             $('#failed').show();
             $('#success').hide();
