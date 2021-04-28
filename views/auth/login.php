@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         
                                         
 
-                                           <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0 float-right">
+                                           <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-3 float-right">
                                            <?= Html::submitButton('Seterusnya', ['class' => 'btn btn-primary']) ?>
                                                 
                                             </div>
