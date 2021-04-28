@@ -14,7 +14,7 @@ use yii\helpers\Html;
     </p>
 </div> -->
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Paparan Maklumat Permohonan</h1>
+    <h1 style="padding-top: 1.5rem;">Maklumat Permohonan</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>

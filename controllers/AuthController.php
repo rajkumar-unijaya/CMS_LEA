@@ -183,7 +183,7 @@ class AuthController extends Controller
                         if ($otpResponse->statusCode == 200) { 
                             $session->open();
                             $session->setFlash('otpDeviceList', $otpSendDeviceList);
-                            Yii::$app->session->addFlash('notification','Check your email for OTP.');
+                            Yii::$app->session->addFlash('notification','Sila Periksa E-mel Anda Untuk Kod OTP.');
                             $this->redirect('../auth/validation-code');
                         }
                         else
@@ -198,7 +198,7 @@ class AuthController extends Controller
                 }
                 else
                 { 
-                Yii::$app->session->setFlash('failed','email not exists in database');
+                Yii::$app->session->setFlash('failed','E-mel tidak wujud dalam pangkalan data');
                 return $this->refresh();
 
                 }  
@@ -268,14 +268,14 @@ class AuthController extends Controller
                 { 
                    $responseInfo['status'] = 422;
                    $responseInfo['message'] = 'failed';
-                   $responseInfo['info'] = 'Invalid OTP entered';
+                   $responseInfo['info'] = 'IOTP Tidak Sah';
                    return $this->asJson($responseInfo);
                 }     
              else if($otp_response->statusCode != 200)
              {  
                 $responseInfo['status'] = 422;
                 $responseInfo['message'] = 'failed';
-                $responseInfo['info'] = 'Invalid OTP entered';
+                $responseInfo['info'] = 'OTP Tidak Sah';
                 return $this->asJson($responseInfo);
              }
         }   

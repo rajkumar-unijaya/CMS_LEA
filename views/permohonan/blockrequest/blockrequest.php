@@ -15,12 +15,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
 		<!-- Bread crumb and right sidebar toggle -->
 		<!-- ============================================================== -->
 		<div class="row page-titles">
-			<div class="col-md-5 col-8 align-self-center">
+			<div class="col-lg-12 col-8 align-self-center">
 				<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
         <nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
-					<li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
-					<li class="breadcrumb-item active">Permohonan Penyekatan</li>
+        <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
+					<li class="breadcrumb-item"><a href="../permohonan/block-request-list">Permohonan Penyekatan</a></li>
+					<li class="breadcrumb-item active">Permohonan Penyekatan Baru</li>
 				</ol>
         </nav>
 			</div>
