@@ -38,7 +38,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
     <div class="row">
 			<div class="col-lg-12">
-				<div class="card card-outline-info">
+			
 
     <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
