@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Html;
-$responses = $responses->data;
 ?>
 <div class="container-fluid">
     <h1 style="padding-top: 1.5rem;">Senarai MNTL</h1>
@@ -28,7 +27,6 @@ $responses = $responses->data;
                         <th>No.</th>
                         <th>No. Laporan Polis</th>
                         <th>No. Kertas Siasatan</th>
-                        <th>No. TP</th>
                         <th>No. Telefon</th>
                         <th>Nama Telco</th>
                         <th>Tarikh 1</th>
@@ -39,17 +37,24 @@ $responses = $responses->data;
                 <tbody>
                     <?php
                     $count = 1;
-                    foreach ($responses['records'] as $key => $responseTemp) { 
+                    foreach ($responses as $key => $responseTemp) { 
+                        foreach($responseTemp['case_info_mntl'] as $key1 => $val)
+                        { 
+                            $phoneNo =  $val['phone_number'];
+                            $telcoName =  $val['telco_name'];
+                            $date1 =  $val['date1'];
+                            $date2 =  $val['date2'];
+                        }
+                        
                     ?>
                         <tr>
                             <td><?php echo $count; ?></td>
                             <td><?php echo $responseTemp['report_no']; ?></td>
                             <td><?php echo $responseTemp['investigation_no']; ?></td>
-                            <td><?php echo $responseTemp['case_info_mntl'][0]['tippoff_id']['tipoff_no'];?></td>
-                            <td><?php echo $responseTemp['case_info_mntl'][0]['phone_number']; ?></td>
-                            <td><?php echo $responseTemp['case_info_mntl'][0]['telco_name']; ?></td>
-                            <td><?php echo $responseTemp['case_info_mntl'][0]['date1']; ?></td>
-                            <td><?php echo $responseTemp['case_info_mntl'][0]['date2']; ?></td>
+                            <td><?php echo $phoneNo; ?></td>
+                            <td><?php echo $telcoName; ?></td>
+                            <td><?php echo $date1; ?></td>
+                            <td><?php echo $date2; ?></td>
                             
                         </tr>
                     <?php
