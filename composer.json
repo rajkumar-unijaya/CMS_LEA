@@ -23,7 +23,8 @@
 
         "egulias/email-validator": "^3.1",
         "yiisoft/yii2-jui": "^2.0",
-        "wbraganca/yii2-dynamicform": "*"
+        "wbraganca/yii2-dynamicform": "*",
+        "yiisoft/yii2-bootstrap4": "^2.0"
 
     },
     "require-dev": {

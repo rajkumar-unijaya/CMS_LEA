@@ -129,6 +129,7 @@ class PermohonanController extends Controller
     {
         $this->layout =  'main';
         $model = new PermohonanMNTLForm();
+        $model->scenario='create';
         $session = Yii::$app->session;
         $masterCaseInfoTypeId = array_search("MNTL",Yii::$app->mycomponent->getMasterData('master_case_info_type'));
         
@@ -217,22 +218,23 @@ class PermohonanController extends Controller
             $caseInfo = array();
             $caseInfoMNTL = array();
 
-            $lastCaseInfoResponse = $client->createRequest()
+            /*$lastCaseInfoResponse = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('POST')
             ->setUrl($this->_url_procedure.'get_case_no')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send(); 
             
             if($lastCaseInfoResponse->statusCode == 200 && count($lastCaseInfoResponse->data['records']) > 0)
                 {
                     $lastCaseInfoNo =  $lastCaseInfoResponse->data['records']['newCaseNo'];
-                }
+                }*/
            
             $caseInfo['master_case_info_type_id'] = $data['PermohonanMNTLForm']['masterCaseInfoTypeId'];
             $caseInfo['requestor_ref'] = $session->get('userId');
-            $caseInfo['case_no'] = $lastCaseInfoNo;
+            //$caseInfo['case_no'] = $lastCaseInfoNo;
             $caseInfo['bagipihak_dirisendiri'] = $data['PermohonanMNTLForm']['for_self'];
+            $caseInfo['self_name'] = $data['PermohonanMNTLForm']['selfName'];
             $caseInfo['no_telephone'] = $data['PermohonanMNTLForm']['no_telephone'];
             $caseInfo['email'] = $data['PermohonanMNTLForm']['email'];
             $caseInfo['report_no'] = $data['PermohonanMNTLForm']['report_no'];
@@ -244,6 +246,8 @@ class PermohonanController extends Controller
             $caseInfoMNTL['telco_name'] = $data['PermohonanMNTLForm']['telco_name'];
             $caseInfoMNTL['date1'] = date("Y-m-d",strtotime($data['PermohonanMNTLForm']['date1']));
             $caseInfoMNTL['date2'] = date("Y-m-d",strtotime($data['PermohonanMNTLForm']['date2']));
+            //echo json_encode($caseInfo);
+            //echo json_encode($caseInfoMNTL);exit;
             
             $caseInfoResponse = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
@@ -2106,14 +2110,19 @@ class PermohonanController extends Controller
         $case_status_values .= array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Rejected",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Closed",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
         $client = new Client();
         $thisyear = date("Y");
+        $returnResultInfo = array();
         $responses = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('GET')
-            //->setUrl($this->_urlCrawler . 'func.mntl.php?search=list&max=10&page=1&order=DESC&year=' . $thisyear)
             ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,3&join=case_info_mntl,tipoff&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
-        return $this->render('mntl/mntlList', ['responses' => $responses]);
+         if(count($responses->data['records']) > 0)
+        {
+            $returnResultInfo = $responses->data['records'];
+                  
+        }    
+        return $this->render('mntl/mntlList', ['responses' => $returnResultInfo]);
     }
 
 

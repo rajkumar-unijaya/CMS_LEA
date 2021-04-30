@@ -30,29 +30,19 @@ use Yii;
 <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 col-sm-12 m-b-10">
-                        <form class="example" action="">
-                        <input type="text" class="form-control" placeholder="Masukkan No. Telefon" name="search">
+                    <?php $form = ActiveForm::begin(['id' => 'mnp-form']); ?>
+                        <!--<input type="text" class="form-control" placeholder="Masukkan No. Telefon" name="search">-->
+                        <?= $form->field($model, 'phone_number')->textInput(['placeholder' => 'Masukkan No. Telefon', 'type' => 'text'])->label(false);  ?>
                         </div>
                         <div class="col-md-4 col-sm-12 m-b-10">
                         <button type="submit"class="btn btn-info btn-lg"><i class="fa fa-search"></i> Carian</button>
-                        </form>
-                    </div>
-                    </div>
-           <!-- <div class="input-group-btn">
-                <?//php $form = ActiveForm::begin(['id' => 'mnp-form']); ?>
-                <div class="row">
-                        <div>
-                            <?//= $form->field($model, 'phone_number')->textInput(['placeholder' => 'Enter Phone Number', 'type' => 'number']); ?>
                         </div>
-                        <div class="form-group">
-                            <?//= Html::submitButton('<i class="fa fa-search"></i> &nbsp; Search', [
-                                //'class' => 'btn btn-primary'
-                            //]) ?>
+                        <div class="col-md-4 col-sm-12 m-b-10">
+                        <?= Html::img('../images/loader.gif',["id" => "loader"]);?>
                         </div>
-                </div>
-                <?//= Html::img('../images/loader.gif',["id" => "loader"]);?>
-                <?//php ActiveForm::end(); ?>
-            </div>-->
+                        <?php ActiveForm::end(); ?>
+                    
+                    </div>
             <br>
             <div class="row">
             <h3>Keputusan Carian MNP :</h3>
@@ -168,7 +158,7 @@ $(document).ready(function() {
     $("#date_registered_blink").hide();
     $("#norecords").hide();
     
-    $("#mnp-form").submit(function(event) {
+    $("#mnp-form").submit(function(event) { 
             event.preventDefault(); // stopping submitting
             var data = $(this).serializeArray();
             var url = $(this).attr('action');
