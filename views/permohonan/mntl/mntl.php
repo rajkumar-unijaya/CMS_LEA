@@ -9,63 +9,47 @@ use yii\widgets\ActiveForm;
 use Yii;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\jui\DatePicker;
-
 ?>
 
 <div class="container-fluid">
-<!-- ============================================================== -->
-		<!-- Bread crumb and right sidebar toggle -->
-		<!-- ============================================================== -->
-		<div class="row page-titles">
-			<div class="col-lg-12 col-8 align-self-center">
-				<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
-        <nav aria-label="breadcrumb">
-				<ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
-					<li class="breadcrumb-item"><a href="../permohonan/block-request-list">Permohonan Penyekatan</a></li>
-					<li class="breadcrumb-item active">Permohonan Penyekatan Baru</li>
-				</ol>
-        </nav>
-			</div>
-		</div>
-
-   <!-- <h1 style="padding-top: 1.5rem;">Permintaan Sekatan</h1>
+    <h1 style="padding-top: 1.5rem;">Permohonan Baru MNTL</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Laman Utama</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Permintaan Sekatan</li>
+            <li class="breadcrumb-item"><a href="#">Laman Utama</a></li>
+            <li class="breadcrumb-item"><a href="../crawler/mntl-list">Senarai MNTL</a></li>
+            <li class="breadcrumb--item active">Permohonan Baru MNTL</li>
             
         </ol>
-    </nav>-->
-
-    <div class="row">
-			<div class="col-lg-12">
-				
-
-    <div class="card-body">
+    </nav>
+    <div class="card card-outline-info">
+           <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
                                          echo Yii::$app->session->getFlash('failed')[0];
                                         ?>
                                         <?php endif; ?>  
                                     </div>
-       
-  <div class="form-body">
+        <div class="row">
+        <div class="col-lg-12">
+
+           <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
+           
 <h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
 <hr>
-<?php $form = ActiveForm::begin(); ?>
-           <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId])->label(false); ?>
-           
           <div class="row">
 						<div class="col-md-6">
 							  <div class="form-group">
 								    <label>Pilihan Mengisi <span class="text-danger">*</span></label>
-								      <?= $form->field($model, 'for_self')->dropDownList($newCase,array('prompt' => 'Pilih Pilihan'))->label(false);?>
+                                    <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId])->label(false); ?>
+                    <?= $form->field($model, 'for_self')->dropDownList($newCase,array('prompt' => 'Pilih Pilihan'))->label(false);?>
 							  </div>
 						  </div>
               </div>
-      <!--/span-->
+      <!--/name-->
       <br>
+      
+                      
+                      
       <div id="choose_forself">
           <div class="row">
               <div class="col-md-6">
@@ -76,7 +60,7 @@ use yii\jui\DatePicker;
                       </div>
                   </div>
               </div>
-              <!--<div class="col-md-6">
+              <div class="col-md-6">
                   <div class="form-group">
                       <label class="control-label">E-mel<span class="text-danger">*</span></label>
                       <div class="controls">
@@ -84,6 +68,7 @@ use yii\jui\DatePicker;
                       </div>
                   </div>
               </div>
+              <!--/phone number-->
               </br>
               <div class="col-md-6">
                   <div class="form-group">
@@ -92,37 +77,100 @@ use yii\jui\DatePicker;
                       <?= $form->field($model, 'no_telephone')->textInput(['class' => 'form-control','placeholder' => 'No. Telefon'])->label(false); ?> 
                       </div>
                   </div>
-              </div>-->
-        </div>
+              </div>
+              </div>
+        </div>      
+    <br>
+           <div class="row">
+              <div class="col-md-6">
+                  <label>No. Laporan Polis</label>
+                  <?= $form->field($model, 'report_no')->textInput(['placeholder' => 'No. Laporan Polis'])->label(false) ?>   
+                     
+          </div>
+
+            <div class="col-md-6">
+                <label>No. Kertas Siasatan<span class="text-danger">*</span> </label>
+                <?= $form->field($model, 'investigation_no')->textInput(['placeholder' => 'No. Kertas Siasatan'])->label(false) ?> 
+            </div>
+            </div>
+       <!--/span-->
+
+       <br>
+
+       <div class="row">
+              <div class="col-md-6">
+                  <label>No. Telefon <span class="text-danger">*</span> </label>
+                  <?php  if(isset($phone_telco['phone_no']) && !empty($phone_telco['phone_no'])){$model->phone_number = $phone_telco['phone_no']; }?>
+                <?= $form->field($model, 'phone_number')->textInput(['placeholder' => 'No. Telefon'])->label(false) ?>   
+          </div>
+
+            <div class="col-md-6">
+                <label>Nama Telco<span class="text-danger">*</span> </label>
+                <?php  if(isset($phone_telco['telco']) && !empty($phone_telco['telco'])){$model->telco_name = $phone_telco['telco'];} ?>
+                <?= $form->field($model, 'telco_name')->textInput(['placeholder' => 'Nama Telco','readonly'=> true])->label(false) ?>   
+            </div>
+            </div>
+       <!--/span-->
+
+       <br>
+
+       <div class="row">
+              <div class="col-md-6">
+                  <label>Tarikh daripada</label>
+                  <?=  $form->field($model, 'date1',['inputOptions' => [
+                                                    'form' => 'form-control',
+                                                    'autocomplete' => 'off']])->widget(\yii\jui\DatePicker::className(),
+                                                    [ 'dateFormat' => 'php:m/d/Y',
+                                                    'clientOptions' => [
+                                                        'changeYear' => true,
+                                                        'changeMonth' => true,
+                                                        //'yearRange' => '-50:-12',
+                                                        'altFormat' => 'yy-mm-dd',
+                                                    ]],['placeholder' => 'mm/dd/yyyy'])
+                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?>  
+          </div>
+
+            <div class="col-md-6">
+                <label>Tarikh sehingga</label>
+                <?=  $form->field($model, 'date2',['inputOptions' => [
+                                                    'form' => 'form-control',
+                                                    'autocomplete' => 'off']])->widget(\yii\jui\DatePicker::className(),
+                                                    [ 'dateFormat' => 'php:m/d/Y',
+                                                    'clientOptions' => [
+                                                        'changeYear' => true,
+                                                        'changeMonth' => true,
+                                                        //'yearRange' => '-50:-12',
+                                                        'altFormat' => 'yy-mm-dd',
+                                                    ]],['placeholder' => 'mm/dd/yyyy'])
+                                                    ->textInput(['placeholder' => 'mm/dd/yyyy'])->label(false) ?>  
+            </div>
+            </div>
+       <!--/span-->
+
+       <br>
+
+  
+<div class="row">
+  <div class="col-md-12 col-12">
+      <div class="text-right">
+          <?= Html::submitButton('Simpan', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
+              <a href="../permohonan/mntl-list"
+                  class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
+                  data-placement="left" title=""
+                  data-original-title="Click to cancel and back to the main page"><i
+                      class="ti-close"></i>
+                  Batal</a>
+              
       </div>
-              
-            
-                  <br>
-              
-                      <div class="row">
-                        <div class="col-md-12 col-12">
-                            <div class="text-right">
-                            <?= Html::submitButton('Hantar', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
-                                <a href="../block-request-list"
-                                    class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
-                                    data-placement="left" title=""
-                                    data-original-title="Click to cancel and back to the main page"><i
-                                        class="ti-close"></i>
-                                    Batal</a>
-                                    
-                            </div>
-                        </div>
-                    </div>
-                    <?php ActiveForm::end(); ?>
-</div>
-</div>
-                                        </div></div>
-<!-- end form design  -->
-
-	
+  </div>
 </div>
 
-</div></div>
+    <?php ActiveForm::end(); ?>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
 
 <?php
 $script = <<< JS

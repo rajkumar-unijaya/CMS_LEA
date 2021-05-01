@@ -11,11 +11,12 @@ use wbraganca\dynamicform\DynamicFormWidget;
 ?>
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Permohonan Baru Sosial Media</h1>
+    <h1 style="padding-top: 1.5rem;">Media Sosial</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Home</a></li>
-            <li class="breadcrumb-item active">Permohonan Baru Sosial Media</a></li>
+        <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
+            <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Media Sosial</a></li>
+            <li class="breadcrumb-item active">Permohonan Baru Media Sosial</a></li>
             
         </ol>
     </nav>
@@ -180,13 +181,14 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         </div>--><!-- .row -->
                         <!--/span-->
     <div class="form-group">
-            <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                  <?= $form->field($modelSuspekSaksi, '['.$i.']master_status_suspect_or_saksi_id')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek / Saksi--'))->label(false); ?>
-                  </div>
-                </div>
-            </div>     
+    <div class="row">
+						<div class="col-md-6">
+							  <div class="form-group">
+								   
+                <?= $form->field($modelSuspekSaksi, '['.$i.']master_status_suspect_or_saksi_id')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek / Saksi--'))->label(false); ?>
+							  </div>
+						  </div>
+              </div>     
                   <!--/span--><br>
                   <div class="row">
                     <div class="col-md-6">
@@ -198,8 +200,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
                     <div class="col-md-6" id="others10">
                     <!--<textarea class="form-control" name="PermohonanForm[$i][others]"></textarea>-->
                     </div>
-                  </div>
-         <!--/span--><br>
+          </div>
+    <!--/span--><br>
                 <div class="row">
                     <div class="col-md-6">
                     <?= $form->field($modelSuspekSaksi, '['.$i.']ic')->textInput(['placeholder' => 'No. Kad Pengenalan'])->label(false);?> 
@@ -308,15 +310,22 @@ use wbraganca\dynamicform\DynamicFormWidget;
               <!--/span--><br>
               <h4 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h4>
                 <hr>
-                        <div class="row"> 
+                <div class="row"> 
+                            <!--<div class="col-lg-6">
+                                <label class="custom-control custom-checkbox"
+                                    style="display: inline-block; padding-right: 30px;">
+                                    <input type="checkbox" class="custom-control-input" name="agensi_action_id" value="0">
+                                    <span class="custom-control-label">Mengenalpasti pengendali akaun/laman sosial/laman web<br>
+                                        
+                                </label>
+                            </div>-->
                             <div class="col-lg-12 m-t-20">
                                 <label class="custom-control"
                                     style="display: inline-block; padding-right: 30px;">
                                     <?= $form->field($model, 'application_purpose')->checkboxList($purposeOfApplication)->label(false);?> 
                                     <div class="col-lg-6"></div>
                                 <div class="col-lg-6">
-                                <input type="text" name="PermohonanForm[application_purpose_info]" placeholder="">
-                                </div>
+                                <input type="text" name="PermohonanForm[application_purpose_info]" placeholder=""></div>
                                 </label>
                                 
                             </div>
@@ -529,6 +538,17 @@ $(".dynamicform_wrapper").on("limitReached", function(e, item) {
 });
 
 
+$('#add').click(function(){ var newID =  ( $('#url_input_append > div').length);
+if(newID <= 15)
+{
+  //$('#url_input_append').append('<div class="row"><div class="form-group field-permohonanform-master_social_media_id"><select id="permohonanform-master_social_media_id['+newID+']" class="form-control" name="PermohonanForm[master_social_media_id]['+newID+']"><option value="">--Pilih Social Media--</option><option value="1">twitter</option><option value="2">instagram</option><option value="3">tumblr</option><option value="4">facebook</option><option value="5">blog / website</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newID+'"><input type="text" id="permohonanform-url-'+newID+'" class="form-control" name="PermohonanForm[url]['+newID+']"><div class="help-block"></div></div></div>');
+  $('#url_input_append').append('<div class="row"><div class="col-lg-12"><div class="form-group field-permohonanform-master_social_media_id"><select id="social_media_'+newID+'" class="form-control" name="PermohonanForm[master_social_media_id]['+newID+']"><option value="">--Pilih Social Media--</option><option value="39">twitter</option><option value="40">instagram</option><option value="41">tumblr</option><option value="42">facebook</option><option value="43">blog / website</option><option value="99">Youtube</option><option value="100">Tiktok</option><option value="101">Others</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newID+'"><input type="text" id="social_media_URL_'+newID+'" class="form-control" name="PermohonanForm[url]['+newID+']"><div class="help-block"></div></div></div></div>');
+}
+else{
+  alert("Perhatian,maksimum hanya 11 data");
+  return false;
+}
+});
 
 $('#permohonanstatussuspeksaksi-0-master_status_suspect_or_saksi_id').change(function(){ 
   if(this.value == 86 ||  this.value == 87)
