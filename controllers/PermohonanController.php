@@ -1416,9 +1416,6 @@ class PermohonanController extends Controller
     {  
         $this->layout =  'main';
         $session = Yii::$app->session;
-        
-
-      
         $client = new Client();
         $session = Yii::$app->session;
         $mediaSocialResponse = array();
@@ -1426,7 +1423,6 @@ class PermohonanController extends Controller
         $responses = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
             ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek,master_status&join=case_info_url_involved,master_status&order=id,desc')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->send();
