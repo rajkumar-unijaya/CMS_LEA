@@ -2043,21 +2043,22 @@ class PermohonanController extends Controller
         if(count($responses->data['records']) > 0)
         { 
             $mediaSocialResponse = $responses->data['records'][0];
-              foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
-                if(array_key_exists($offenceInfo['offence_id'], $filterOffenceResponse))
-                {
-                  $prevSelectedOffences[$offenceInfo['offence_id']] = $filterOffenceResponse[$offenceInfo['offence_id']];
-                  $offencesListRes[$offenceInfo['offence_id']] = array("selected"=>true);
-                }
-              endforeach;
-
-              foreach($filterOffenceResponse as $key => $offenceInfo):
-                  if(array_key_exists($key, $prevSelectedOffences))
-                  {
-                      unset($filterOffenceResponse[$key]);
-                  }
+                foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
                     
+                  if(array_key_exists($offenceInfo['offence_id']['id'], $filterOffenceResponse))
+                  {
+                    $prevSelectedOffences[$offenceInfo['offence_id']['id']] = $filterOffenceResponse[$offenceInfo['offence_id']['id']];
+                    $offencesListRes[$offenceInfo['offence_id']['id']] = array("selected"=>true);
+                  }
                 endforeach;
+
+                foreach($filterOffenceResponse as $key => $offenceInfo):
+                    if(array_key_exists($key, $prevSelectedOffences))
+                    {
+                        unset($filterOffenceResponse[$key]);
+                    }
+                      
+                  endforeach;
                 $modelUrl = [new PermohonanUrl];
                 $newModels= 0;
                 foreach($mediaSocialResponse['case_info_url_involved'] as $key => $val):
@@ -2389,8 +2390,6 @@ class PermohonanController extends Controller
            }
        
            return $realString;
-       
        }
     
-
 }
