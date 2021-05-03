@@ -2393,5 +2393,4 @@ class PermohonanController extends Controller
        
        }
     
-
 }
