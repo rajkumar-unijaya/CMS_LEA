@@ -16,7 +16,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 		<!-- ============================================================== -->
 		<div class="row page-titles">
 			<div class="col-lg-12 col-8 align-self-center">
-				<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
+				<h3 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h3>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
@@ -49,7 +49,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                     </div>
        
   <div class="form-body">
-<h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+<h5 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h5>
 <hr>
 <?php $form = ActiveForm::begin(['enableClientValidation' => true,'id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
            
@@ -83,7 +83,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 <!--Kesalahan-->
               <label class="control-label">Kesalahan<span class="text-danger">*</span></label>
-              <h5>Pilih Kesalahan</h5>
+              <h6>Pilih Kesalahan</h6>
       <div class="row">
                   <div class="col-md col-sm">
                     <?= $form->field($model, 'offence_preselected')->dropDownList($offences,array('id'=>'mySideToSideSelect','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
@@ -113,7 +113,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
               </div>
 <br>
   <!-- Surat Rasmi-->         
-  <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
+  <h5 class="m-t-20"style="color:#337ab7"> URL Terbabit / Email / Nama Pengguna Social Media / Etc.</h5>
       <hr>
         <div class="row">
           <div class="col-md-6">
@@ -128,12 +128,12 @@ use wbraganca\dynamicform\DynamicFormWidget;
                               </div>
                               <div class="row">
                               <div id="suratRasmiAttachmentNotNull">
-                                  <div class="col-sm-4" id="surat_rasmi_img_del">
+                                  <div class="col-md-6" id="surat_rasmi_img_del">
                                       <input type="hidden" id="suratRasmiImagePath" name="BlockRequestForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
                                       <?= Html::button("Padam",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
                                   </div>
-                            
-                                  <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
+                            </div><div class="row">
+                                  <div class="col-md-12 text-right" id="surat_rasmi_img_download">
                                         <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
                                   </div>
                               </div>                    
@@ -162,8 +162,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                       <?= Html::button("Padam",['class'=>'btn btn-primary',"id" => "laporanPolisDeleteImg"]);?>
                                     </div>
                           
-                        
-                                    <div class="col-sm-4 text-right" id="laporan_polis_img_download">
+                                    </div><div class="row">
+                                    <div class="col-sm-12 text-right" id="laporan_polis_img_download">
                                         <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
                                     </div>
                             </div>
@@ -196,9 +196,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 <div class="panel panel-default">
         <div class="panel-heading">
-            URL
+        <h5 class="panel-title pull-left">URL</h5>
             <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> </button>
-            <div class="clearfix"></div>
+            <div class="clearfix"></div><hr>
         </div>
         <div class="panel-body container-items"><!-- widgetContainer -->
             <?php 

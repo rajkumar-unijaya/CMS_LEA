@@ -16,7 +16,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 		<!-- ============================================================== -->
 		<div class="row page-titles">
 			<div class="col-lg-12  col-8 align-self-center">
-				<h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
+				<h3 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h3>
         <nav aria-label="breadcrumb">
 				<ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
@@ -38,7 +38,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
     <div class="row">
 			<div class="col-lg-12">
-				<div class="card card-outline-info">
+				
 
     <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
@@ -49,7 +49,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                     </div>
        
   <div class="form-body">
-<h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+<h5 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h5>
 <hr>
 <?php $form = ActiveForm::begin(['enableClientValidation' => true,'id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
            <?= $form->field($model, 'master_case_info_type_id')->hiddenInput(['value' => $mediaSocialResponse['master_case_info_type_id']])->label(false); ?>
@@ -79,7 +79,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 <!--Kesalahan-->
               <label class="control-label">Kesalahan<span class="text-danger">*</span></label>
-      <h5>Pilih Kesalahan</h5>
+      <h6>Pilih Kesalahan</h6>
       <div class="row">
           <div class="col-md col-sm">
              <?= $form->field($model, 'offence_preselected')->dropDownList($offences,array('id'=>'mySideToSideSelect','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
@@ -138,9 +138,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 <div class="panel panel-default">
         <div class="panel-heading">
-            URL
-            <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> URL</button>
-            <div class="clearfix"></div>
+        <h5 class="panel-title pull-left">URL</h5>
+            <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i></button>
+            <div class="clearfix"></div><hr>
         </div>
         <div class="panel-body container-items"><!-- widgetContainer -->
             <?php 
@@ -190,7 +190,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         </div>
                     </div>
                     <?php ActiveForm::end(); ?>
-</div>
+
 </div>
                                         </div></div>
 
