@@ -12,7 +12,7 @@ $this->title = 'Blocking Request';
 <?php endif;?>
 </div>
 <div class="container-fluid">
-    <h1 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h1>
+    <h3 class="text-themecolor" style="padding-top: 2rem;">Permohonan Penyekatan</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>

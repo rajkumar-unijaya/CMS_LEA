@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <?php endif; ?>  
                                     </div>
                                     <div class="card-body">
-                                    <h4 class="text-center text-muted m-t-10 m-b-40"> Selamat Datang ke Log Masuk CMS LEA</h4>
+                                    <h5 class="text-center text-muted m-t-10 m-b-40"> Selamat Datang ke Log Masuk CMS LEA</h5>
                                     <br>
                                     <?php 
                                     $action = Url::to(['/auth/login']);

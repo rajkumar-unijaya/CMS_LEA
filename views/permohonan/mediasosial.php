@@ -14,7 +14,7 @@ $this->title = 'Media Sosial';
 </div>
 <div class="container-fluid">
  
-    <h1 style="padding-top: 1.5rem;">Media Sosial</h1>
+    <h3 style="padding-top: 1.5rem;">Media Sosial</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>

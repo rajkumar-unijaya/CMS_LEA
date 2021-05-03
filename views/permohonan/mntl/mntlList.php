@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 ?>
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Senarai MNTL</h1>
+    <h3 style="padding-top: 1.5rem;">Senarai MNTL</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
