@@ -2390,7 +2390,6 @@ class PermohonanController extends Controller
            }
        
            return $realString;
-       
        }
     
 }
