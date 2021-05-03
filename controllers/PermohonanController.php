@@ -1669,8 +1669,6 @@ class PermohonanController extends Controller
         if(count($responses->data['records']) > 0)
         {
             $mediaSocialResponse = $responses->data['records'][0];
-            //echo"<pre>";print_r($mediaSocialResponse['case_offence']);
-            //echo"<pre>";print_r($filterOffenceResponse);exit;
                 foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
                     
                   if(array_key_exists($offenceInfo['offence_id']['id'], $filterOffenceResponse))
