@@ -985,7 +985,6 @@ class PermohonanController extends Controller
                   {
                       unset($filterOffenceResponse[$key]);
                   }
-                    
                 endforeach;
         }
         return $this->render('editsocialmedia', ['model'=>$model,"modelUrl" => $modelUrl,"modelStatusSuspekSaksi" => $modelStatusSuspekSaksi,"mediaSocialResponse" => $mediaSocialResponse,"masterStatusSuspect" => $masterStatusSuspect,"purposeOfApplication" => $purposeOfApplication,"newCase" => $newCase,"offences" => $filterOffenceResponse,"suspectOrSaksi" => $suspectOrSaksi,"masterSocialMedia" => $masterSocialMedia,"prevSelectedOffences" => $prevSelectedOffences,"offencesListRes" => $offencesListRes]);
