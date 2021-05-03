@@ -34,7 +34,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
            <?php $form = ActiveForm::begin(['id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
            <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId])->label(false); ?>
            
-<h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+<h5 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h5>
 <hr>
           <div class="row">
 						<div class="col-md-6">
@@ -106,8 +106,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
           </div>
       <div class="col-md-1 col-sm-12" style="margin: auto;">
       
-      <button type="button" id="add_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
-      <button type="button" id="remove_options" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+      <button type="button" id="add_options" class="btn btn-sm waves-effect waves-light btn-info btn-block"> > </button>
+      <button type="button" id="remove_options" class="btn btn-sm waves-effect waves-light btn-info btn-block">< </button> 
 		
 	
         
@@ -135,7 +135,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
         <!--URL--> 
   <!-- rams start --><div class="row"> 
-  <div class="col-sm-6">
+  <div class="col-md-6">
   <!--<div class="panel panel-default">
         <div class="panel-body">-->
              <?php DynamicFormWidget::begin([
@@ -162,13 +162,14 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <?php foreach ($modelStatusSuspekSaksi as $i => $modelSuspekSaksi): //echo"<pre>";print_r($modelUrl);exit;?>
                 <div class="item panel panel-default"><!-- widgetBody -->
                     <div class="panel-heading">
-                        <h3 class="panel-title pull-left">Status Suspek / Saksi</h3>
+                        <h5 class="panel-title pull-left">Status Suspek / Saksi</h5>
+                        
                         <div class="pull-right">
-                            <button type="button" class="add-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
-                            <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
+                            <button type="button" class="add-item btn btn-success btn-xs"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                         </div>
                         <div class="clearfix"></div>
-                    </div>
+                    </div><hr>
                     <div class="panel-body">
                         
                         <!--<div class="row">
@@ -225,7 +226,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <!-- rams end -->
 
     <!-- Surat Rasmi-->         
-  <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
+  <h5 class="m-t-20"style="color:#337ab7"> URL Terbabit / Email / Nama Pengguna Social Media / Etc.</h5>
       <hr>
         <div class="row">
           <div class="col-md-6">
@@ -233,7 +234,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 					  	<label>Surat Rasmi</label>
                   
 						    <?=  $form->field($model, 'surat_rasmi')->fileInput()->label(false); ?>
-                <br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+                <small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
 						      <div id="fileList"></div>                     
 				  	</div>
           </div>
@@ -244,7 +245,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <div class="form-group">
 					  	<label>Laporan Polis</label>
 						    <?=  $form->field($model, 'laporan_polis')->fileInput()->label(false); ?>
-                <br /><small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
+                <small>(format file : .DOC, .DOCX, .JPG, .JPEG, .PNG, .PDF)</small>
 						      <div id="fileList"></div>
                </div>      
 				  	</div>
@@ -279,13 +280,15 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <?php foreach ($modelUrl as $j => $modelUrl): //echo"<pre>";print_r($modelUrl);exit;?>
                 <div class="item panel panel-default"><!-- widgetBody -->
                     <div class="panel-heading">
-                        <h3 class="panel-title pull-left">URL</h3>
+                        <h5 class="panel-title pull-left">URL</h5>
                         <div class="pull-right">
-                            <button type="button" class="add-url-item btn btn-success btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
-                            <button type="button" class="remove-url-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
+                            <button type="button" class="add-url-item btn btn-success btn-xs"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="remove-url-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                         </div>
-                        <div class="clearfix"></div>
+                        
+                        <div class="clearfix"></div><hr>
                     </div>
+                    
                     <div class="panel-body">
                         
                         <div class="row">
@@ -308,7 +311,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     </div>-->
     <!-- rams end -->
               <!--/span--><br>
-              <h4 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h4>
+              <h5 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h5>
                 <hr>
                 <div class="row"> 
                             <!--<div class="col-lg-6">
@@ -321,13 +324,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             </div>-->
                             <div class="col-lg-12 m-t-20">
                                 <label class="custom-control"
-                                    style="display: inline-block; padding-right: 30px;">
+                                    style="display: inline-block;">
                                     <?= $form->field($model, 'application_purpose')->checkboxList($purposeOfApplication)->label(false);?> 
-                                    <div class="col-lg-6"></div>
+                                    <div class="row"> 
                                 <div class="col-lg-6">
                                 <input type="text" name="PermohonanForm[application_purpose_info]" placeholder=""></div>
                                 </label>
-                                
+                                </div>
                             </div>
                         </div>
          
@@ -337,7 +340,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         <div class="col-md-12 col-12">
                             <div class="text-right">
                                 <div class="form-group">
-                                     <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>
+                                     <?= Html::submitButton('Hantar', ['class' => 'btn btn-success']) ?>
+                                     <a href="../permohonan/mediasosial"
+                                    class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
+                                    data-placement="left" title=""
+                                    data-original-title="Click to cancel and back to the main page"><i
+                                        class="ti-close"></i>
+                                    Batal</a>
                                  </div>
                             </div>
                         </div>
@@ -523,18 +532,18 @@ $('#permohonanstatussuspeksaksi-4-master_status_status_suspek_id').change(functi
 });
 
 $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {
-    if (! confirm("Are you sure you want to delete this item?")) {
+    if (! confirm("Anda Pasti Ingin Memadam Data ini?")) {
         return false;
     }
     return true;
 });
 
 $(".dynamicform_wrapper").on("afterDelete", function(e) {
-    console.log("Deleted item!");
+    console.log("Data Berjaya Dipadam!");
 });
 
 $(".dynamicform_wrapper").on("limitReached", function(e, item) {
-    alert("Limit reached");
+    alert("Had Telah Dicapai");
 });
 
 
@@ -545,7 +554,7 @@ if(newID <= 15)
   $('#url_input_append').append('<div class="row"><div class="col-lg-12"><div class="form-group field-permohonanform-master_social_media_id"><select id="social_media_'+newID+'" class="form-control" name="PermohonanForm[master_social_media_id]['+newID+']"><option value="">--Pilih Social Media--</option><option value="39">twitter</option><option value="40">instagram</option><option value="41">tumblr</option><option value="42">facebook</option><option value="43">blog / website</option><option value="99">Youtube</option><option value="100">Tiktok</option><option value="101">Others</option></select><div class="help-block"></div></div><div class="form-group field-permohonanform-url-'+newID+'"><input type="text" id="social_media_URL_'+newID+'" class="form-control" name="PermohonanForm[url]['+newID+']"><div class="help-block"></div></div></div></div>');
 }
 else{
-  alert("Perhatian,maksimum hanya 11 data");
+  alert("Perhatian,maksimum hanya 15 data");
   return false;
 }
 });

@@ -21,7 +21,7 @@ class DashboardAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/styles-admin.css',
-        'css/styles-ui-kit.css',
+        //'css/styles-ui-kit.css',
         'css/styles.css',
         'css/dataTables.bootstrap4.min.css',
         

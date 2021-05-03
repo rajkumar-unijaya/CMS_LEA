@@ -12,12 +12,12 @@ use yii\jui\DatePicker;
 ?>
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Permohonan Baru MNTL</h1>
+    <h3 style="padding-top: 1.5rem;">Permohonan Baru MNTL</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="#">Laman Utama</a></li>
-            <li class="breadcrumb-item"><a href="../crawler/mntl-list">Senarai MNTL</a></li>
-            <li class="breadcrumb--item active">Permohonan Baru MNTL</li>
+            <li class="breadcrumb-item"><a href="../permohonan/mntl-list">Senarai MNTL</a></li>
+            <li class="breadcrumb-item active">Permohonan Baru MNTL</li>
             
         </ol>
     </nav>
@@ -34,7 +34,7 @@ use yii\jui\DatePicker;
 
            <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
            
-<h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+<h5 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h5>
 <hr>
           <div class="row">
 						<div class="col-md-6">
@@ -153,7 +153,7 @@ use yii\jui\DatePicker;
 <div class="row">
   <div class="col-md-12 col-12">
       <div class="text-right">
-          <?= Html::submitButton('Simpan', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
+          <?= Html::submitButton('Hantar', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
               <a href="../permohonan/mntl-list"
                   class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
                   data-placement="left" title=""

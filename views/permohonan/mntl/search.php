@@ -16,7 +16,7 @@ use Yii;
 </div> -->
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;"> Carian MNP</h1>
+    <h3 style="padding-top: 1.5rem;"> Carian MNP</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
@@ -35,7 +35,7 @@ use Yii;
                         <?= $form->field($model, 'phone_number')->textInput(['placeholder' => 'Masukkan No. Telefon', 'type' => 'text'])->label(false);  ?>
                         </div>
                         <div class="col-md-4 col-sm-12 m-b-10">
-                        <button type="submit"class="btn btn-info btn-lg"><i class="fa fa-search"></i> Carian</button>
+                        <button type="submit"class="btn btn-info"><i class="fa fa-search"></i> Carian</button>
                         </div>
                         <div class="col-md-4 col-sm-12 m-b-10">
                         <?= Html::img('../images/loader.gif',["id" => "loader"]);?>
@@ -45,7 +45,7 @@ use Yii;
                     </div>
             <br>
             <div class="row">
-            <h3>Keputusan Carian MNP :</h3>
+            <h5>Keputusan Carian MNP :</h5>
             </div> 
             <br>
             
@@ -87,7 +87,7 @@ use Yii;
 
 <br>
             <div>
-                <h3>Keputusan Carian MNTL :</h3></div>
+                <h5>Keputusan Carian MNTL :</h5></div>
            <br>
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%" cellspacing="0">
