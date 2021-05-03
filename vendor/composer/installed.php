@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'b66b74d6807285af96792c00caab78a4735de542',
+    'reference' => 'ab1e005d96cc5d780c7e3020c0c683db9178da88',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -239,6 +239,15 @@
       array (
         0 => '1.10.2',
       ),
+    ),
+    'npm-asset/bootstrap' => 
+    array (
+      'pretty_version' => '4.6.0',
+      'version' => '4.6.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => NULL,
     ),
     'opis/closure' => 
     array (
@@ -770,7 +779,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'b66b74d6807285af96792c00caab78a4735de542',
+      'reference' => 'ab1e005d96cc5d780c7e3020c0c683db9178da88',
     ),
     'yiisoft/yii2-bootstrap' => 
     array (
@@ -780,6 +789,15 @@
       array (
       ),
       'reference' => '073c9ab0a4eb71f2485d84c96a1967130300d8fc',
+    ),
+    'yiisoft/yii2-bootstrap4' => 
+    array (
+      'pretty_version' => '2.0.9',
+      'version' => '2.0.9.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'a75555e4a888508416fadfd0a2b94881342cdd45',
     ),
     'yiisoft/yii2-composer' => 
     array (
