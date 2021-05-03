@@ -86,25 +86,7 @@ use yii\helpers\Html;
                         ?></td>
                     </tr>
 
-                    <tr>
-                        <td><strong>Status Suspek/Saksi</strong></td>
-                        <td><?php
-                        if(count($mediaSocialResponse["case_info_status_suspek"]) > 0)
-                        {
-                          $increments = 1;
-                          foreach($mediaSocialResponse["case_info_status_suspek"] as $key => $val)
-                          {
-                            echo $increments." : ".$val['master_status_suspect_or_saksi_id']['name']."<br>";
-                            echo "&nbsp;&nbsp;&nbsp;".$val['master_status_status_suspek_id']['name']."<br>";
-                            echo "&nbsp;&nbsp;&nbsp;".$val['ic']."&nbsp;&nbsp;".$val['name']."&nbsp;&nbsp;".$val['others']."<br>";
-                            $increments++;
-
-                          }
-                        }
-                            
-                            ?>
-                        </td>
-                    </tr>
+                   
                     <tr>
                         <td><strong>URL</strong></td>
                         <td><?php
@@ -127,7 +109,8 @@ use yii\helpers\Html;
                 </tbody>
             </table>
         </div>
-                   
+
+                    
 </div>
 </div>
 </div>
