@@ -972,10 +972,11 @@ class PermohonanController extends Controller
                 endforeach;
             }
             foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
-                if(array_key_exists($offenceInfo['offence_id'], $filterOffenceResponse))
+                    
+                if(array_key_exists($offenceInfo['offence_id']['id'], $filterOffenceResponse))
                 {
-                  $prevSelectedOffences[$offenceInfo['offence_id']] = $filterOffenceResponse[$offenceInfo['offence_id']];
-                  $offencesListRes[$offenceInfo['offence_id']] = array("selected"=>true);
+                  $prevSelectedOffences[$offenceInfo['offence_id']['id']] = $filterOffenceResponse[$offenceInfo['offence_id']['id']];
+                  $offencesListRes[$offenceInfo['offence_id']['id']] = array("selected"=>true);
                 }
               endforeach;
 
@@ -984,9 +985,7 @@ class PermohonanController extends Controller
                   {
                       unset($filterOffenceResponse[$key]);
                   }
-                    
                 endforeach;
-            
         }
         return $this->render('editsocialmedia', ['model'=>$model,"modelUrl" => $modelUrl,"modelStatusSuspekSaksi" => $modelStatusSuspekSaksi,"mediaSocialResponse" => $mediaSocialResponse,"masterStatusSuspect" => $masterStatusSuspect,"purposeOfApplication" => $purposeOfApplication,"newCase" => $newCase,"offences" => $filterOffenceResponse,"suspectOrSaksi" => $suspectOrSaksi,"masterSocialMedia" => $masterSocialMedia,"prevSelectedOffences" => $prevSelectedOffences,"offencesListRes" => $offencesListRes]);
     }
@@ -1386,10 +1385,11 @@ class PermohonanController extends Controller
                 endforeach;
             }
             foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
-                if(array_key_exists($offenceInfo['offence_id'], $filterOffenceResponse))
+                    
+                if(array_key_exists($offenceInfo['offence_id']['id'], $filterOffenceResponse))
                 {
-                  $prevSelectedOffences[$offenceInfo['offence_id']] = $filterOffenceResponse[$offenceInfo['offence_id']];
-                  $offencesListRes[$offenceInfo['offence_id']] = array("selected"=>true);
+                  $prevSelectedOffences[$offenceInfo['offence_id']['id']] = $filterOffenceResponse[$offenceInfo['offence_id']['id']];
+                  $offencesListRes[$offenceInfo['offence_id']['id']] = array("selected"=>true);
                 }
               endforeach;
 
