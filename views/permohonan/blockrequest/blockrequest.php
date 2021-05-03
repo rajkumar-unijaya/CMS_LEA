@@ -154,7 +154,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
               </div>
 <br>
   <!-- Surat Rasmi-->         
-  <h5 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h5>
+  <h5 class="m-t-20"style="color:#337ab7"> URL Terbabit / Email / Nama Pengguna Social Media / Etc.</h5>
       <hr>
         <div class="row">
           <div class="col-md-6">

@@ -11,7 +11,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 ?>
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Media Sosial</h1>
+    <h3 style="padding-top: 1.5rem;">Media Sosial</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
@@ -20,7 +20,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             
         </ol>
     </nav>
-    <div class="card card-outline-info">
+   
            <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
@@ -97,7 +97,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
        <br>
 <!--Kesalahan-->
 <label class="control-label">Kesalahan<span class="text-danger">*</span></label>
-      <h5>Pilih Kesalahan</h5>
+      <h6>Pilih Kesalahan</h6>
       <div class="row">
           <div class="col-md col-sm">
              <?= $form->field($model, 'offence_preselected')->dropDownList($offences,array('id'=>'mySideToSideSelect','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
@@ -135,7 +135,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
         <!--URL--> 
   <!-- rams start --><div class="row"> 
-  <div class="col-md-6">
+  <div class="col-sm-12">
   <!--<div class="panel panel-default">
         <div class="panel-body">-->
              <?php DynamicFormWidget::begin([
@@ -183,7 +183,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         <!--/span-->
     <div class="form-group">
     <div class="row">
-						<div class="col-md-6">
+						<div class="col-sm-6">
 							  <div class="form-group">
 								   
                 <?= $form->field($modelSuspekSaksi, '['.$i.']master_status_suspect_or_saksi_id')->dropDownList($suspectOrSaksi,array('prompt' => '--Pilih Suspek / Saksi--'))->label(false); ?>
@@ -192,13 +192,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
               </div>     
                   <!--/span--><br>
                   <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             
                         <?= $form->field($modelSuspekSaksi, '['.$i.']master_status_status_suspek_id')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Status--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
 							            </div>
 						          </div>
-                    <div class="col-md-6" id="others10">
+                    <div class="col-sm-6" id="others10">
                     <!--<textarea class="form-control" name="PermohonanForm[$i][others]"></textarea>-->
                     </div>
           </div>
@@ -224,7 +224,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <!--</div>
     </div>-->
     <!-- rams end -->
-
+<br>
     <!-- Surat Rasmi-->         
   <h5 class="m-t-20"style="color:#337ab7"> URL Terbabit / Email / Nama Pengguna Social Media / Etc.</h5>
       <hr>
@@ -322,17 +322,17 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                         
                                 </label>
                             </div>-->
-                            <div class="col-lg-12 m-t-20">
-                                <label class="custom-control"
-                                    style="display: inline-block;">
+                            <div class="col-sm-12 m-t-20">
+                                <label class="custom-control"style= "display: block;">
                                     <?= $form->field($model, 'application_purpose')->checkboxList($purposeOfApplication)->label(false);?> 
                                     <div class="row"> 
-                                <div class="col-lg-6">
-                                <input type="text" name="PermohonanForm[application_purpose_info]" placeholder=""></div>
-                                </label>
+                                      <div class="col-sm-6">
+                                      <input type="text" name="PermohonanForm[application_purpose_info]" placeholder="">
+                                      </div>
                                 </div>
+                                </label>
                             </div>
-                        </div>
+                </div>
          
 
 <br>
@@ -355,7 +355,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <?php ActiveForm::end(); ?>
             </div>
           </div>
-        </div>
+       
     </div>
 </div>
 
