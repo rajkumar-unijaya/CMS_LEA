@@ -187,7 +187,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             <br>
             <!--URL--> 
   <!-- rams start --><div class="row"> 
-  <div class="col-sm-6">
+  <div class="col-sm-12">
   <!--<div class="panel panel-default">
         <div class="panel-body">-->
         <?php DynamicFormWidget::begin([
@@ -226,12 +226,12 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                     <div class="panel-body">
                         
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                             <?php $idVal = "PermohonanUrl[".$index."][caseInfoURLInvolvedId]";?>
                             <?=  Html::hiddenInput($idVal, $modelurl['id']); ?>
                                 <?= $form->field($modelurl, "[{$index}]master_social_media_id")->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','options' => array($modelurl['master_social_media_id'] => array('selected'=>true))))->label(false);?> 
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                                 <?= $form->field($modelurl, "[{$index}]url")->textInput(['value' => $modelurl['url'] ? $modelurl['url'] : ''])->label(false); ?>
                             </div>
                         </div><!-- end:row -->
