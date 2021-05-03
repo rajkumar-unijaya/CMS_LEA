@@ -62,26 +62,26 @@ $this->title = 'Blocking Request';
                             <?php 
                             if(strcasecmp($responseTemp['case_status']['name'],"Closed") == 0)
                             {
-                             echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
+                             echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-block-request', 'id'=>$responseTemp['id']));
                              echo "&nbsp;&nbsp;&nbsp;";
                              echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('permohonan/reopencase', 'id'=>$responseTemp['id']));
                             }
                             if(strcasecmp($responseTemp['case_status']['name'],"Rejected") == 0)
                             {
-                             echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
+                             echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-block-request', 'id'=>$responseTemp['id']));
                              echo "&nbsp;&nbsp;&nbsp;";
                              echo "&nbsp;&nbsp;&nbsp;";
                             }
                             if(strcasecmp($responseTemp['case_status']['name'],"Pending") == 0)
                             {
-                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
+                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-block-request', 'id'=>$responseTemp['id']));
                             echo "&nbsp;&nbsp;&nbsp;";
                             echo Html::a('<i class="fa fa-pencil" aria-hidden="true"></i>', array('permohonan/edit-block-request', 'id'=>$responseTemp['id']));
                             echo "&nbsp;&nbsp;&nbsp;";
                             }
                             if(strcasecmp($responseTemp['case_status']['name'],"Reopen") == 0)
                             {
-                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-social-media', 'id'=>$responseTemp['id']));
+                            echo Html::a('<i class="fa fa-eye" aria-hidden="true"></i>', array('permohonan/view-block-request', 'id'=>$responseTemp['id']));
                             echo "&nbsp;&nbsp;&nbsp;";
                             echo Html::a('<i class="fa fa-folder" aria-hidden="true"></i>', array('permohonan/reopen-block-request', 'id'=>$responseTemp['id']));
                             }
