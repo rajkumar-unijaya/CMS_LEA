@@ -6,12 +6,12 @@ use yii\helpers\Html;
 ?>
 
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Maklumat Permohonan</h1>
+    <h3 style="padding-top: 1.5rem;">Media Sosial</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
-            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Permohonan Penyekatan</a></li>
-            <li class="breadcrumb-item active">Paparan Maklumat Permohonan</a></li>
+            <li class="breadcrumb-item"><a href="../permohonan/block-request-list">Media Sosial</a></li>
+            <li class="breadcrumb-item active">Paparan Media Sosial</a></li>
             
         </ol>
     </nav>
@@ -24,15 +24,15 @@ use yii\helpers\Html;
                                     
        
   <div class="form-body">
-<h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+<h5 class="m-t-20" style="color:#337ab7" >Maklumat Media Sosial</h5>
 <hr>
            
 <div class="table-responsive">
             <table class="table table-bordered" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Item</th>
-                        <th>Detail</th>
+                        <th>Perkara</th>
+                        <th>Maklumat</th>
                     </tr>
                 </thead>
                 <tbody>

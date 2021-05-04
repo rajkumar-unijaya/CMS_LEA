@@ -16,17 +16,19 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
   $prevSuspekStatus = count($mediaSocialResponse['case_info_status_suspek']); 
 }
 ?>
+
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Permohonan Baru Sosial Media</h1>
+    <h3 style="padding-top: 1.5rem;">Media Sosial</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Home</a></li>
-            <li class="breadcrumb-item active">Permohonan Baru Sosial Media</a></li>
+        <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
+        <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Media Sosial</a></li>
+            <li class="breadcrumb-item active">Kemaskini Permohonan Media Sosial </a></li>
             
         </ol>
     </nav>
     
-<div class="card card-outline-info"> 
+
   <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
@@ -40,7 +42,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
         <div class="col-lg-12">
                       <?php $form = ActiveForm::begin(['id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
 
-                      <h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+                      <h5 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Media Sosial</h5>
                       <hr>
                     <div class="row">
                         <div class="col-md-6">
@@ -87,7 +89,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                   
 <!--Kesalahan-->
 <label class="control-label">Kesalahan<span class="text-danger">*</span></label>
-              <h5>Pilih Kesalahan</h5>
+              <h6>Pilih Kesalahan</h6>
       <div class="row">
                   <div class="col-md col-sm">
                     <?= $form->field($model, 'offence_preselected')->dropDownList($offences,array('id'=>'mySideToSideSelect','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
@@ -104,9 +106,10 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
        </div>
        <br>
 
+      
  <!-- rams start -->
  <div class="row"> 
-                      <div class="col-sm-6">
+                      <div class="col-sm-12">
                             <!--<div class="panel panel-default">
                                   <div class="panel-body">-->
                             <?php DynamicFormWidget::begin([
@@ -126,9 +129,9 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                     ],
                                 ]); ?>
 
-                                <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            Status Suspek/Saksi
+                                <div class="panel panel-info">
+                                        <div class="panel-heading" style=" padding: 8px;">
+                                           <b> Status Suspek / Saksi</b>
                                             <button type="button" class="pull-right add-item-suspek btn btn-success btn-xs"><i class="fa fa-plus"></i> </button>
                                             <div class="clearfix"></div>
                                         </div>
@@ -137,15 +140,15 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                             //foreach ($modelsAddress as $index => $modelAddress):
                                             foreach ($modelStatusSuspekSaksi as $i => $statusSuspekSaksi):?>
                                                 <div class="item panel panel-default"><!-- widgetBody -->
-                                                    <div class="panel-heading">
-                                                        <span class="panel-title-address"></span>
-                                                        <button type="button" class="pull-right remove-item-suspek btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
+                                                    <div class="panel-heading"style=" padding: 8px;">
+                                                    <span class="panel-title-address">Status Suspek / Saksi : </span>
+                                                        <button type="button" class="pull-right remove-item-suspek btn btn-danger btn-xs" ><i class="fa fa-minus"></i></button>
                                                         <div class="clearfix"></div>
                                                     </div>
-                                                    <div class="panel-body">
+                                                    <div class="panel-body"style=" padding: 10px;">
                                                         <div class="form-group">
                                                                   <div class="row">
-                                                                      <div class="col-md-6">
+                                                                      <div class="col-sm-6">
                                                                         <div class="form-group">
                                                                         <?=  Html::hiddenInput('PermohonanStatusSuspekSaksi['.$i.'][caseInfoID]', $mediaSocialResponse['id']); ?>  
                                                                         <?=  Html::hiddenInput('PermohonanStatusSuspekSaksi['.$i.'][caseInfoStatusSuspekID]', $statusSuspekSaksi['id']); ?>
@@ -153,25 +156,25 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                                                         </div>
                                                                       </div>
                                                                   </div>     
-                                                                  <!--/span--><br>
+                                                                  <!--/span-->
                                                                   <div class="row">
-                                                                        <div class="col-md-6">
+                                                                        <div class="col-sm-6">
                                                                             <div class="form-group">
                                                                                 
                                                                             <?= $form->field($statusSuspekSaksi, '['.$i.']master_status_status_suspek_id')->dropDownList($masterStatusSuspect,['prompt' => '--Pilih Status--'/*,'itemOptions'=>['class' => 'master_suspect_class']*/])->label(false);?>   
                                                                             </div>
                                                                           </div>
-                                                                        <div class="col-md-6" id="others_<?= $i;?>">
+                                                                        <div class="col-sm-6" id="others_<?= $i;?>">
                                                                         <?php $nameVal = "PermohonanForm[".$i."][others]";?>
                                                                         <textarea id="others_info_<?= $i;?>" class="form-control" name = <?= $nameVal;?>><?= $statusSuspekSaksi->others;?></textarea>
                                                                         </div>
                                                                   </div>
                                                                   <!--/span--><br>
                                                                   <div class="row">
-                                                                      <div class="col-md-6">
+                                                                      <div class="col-sm-6">
                                                                       <?= $form->field($statusSuspekSaksi, '['.$i.']ic')->textInput(['placeholder' => 'No. Kad Pengenalan'])->label(false);?> 
                                                                       </div>
-                                                                      <div class="col-md-6"> 
+                                                                      <div class="col-sm-6"> 
                                                                       <?= $form->field($statusSuspekSaksi, '['.$i.']name')->textInput(['placeholder' => 'Nama'])->label(false);?> 
                                                                       </div>  
                                                                   </div>
@@ -193,7 +196,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
     <!-- rams end -->
       <br>
             <!-- Surat Rasmi-->         
-  <h4 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h4>
+  <h5 class="m-t-20"style="color:#337ab7"> URL Terbabit/Email/ Nama Pengguna Social Media/Etc.</h5>
       <hr>
         <div class="row">
           <div class="col-md-6">
@@ -208,12 +211,12 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                               </div>
                               <div class="row">
                               <div id="suratRasmiAttachmentNotNull">
-                                  <div class="col-sm-4" id="surat_rasmi_img_del">
+                                  <div class="col-md-6" id="surat_rasmi_img_del">
                                       <input type="hidden" id="suratRasmiImagePath" name="PermohonanForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
                                       <?= Html::button("Padam",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
                                   </div>
-                            
-                                  <div class="col-sm-4 text-right" id="surat_rasmi_img_download">
+                                  </div><div class="row">
+                                  <div class="col-md-12 text-right" id="surat_rasmi_img_download">
                                         <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
                                   </div>
                               </div>                    
@@ -276,9 +279,9 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                 ],
             ]); ?>
 
-<div class="panel panel-default">
-        <div class="panel-heading">
-            URL
+<div class="panel panel-info">
+        <div class="panel-heading"style=" padding: 8px;">
+           <b> URL </b>
             <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> </button>
             <div class="clearfix"></div>
         </div>
@@ -287,12 +290,12 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             //foreach ($modelsAddress as $index => $modelAddress):
             foreach ($modelUrl as $index => $modelurl): ?>
                 <div class="item panel panel-default"><!-- widgetBody -->
-                    <div class="panel-heading">
-                        <span class="panel-title-address">URL: <?= ($index + 1) ?></span>
+                    <div class="panel-heading"style=" padding: 8px;">
+                        <span class="panel-title-address">URL : <?= ($index + 1) ?></span>
                         <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body"style=" padding: 10px;">
                         
                         <div class="row">
                             <div class="col-sm-4">
@@ -316,7 +319,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
 
     
  <!--/span--><br>
- <h4 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h4>
+ <h5 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h5>
                 <hr>
                         <div class="row"> 
                             <div class="col-lg-12 m-t-20">
@@ -356,7 +359,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             </div>
         </div>
     </div>
-</div>
+
 <?php
 $purposeOfApplicationIdValInfo = "";
 $isSuratRasmiExists =  0;
@@ -717,14 +720,14 @@ $('#permohonanstatussuspeksaksi-4-master_status_status_suspek_id').change(functi
 });
 
 $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {
-    if (! confirm("Are you sure you want to delete this item?")) {
+    if (! confirm("Anda pasti ingin memadam data ini?")) {
         return false;
     }
     return true;
 });
 
 $(".dynamicform_wrapper").on("afterDelete", function(e) {
-    console.log("Deleted item!");
+    console.log("Data Dipadam!");
     //start select pilih status
 var others_0 = 1;var others_1 = 1;var others_2 = 1;var others_3 = 1;var others_4 = 1;
 $('#permohonanstatussuspeksaksi-0-master_status_status_suspek_id').change(function(){ 
@@ -799,7 +802,7 @@ $('#permohonanstatussuspeksaksi-4-master_status_status_suspek_id').change(functi
 });
 
 $(".dynamicform_wrapper").on("limitReached", function(e, item) {
-    alert("Limit reached");
+    alert("Had Maksima telah Dicapai");
 });
 //rams end
 

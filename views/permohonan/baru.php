@@ -34,7 +34,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
            <?php $form = ActiveForm::begin(['id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
            <?= $form->field($model, 'masterCaseInfoTypeId')->hiddenInput(['value' => $masterCaseInfoTypeId])->label(false); ?>
            
-<h5 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h5>
+<h5 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Media Sosial</h5>
 <hr>
           <div class="row">
 						<div class="col-md-6">
@@ -161,15 +161,15 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <div class="container-items"><!-- widgetContainer -->
             <?php foreach ($modelStatusSuspekSaksi as $i => $modelSuspekSaksi): //echo"<pre>";print_r($modelUrl);exit;?>
                 <div class="item panel panel-default"><!-- widgetBody -->
-                    <div class="panel-heading">
-                        <h5 class="panel-title pull-left">Status Suspek / Saksi</h5>
+                    <div class="panel-heading" style=" padding: 8px;">
+                        <b>Status Suspek / Saksi</b>
                         
                         <div class="pull-right">
                             <button type="button" class="add-item btn btn-success btn-xs"><i class="fa fa-plus"></i></button>
                             <button type="button" class="remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                         </div>
                         <div class="clearfix"></div>
-                    </div><hr>
+                    </div>
                     <div class="panel-body">
                         
                         <!--<div class="row">
@@ -181,7 +181,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             </div>
                         </div>--><!-- .row -->
                         <!--/span-->
-    <div class="form-group">
+    <div class="form-group" style=" padding: 10px;">
     <div class="row">
 						<div class="col-sm-6">
 							  <div class="form-group">
@@ -279,17 +279,17 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <div class="container-items"><!-- widgetContainer -->
             <?php foreach ($modelUrl as $j => $modelUrl): //echo"<pre>";print_r($modelUrl);exit;?>
                 <div class="item panel panel-default"><!-- widgetBody -->
-                    <div class="panel-heading">
-                        <h5 class="panel-title pull-left">URL</h5>
+                    <div class="panel-heading"style=" padding: 8px;">
+                        <b>URL</b>
                         <div class="pull-right">
                             <button type="button" class="add-url-item btn btn-success btn-xs"><i class="fa fa-plus"></i></button>
                             <button type="button" class="remove-url-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                         </div>
                         
-                        <div class="clearfix"></div><hr>
+                        <div class="clearfix"></div>
                     </div>
                     
-                    <div class="panel-body">
+                    <div class="panel-body"style=" padding: 10px;">
                         
                         <div class="row">
                             <div class="col-sm-4">
@@ -543,7 +543,7 @@ $(".dynamicform_wrapper").on("afterDelete", function(e) {
 });
 
 $(".dynamicform_wrapper").on("limitReached", function(e, item) {
-    alert("Had Telah Dicapai");
+    alert("Had Maksima telah Dicapai");
 });
 
 

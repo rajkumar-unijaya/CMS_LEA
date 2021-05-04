@@ -77,19 +77,19 @@ DashboardAsset::register($this);
 
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <!--<a class="nav-link" href="../permohonan/mediasosial">Melalui Media Sosial</a>-->
-                                    <a class="nav-link" href="../permohonan/mediasosial"><i class="fa fa-desktop"></i>&nbsp;&nbsp; Media Sosial</a>
-                                    <a class="nav-link" href="../permohonan/block-request-list"><i class="fa fa-minus-circle"></i>&nbsp;Permohonan Penyekatan</a>
+                                    <a class="nav-link" href="../permohonan/mediasosial">Media Sosial</a>
+                                    <a class="nav-link" href="../permohonan/block-request-list">Permohonan Penyekatan</a>
                                     <!--<a class="nav-link" href="../permohonan/mntl">MNTL</a>-->
 
                                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseMNTL" aria-expanded="false" aria-controls="pagesCollapseMNTL">
-                                    <i class="fa fa-folder" aria-hidden="true"></i>&nbsp;&nbsp;MNTL
+                                    MNTL
                                     <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
                                     </a>
                                     <div class="collapse" id="pagesCollapseMNTL" aria-labelledby="headingOne"
                                     data-parent="#sidenavAccordionPages">
                                     <nav class="sb-sidenav-menu-nested nav">
-                                        <a class="nav-link" href="../permohonan/mntl-list">&nbsp;&nbsp;Senarai</a>
-                                        <a class="nav-link" href="../permohonan/search">&nbsp;&nbsp;Carian MNP</a>
+                                        <a class="nav-link" href="../permohonan/mntl-list">Senarai</a>
+                                        <a class="nav-link" href="../permohonan/search">Carian MNP</a>
                                     </nav>
                                     </div>
                                     

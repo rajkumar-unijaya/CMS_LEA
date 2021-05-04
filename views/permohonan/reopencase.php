@@ -17,16 +17,17 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
 }
 ?>
 <div class="container-fluid">
-    <h1 style="padding-top: 1.5rem;">Permohonan Baru Sosial Media</h1>
+    <h3 style="padding-top: 1.5rem;">Sosial Media</h3>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Home</a></li>
+        <li class="breadcrumb-item"><a href="../dashboard/index">Laman Utama</a></li>
+        <li class="breadcrumb-item"><a href="../permohonan/mediasosial">Media Sosial</a></li>
             <li class="breadcrumb-item active">Permohonan Baru Sosial Media</a></li>
             
         </ol>
     </nav>
     
-<div class="card card-outline-info"> 
+
   <div class="card-body">
                                     <div  id="failed" class="info failedMsg">
                                         <?php if(Yii::$app->session->hasFlash('failed')):
@@ -40,7 +41,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
         <div class="col-lg-12">
                       <?php $form = ActiveForm::begin(['id' => 'dynamic-form','options' => ['enctype' => 'multipart/form-data']]); ?>
 
-                      <h4 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h4>
+                      <h5 class="m-t-20" style="color:#337ab7" >Maklumat Permohonan Penyekatan</h5>
                       <hr>
                     
            <?= $form->field($model, 'master_case_info_type_id')->hiddenInput(['value' => $mediaSocialResponse['master_case_info_type_id']])->label(false); ?>
@@ -80,7 +81,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                   
 <!--Kesalahan-->
 <label class="control-label">Kesalahan<span class="text-danger">*</span></label>
-              <h5>Pilih Kesalahan</h5>
+              <h6>Pilih Kesalahan</h6>
       <div class="row">
                   <div class="col-md col-sm">
                     <?= $form->field($model, 'offence_preselected')->dropDownList($offences,array('id'=>'mySideToSideSelect','class' => 'form-control','size' => 10,'multiple'=>'multiple','prompt' => 'Pilih Kesalahan'))->label(false); ?>
@@ -99,7 +100,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
 
  <!-- rams start -->
  <div class="row"> 
-                      <div class="col-sm-6">
+ <div class="col-sm-12">
                             <!--<div class="panel panel-default">
                                   <div class="panel-body">-->
                             <?php DynamicFormWidget::begin([
@@ -119,9 +120,10 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                     ],
                                 ]); ?>
 
-                                <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            Status Suspek/Saksi
+                                <div class="panel panel-info">
+                                        <div class="panel-heading"style=" padding: 8px;">
+                                           <b> Status Suspek / Saksi</b>
+                                            
                                             <button type="button" class="pull-right add-item-suspek btn btn-success btn-xs"><i class="fa fa-plus"></i> </button>
                                             <div class="clearfix"></div>
                                         </div>
@@ -130,13 +132,13 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                             //foreach ($modelsAddress as $index => $modelAddress):
                                             foreach ($modelStatusSuspekSaksi as $i => $statusSuspekSaksi):?>
                                                 <div class="item panel panel-default"><!-- widgetBody -->
-                                                    <div class="panel-heading">
-                                                        <span class="panel-title-address"></span>
+                                                    <div class="panel-heading"style=" padding: 8px;">
+                                                    <span class="panel-title-address">Status Suspek / Saksi : </span>
                                                         <button type="button" class="pull-right remove-item-suspek btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                                                         <div class="clearfix"></div>
                                                     </div>
                                                     <div class="panel-body">
-                                                        <div class="form-group">
+                                                        <div class="form-group" style=" padding: 10px;">
                                                                   <div class="row">
                                                                       <div class="col-md-6">
                                                                         <div class="form-group">
@@ -207,9 +209,10 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                 ],
             ]); ?>
 
-<div class="panel panel-default">
-        <div class="panel-heading">
-            URL
+<div class="panel panel-info">
+        <div class="panel-heading"style=" padding: 8px;">
+           <b> URL </b>
+            
             <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i> </button>
             <div class="clearfix"></div>
         </div>
@@ -218,12 +221,12 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             //foreach ($modelsAddress as $index => $modelAddress):
             foreach ($modelUrl as $index => $modelurl): ?>
                 <div class="item panel panel-default"><!-- widgetBody -->
-                    <div class="panel-heading">
+                    <div class="panel-heading"style=" padding: 8px;">
                         <span class="panel-title-address">URL: <?= ($index + 1) ?></span>
                         <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body"style=" padding: 10px;">
                         
                         <div class="row">
                             <div class="col-sm-4">
@@ -247,7 +250,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
 
     
  <!--/span--><br>
- <h4 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h4>
+ <h5 class="m-t-20"style="color:#337ab7"> Tujuan Permohonan</h5>
                 <hr>
                         <div class="row"> 
                             <div class="col-lg-12 m-t-20">
@@ -286,7 +289,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
             </div>
             </div>
         </div>
-    </div>
+    
 </div>
 <?php
 $purposeOfApplicationIdValInfo = "";
