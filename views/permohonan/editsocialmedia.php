@@ -243,10 +243,11 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                     <div class="col-sm-4" id="laporan_polis_img_del">
                                       <input type="hidden" id="loparanImagePath" name="PermohonanForm[laporan_polis_last_attachment]" value="<?php echo $mediaSocialResponse['laporan_polis'];?>"> 
                                       <?= Html::button("Padam",['class'=>'btn btn-primary',"id" => "laporanPolisDeleteImg"]);?>
-                                    </div>
+                                      </div>
+                                  </div><div class="row">
                           
                         
-                                    <div class="col-sm-4 text-right" id="laporan_polis_img_download">
+                                    <div class="col-md-12 text-right" id="laporan_polis_img_download">
                                         <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
                                     </div>
                             </div>
@@ -330,7 +331,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                     <div class="col-lg-6"></div>
                                 <div class="col-lg-6">
                                 <div id="application_purpose_info">
-                                <input type="text" name="PermohonanForm[application_purpose_info]" placeholder="" value="<?= $mediaSocialResponse['purpose_of_application_info']?>">
+                                <input type="text" style="width: 130%; min-height: 2.5rem;"name="PermohonanForm[application_purpose_info]" placeholder="" value="<?= $mediaSocialResponse['purpose_of_application_info']?>">
                                 </div>
                                 </div>
                                 </label>

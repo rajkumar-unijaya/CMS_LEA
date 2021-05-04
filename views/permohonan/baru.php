@@ -327,7 +327,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                     <?= $form->field($model, 'application_purpose')->checkboxList($purposeOfApplication)->label(false);?> 
                                     <div class="row"> 
                                       <div class="col-sm-6">
-                                      <input type="text" name="PermohonanForm[application_purpose_info]" placeholder="">
+                                      <input type="text" style="width: 130%; min-height: 2.5rem;" name="PermohonanForm[application_purpose_info]" placeholder="">
                                       </div>
                                 </div>
                                 </label>
