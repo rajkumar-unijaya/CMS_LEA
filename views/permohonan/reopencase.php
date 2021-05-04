@@ -261,7 +261,7 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                                     <div class="col-lg-6"></div>
                                 <div class="col-lg-6">
                                 <div id="application_purpose_info">
-                                <input type="text" name="PermohonanForm[application_purpose_info]" placeholder="" value="<?= $mediaSocialResponse['purpose_of_application_info']?>">
+                                <input type="text" style="width: 130%; min-height: 2.5rem;" name="PermohonanForm[application_purpose_info]" placeholder="" value="<?= $mediaSocialResponse['purpose_of_application_info']?>">
                                 </div>
                                 </div>
                                 </label>
