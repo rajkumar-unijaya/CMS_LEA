@@ -136,9 +136,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 ],
             ]); ?>
 
-<div class="panel panel-default">
-        <div class="panel-heading">
-        <h5 class="panel-title pull-left">URL</h5>
+<div class="panel panel-info">
+        <div class="panel-heading"style=" padding: 8px;">
+           <b> URL </b>
             <button type="button" class="pull-right add-item btn btn-success btn-xs"><i class="fa fa-plus"></i></button>
             <div class="clearfix"></div><hr>
         </div>
@@ -147,12 +147,12 @@ use wbraganca\dynamicform\DynamicFormWidget;
             //foreach ($modelsAddress as $index => $modelAddress):
             foreach ($modelUrl as $index => $modelurl): ?>
                 <div class="item panel panel-default"><!-- widgetBody -->
-                    <div class="panel-heading">
+                    <div class="panel-heading"style=" padding: 8px;">
                         <span class="panel-title-address">URL: <?= ($index + 1) ?></span>
                         <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body"style=" padding: 10px;">
                         <div class="row">
                             <div class="col-sm-4">
                                 <?= Html::hiddenInput('PermohonanUrl['.$index.'][caseInfoURLInvolvedId]', $modelurl['id']);?>

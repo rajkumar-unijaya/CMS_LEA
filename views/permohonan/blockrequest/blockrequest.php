@@ -204,16 +204,16 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
             <div class="container-items"><!-- widgetContainer -->
             <?php foreach ($modelUrl as $i => $modelUrl): //echo"<pre>";print_r($modelUrl);exit;?>
-                <div class="item panel panel-default"><!-- widgetBody -->
-                    <div class="panel-heading">
-                        <h5 class="panel-title pull-left">URL</h5>
+                <div class="item panel panel-info"><!-- widgetBody -->
+                    <div class="panel-heading"style=" padding: 8px;">
+                    <b> URL </b>
                         <div class="pull-right">
                             <button type="button" class="add-item btn btn-success btn-xs"><i class="fa fa-plus"></i></button>
                             <button type="button" class="remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
                         </div>
-                        <div class="clearfix"></div><hr>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body"style=" padding: 10px;">
                         
                         <div class="row">
                             <div class="col-sm-4">
@@ -240,12 +240,11 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         <div class="col-md-12 col-12">
                             <div class="text-right">
                             <?= Html::submitButton('Hantar', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
-                                <a href="../block-request-list"
-                                    class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
-                                    data-placement="left" title=""
-                                    data-original-title="Click to cancel and back to the main page"><i
-                                        class="ti-close"></i>
-                                    Batal</a>
+                            <button type="button" class="btn waves-effect-light btn-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">
+                                    Batal
+                                    </button>  
+                            
+                            
                                     
                             </div>
                         </div>
@@ -261,6 +260,27 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 </div></div>
 
+
+<!-- popup cancel button -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"> </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      Sekiranya anda BATAL sebelum menyimpan, Maklumat yang diisi akan hilang.</div>
+      <div class="modal-footer">
+      <a href="../permohonan/block-request-list"><button type="button" class="btn btn-primary">Ya</button></a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
 <?php
 $script = <<< JS
 $(document).ready(function() {

@@ -259,11 +259,11 @@ class PermohonanController extends Controller
             ->send(); 
             if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
                 { 
-                    Yii::$app->session->addFlash('success','Successfully added new case infomation.');
+                    Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/mntl-list');
                 }
                 else{
-                    Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
+                    Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
             
@@ -478,11 +478,11 @@ class PermohonanController extends Controller
                     ->send();
                    // unlink($loparaPoliceDFFileName);
                     }
-                    Yii::$app->session->addFlash('success','Successfully added new case infomation.');
+                    Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/mediasosial');
                 }
                 else{
-                    Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
+                    Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
             
@@ -654,11 +654,11 @@ class PermohonanController extends Controller
                     ->send();
                     //unlink($loparaPoliceDFFileName);
                     }
-                    Yii::$app->session->addFlash('success','Successfully added new case infomation.');
+                    Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/block-request-list');
                 }
                 else{
-                    Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
+                    Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
             
@@ -923,11 +923,11 @@ class PermohonanController extends Controller
                     ->send();
                    // unlink($loparaPoliceDFFileName);
                     }
-                    Yii::$app->session->addFlash('success','Successfully updated existing case infomation.');
+                    Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/mediasosial');
                 }
                 else{
-                    Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
+                    Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
             
@@ -1656,11 +1656,11 @@ class PermohonanController extends Controller
                     ->send();
                    // unlink($loparaPoliceDFFileName);
                     }
-                    Yii::$app->session->addFlash('success','Successfully updated existing case infomation.');
+                    Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/block-request-list');
                 }
                 else{
-                    Yii::$app->session->addFlash('failed','New case infomation not inserted successfully.');
+                    Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
             
