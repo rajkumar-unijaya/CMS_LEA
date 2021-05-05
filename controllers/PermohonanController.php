@@ -933,11 +933,12 @@ class PermohonanController extends Controller
             
 		}    
         if(count($responses->data['records']) > 0)
-        {
+        {  
             $mediaSocialResponse = $responses->data['records'][0];
+            $modelStatusSuspekSaksi = [new PermohonanStatusSuspekSaksi];
+            $modelUrl = [new PermohonanUrl];
             if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialResponse['case_info_status_suspek']) > 0)
             {  
-                $modelStatusSuspekSaksi = [new PermohonanStatusSuspekSaksi];
                 $newSuspekSaksiModels= 0;
                 foreach($mediaSocialResponse['case_info_status_suspek'] as $key => $val):
                     if($newSuspekSaksiModels > 0)
@@ -954,10 +955,10 @@ class PermohonanController extends Controller
                 $newSuspekSaksiModels++;   
                 endforeach;
             }
-            //echo"<pre>";print_r($modelStatusSuspekSaksi);exit;
+            
             if(isset($mediaSocialResponse['case_info_url_involved']) && count($mediaSocialResponse['case_info_url_involved']) > 0)
             {  
-                $modelUrl = [new PermohonanUrl];
+                
                 $newModels= 0;
                 foreach($mediaSocialResponse['case_info_url_involved'] as $key => $val):
                     if($newModels > 0)
@@ -1348,9 +1349,10 @@ class PermohonanController extends Controller
         if(count($responses->data['records']) > 0)
         {
             $mediaSocialResponse = $responses->data['records'][0];
+            $modelUrl = [new PermohonanUrl];
+            $modelStatusSuspekSaksi = [new PermohonanStatusSuspekSaksi];
             if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialResponse['case_info_status_suspek']) > 0)
             {  
-                $modelStatusSuspekSaksi = [new PermohonanStatusSuspekSaksi];
                 $newSuspekSaksiModels= 0;
                 foreach($mediaSocialResponse['case_info_status_suspek'] as $key => $val):
                     if($newSuspekSaksiModels > 0)
@@ -1370,7 +1372,6 @@ class PermohonanController extends Controller
             //echo"<pre>";print_r($modelStatusSuspekSaksi);exit;
             if(isset($mediaSocialResponse['case_info_url_involved']) && count($mediaSocialResponse['case_info_url_involved']) > 0)
             {  
-                $modelUrl = [new PermohonanUrl];
                 $newModels= 0;
                 foreach($mediaSocialResponse['case_info_url_involved'] as $key => $val):
                     if($newModels > 0)
@@ -1668,6 +1669,7 @@ class PermohonanController extends Controller
         
         if(count($responses->data['records']) > 0)
         {
+            $modelUrl = [new PermohonanUrl];
             $mediaSocialResponse = $responses->data['records'][0];
                 foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
                     
@@ -1689,7 +1691,7 @@ class PermohonanController extends Controller
         }
         if(isset($mediaSocialResponse['case_info_url_involved']) && count($mediaSocialResponse['case_info_url_involved']) > 0)
         { 
-            $modelUrl = [new PermohonanUrl];
+            
             $newModels= 0;
             foreach($mediaSocialResponse['case_info_url_involved'] as $key => $val):
                 if($newModels > 0)
@@ -1946,6 +1948,7 @@ class PermohonanController extends Controller
         $prevDeletedOffences = array();
         $removePrevSelectedOffences = array();
         $offencesListRes = array();
+        $prevSelectedOffences = array();
 
         /******
          * Get offence master data from the offence table using api service.
