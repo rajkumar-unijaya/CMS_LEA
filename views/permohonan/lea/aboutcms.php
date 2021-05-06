@@ -18,8 +18,21 @@ if (Yii::$app->session->hasFlash('success')) {
             <li class="breadcrumb-item active" aria-current="page">Tentang CMS</li>
         </ol>
     </nav>
-    
-  <div class="panel panel-default">
-    <div class="panel-body">Case management System (CMS) is an initiative by the Malaysian Communications and Multimedia Commission to facilitate the Law Enforcement Agency (LEA) or statutory / non-statutory agencies to submit application for assistance in providing information for the purpose of the Royal Malaysian Police Inquiry.  </div>
-  </div>
+
+    <div class="row">
+			<div class="col-lg-12">
+				<div class="card card-outline-info">
+         <div class="card-body">
+                <label>Case management System (CMS) is an initiative by the Malaysian Communications 
+                and Multimedia Commission to facilitate the Law Enforcement Agency (LEA) or statutory / non-statutory 
+                agencies to submit application for assistance in providing information for the purpose of the Royal 
+                Malaysian Police Inquiry.  
+                
+
+                
+                </label>
+              </div>
+</div>
+</div>
+</div>
 </div>
