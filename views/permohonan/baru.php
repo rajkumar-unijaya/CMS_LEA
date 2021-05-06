@@ -278,7 +278,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
             <div class="container-items"><!-- widgetContainer -->
             <?php foreach ($modelUrl as $j => $modelUrl): //echo"<pre>";print_r($modelUrl);exit;?>
-                <div class="item panel panel-default"><!-- widgetBody -->
+                <div class="item panel panel-info"><!-- widgetBody -->
                     <div class="panel-heading"style=" padding: 8px;">
                         <b>URL</b>
                         <div class="pull-right">
