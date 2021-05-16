@@ -132,10 +132,11 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                       <input type="hidden" id="suratRasmiImagePath" name="BlockRequestForm[surat_rasmi_last_attachment]" value="<?php echo $mediaSocialResponse['surat_rasmi'];?>">
                                       <?= Html::button("Padam",['class'=>'btn btn-primary deleteImg',"id" => "deleteImg"]);?>
                                   </div>
-                            </div><div class="row">
+                                  <div class="row">
                                   <div class="col-md-12 text-right" id="surat_rasmi_img_download">
                                         <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "suratRasmiViesDownloadImg"]);?>
                                   </div>
+                            </div>
                               </div>                    
                         
                   </div>
@@ -161,10 +162,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
                                       <input type="hidden" id="loparanImagePath" name="BlockRequestForm[laporan_polis_last_attachment]" value="<?php echo $mediaSocialResponse['laporan_polis'];?>"> 
                                       <?= Html::button("Padam",['class'=>'btn btn-primary',"id" => "laporanPolisDeleteImg"]);?>
                                     </div>
-                          
-                                    </div><div class="row">
+                                    <div class="row">
                                     <div class="col-sm-12 text-right" id="laporan_polis_img_download">
                                         <?= Html::button("Muat Turun | Lihat",['class'=>'btn btn-primary',"id" => "laporanPolisViesDownloadImg"]);?>
+                                    </div>
                                     </div>
                             </div>
                              
@@ -221,6 +222,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         
                         <div class="row">
                             <div class="col-sm-4">
+                            <?php $idVal = "PermohonanUrl[".$index."][caseInfoURLInvolvedId]";?>
+                            <?=  Html::hiddenInput($idVal, $modelurl['id']); ?>
                                 <?= $form->field($modelurl, "[{$index}]master_social_media_id")->dropDownList($masterSocialMedia,array('prompt' => 'Pilih Sosial Media','options' => array($modelurl['master_social_media_id'] => array('selected'=>true))))->label(false);?> 
                             </div>
                             <div class="col-sm-8">

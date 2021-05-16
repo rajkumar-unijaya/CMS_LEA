@@ -43,11 +43,13 @@ class BlockRequestForm extends Model
     {
         return [
             [['for_self'], 'required','message'=>'Pilihan Mengisi'],
-            [['selfName'], 'required','message'=>'Masukkan name','when' => function ($model) { 
-                return ($model->for_self == 78 ? true : false); 
+            [['selfName'], 'required','message'=>'Masukkan Nama','when' => function ($model) { 
+                return ($model->for_self == 78 ? true : false);
             }, 'whenClient' => "function (attribute, value) { 
-                return $('#blockrequestform-for_self').val() == 78;
-            }"],
+                return $('[name=\"BlockRequestForm[for_self]\"]').val() == 78;
+                }"], 
+            
+                
             [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false); 
              }, 'whenClient' => "function (attribute, value) {
@@ -57,7 +59,7 @@ class BlockRequestForm extends Model
 
             [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false);
-             }, 'whenClient' => "function (attribute, value) {
+             }, 'whenClient' => "function (attribute, value) { 
                 return $('#blockrequestform-for_self').val() == 78;
                  }"],
             [['report_no'],Reportno::className()],       
