@@ -65,16 +65,16 @@ class PermohonanForm extends Model
         return [
             [['for_self'], 'required','message'=>'Pilih Pilihan Mengisi'],
             
-            [['selfName'], 'required','message'=>'Masukkan name','when' => function ($model) { 
-                return ($model->for_self == 78 ? true : false); 
-            }, 'whenClient' => "function (attribute, value) {
-                return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 78;
-                }"],
+            [['selfName'], 'required','message'=>'Masukkan Nama','when' => function ($model) { 
+                return ($model->for_self == 78 ? true : false);
+            }, 'whenClient' => "function (attribute, value) { 
+                return $('[name=\"PermohonanForm[for_self]\"]').val() == 78;
+                }"],  
             [['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false); 
-             }, 'whenClient' => "function (attribute, value) {
-                 return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 78;
-                 }"],
+             }, 'whenClient' => "function (attribute, value) { 
+                return $('[name=\"PermohonanForm[for_self]\"]').val() == 78;
+                }"],
             [['email'],Domaincheck::className()],     
             /*[['email'], 'required','message'=>'Masukkan email','when' => function ($model) { 
                 $allDomains = [".gov.my"];
@@ -100,9 +100,9 @@ class PermohonanForm extends Model
             [['email'],'domainCheck'],*/
             [['no_telephone'], 'required','message'=>'Masukkan No. telephone','when' => function ($model) { 
                  return ($model->for_self == 78 ? true : false);
-             }, 'whenClient' => "function (attribute, value) {
-                 return $('input[type=\"radio\"][name=\"PermohonanForm[for_self]\"]:checked').val() == 78;
-                 }"],     
+             }, 'whenClient' => "function (attribute, value) { 
+                 return $('[name=\"PermohonanForm[for_self]\"]').val() == 78;
+                 }"], 
              [['report_no'], 'required','message'=>'Masukkan No Laporan Polis atau No Kertas Siasatan',
                  'when' => function($model) { return empty($model->investigation_no); }, 'whenClient' => "function (attribute, value) {
                     return $('#permohonanform-investigation_no').val().length == 0;

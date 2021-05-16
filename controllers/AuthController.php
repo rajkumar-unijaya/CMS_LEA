@@ -25,6 +25,8 @@ class AuthController extends Controller
     private $_url_crawler = null;
     private $_DFHeaderKey = null;
     private $_DFHeaderPass = null;
+    private $browserInfo = null;
+    private $auditDetails = array();
     
     
     /**
@@ -34,27 +36,13 @@ class AuthController extends Controller
     {
         $this->_url = Yii::$app->params['DreamFactoryContextURL'];
         $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
-        $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
+        //$this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
         $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
         $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
+        $ua = $this->getBrowser();
+        $this->browserInfo =  $ua['name'] . " " . $ua['version'] . " on " .$ua['platform'];
+
         return [
-            /*'access' => [
-                'class' => AccessControl::className(),
-                //'only' => ['logout'],
-                'rules' => [
-                    [
-                        //'actions' => ['logout'],
-                        //'allow' => true,
-                        //'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    //'logout' => ['post'],
-                ],
-            ],*/
         ];
     }
 
@@ -97,6 +85,7 @@ class AuthController extends Controller
         $model = new EmailForm();
         $otpAuth = new OtpAuthentication;
         $otpSendDeviceList = array();
+        
         // check post data and validate postdata and generate random OTP send it as email notifications
         if ($model->load(Yii::$app->request->post()) && $model->validate()) 
         { 
@@ -107,7 +96,7 @@ class AuthController extends Controller
             $client = new Client();
             /*
             ***** check if user entered email address is exists in database or not, If exists then proceed with next business logic
-            */    
+            */  
             $emailResponse = $client->createRequest()
                 ->setFormat(Client::FORMAT_URLENCODED)
                 ->setMethod('GET')
@@ -115,23 +104,34 @@ class AuthController extends Controller
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
                  //check if user entered telegram id is exists in database or not, If exists then proceed with next business logic
-                
-                if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
+                if(count($emailResponse->data['records']) > 0)
                 { 
-                    $telegramResponse = $client->createRequest()
-                    ->setFormat(Client::FORMAT_URLENCODED)
-                    ->setMethod('GET')
-                    ->setUrl($this->_url_crawler."func.telegram_sendmsg.php?chatid=".$emailResponse->data['records'][0]['telegram_id']."&msg=".rawurlencode("Oyi"))
-                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
-                    ->send();
-                    if(isset($telegramResponse->data['ok']) && !empty($telegramResponse->data['ok']))
+                    if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
                     {
-                        array_push($otpSendDeviceList,"telegram");
+                        $telegramResponse = $client->createRequest()
+                        ->setFormat(Client::FORMAT_URLENCODED)
+                        ->setMethod('GET')
+                        ->setUrl($this->_url_crawler."func.telegram_sendmsg.php?chatid=".$emailResponse->data['records'][0]['telegram_id']."&msg=".rawurlencode("Oyi"))
+                        ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+                        ->send();
+                        if(isset($telegramResponse->data['ok']) && !empty($telegramResponse->data['ok']))
+                        {
+                            array_push($otpSendDeviceList,"telegram");
+                        $this->auditDetails['master_audit_activity_id'] = array_search("Send Telegram",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                        $this->auditDetails['master_audit_log_type'] = array_search("External API Call",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                        $this->auditDetails['user_id'] = $emailResponse->data['records'][0]['id'];
+                        $this->auditDetails['master_user_type'] = $emailResponse->data['records'][0]['master_user_type_id'];
+                        $this->auditDetails['description'] = "OTP send to telegram";
+                        $this->auditDetails['user_agent'] = $this->browserInfo;
+                        $this->auditDetails['ip_address'] = Yii::$app->request->userIP;
+                        $responses = Yii::$app->helper->apiService('POST', 'audit_info', $this->auditDetails);
+                        }
                     }
-                    /*else{
-                        Yii::$app->session->addFlash('failed','telegram id is not correct');
-                        return $this->refresh();
-                    }*/
+                    
+                    //else{
+                        //Yii::$app->session->addFlash('failed','telegram id is not correct');
+                        //return $this->refresh();
+                    //}
                 }
                 // check if user entered mobile number is exists in database or not, If exists then proceed with next business logic
 
@@ -166,12 +166,13 @@ class AuthController extends Controller
                     ->setTo('zoie17@ethereal.email')
                     ->setSubject('Email sent from cms project')
                     ->send())
-                    {   
+                    {  
                         array_push($otpSendDeviceList,"email");
                         $client = new Client();
                         $session = Yii::$app->session;
-                        $session->set('email', $data['EmailForm']['email']);
-                        $session->set('userId', $emailResponse->data['records'][0]['id']);
+                        Yii::$app->session->setFlash('email', $data['EmailForm']['email']);
+                        Yii::$app->session->setFlash('userId', $emailResponse->data['records'][0]['id']);
+                        Yii::$app->session->setFlash('master_user_type', $emailResponse->data['records'][0]['master_user_type_id']);
                         $otpResponse = $client->createRequest()
                         ->setFormat(Client::FORMAT_URLENCODED)
                         ->setMethod('POST')
@@ -179,11 +180,28 @@ class AuthController extends Controller
                         ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                         ->setData(["otp" => $otp,"email" => $data['EmailForm']['email'],"user_id" => $emailResponse->data['records'][0]['id']])
                         ->send();
+
+                        $this->auditDetails['master_audit_activity_id'] = array_search("Send Email",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                        $this->auditDetails['master_audit_log_type'] = array_search("External API Call",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                        $this->auditDetails['user_id'] = $emailResponse->data['records'][0]['id'];
+                        $this->auditDetails['master_user_type'] = $emailResponse->data['records'][0]['master_user_type_id'];
+                        $this->auditDetails['description'] = "OTP send to email";
+                        $this->auditDetails['user_agent'] = $this->browserInfo;
+                        $this->auditDetails['ip_address'] = Yii::$app->request->userIP;
+                        $responses = Yii::$app->helper->apiService('POST', 'audit_info', $this->auditDetails);
                         // once email notifications successfully done then redirect to verifications page
                         if ($otpResponse->statusCode == 200) { 
                             $session->open();
                             $session->setFlash('otpDeviceList', $otpSendDeviceList);
                             Yii::$app->session->addFlash('notification','Sila Periksa E-mel Anda Untuk Kod OTP.');
+                            $this->auditDetails['master_audit_activity_id'] = array_search("Token Request",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                            $this->auditDetails['master_audit_log_type'] = array_search("LEA Activity Log",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                            $this->auditDetails['user_id'] = $emailResponse->data['records'][0]['id'];
+                            $this->auditDetails['master_user_type'] = $emailResponse->data['records'][0]['master_user_type_id'];
+                            $this->auditDetails['description'] = "OTP request";
+                            $this->auditDetails['user_agent'] = $this->browserInfo;
+                            $this->auditDetails['ip_address'] = Yii::$app->request->userIP;
+                            $responses = Yii::$app->helper->apiService('POST', 'audit_info', $this->auditDetails);
                             $this->redirect('../auth/validation-code');
                         }
                         else
@@ -217,16 +235,18 @@ class AuthController extends Controller
      */
     public function actionValidationCode()
     {  
+       
         $url = Yii::$app->params['DreamFactoryContextURL'];
         $this->layout =  'login';
         $session = Yii::$app->session;
         $model = new ValidationCodeForm();
         //default timezone is UTC it has configured at web.php
-        if (Yii::$app->request->get('email') && Yii::$app->request->get('otp')) {
+        if (Yii::$app->request->get('email') && Yii::$app->request->get('otp')) { 
              $lessDate =  date("Y-m-d H:i:s", strtotime("-5 minutes"));
              $date =  date("Y-m-d H:i:s");
              $otp = Yii::$app->request->get('otp');
              $email = Yii::$app->request->get('email');
+             $userId = Yii::$app->request->get('userId');
              $client = new Client();
              $otp_response = $client->createRequest()
              ->setFormat(Client::FORMAT_URLENCODED)
@@ -234,7 +254,7 @@ class AuthController extends Controller
              //->setUrl($this->_url_procedure.'crud-api-procedures/check_user_islogged')//local
              ->setUrl($this->_url_procedure.'check_user_islogged')//live
              ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
-             ->setData(["email" => $email,"otp" => $otp,"userId"=>$session->get('userId')])
+             ->setData(["email" => $email,"otp" => $otp,"userId"=>$userId])
              ->send(); 
              /*
              *** check if email & otp is check in table if correct then session will create and redirect to dashboard page
@@ -245,18 +265,38 @@ class AuthController extends Controller
                     { 
                         if ($session->isActive)
                         { 
+                            $session->set('userId', $otp_response->data['records']['id']);
                             $session->set('IC', $otp_response->data['records']['ic_no']);
                             $session->set('email', $otp_response->data['records']['email']);
                             $session->set('mobile', $otp_response->data['records']['mobile_no']);
                             $session->set('telegram_id', $otp_response->data['records']['telegram_id']);
                             $session->set('username', $otp_response->data['records']['fullname']);
+                            $session->set('master_user_type', $otp_response->data['records']['master_user_type_id']);
                         } 
+                        $this->auditDetails['master_audit_activity_id'] = array_search("Login Successful",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                        $this->auditDetails['master_audit_log_type'] = array_search("LEA Activity Log",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                        $this->auditDetails['user_id'] = $session->get('userId');
+                        $this->auditDetails['master_user_type'] = $session->get('master_user_type');
+                        $this->auditDetails['description'] = "Login Successfull";
+                        $this->auditDetails['user_agent'] = $this->browserInfo;
+                        $this->auditDetails['ip_address'] = Yii::$app->request->userIP;
+                        $responses = Yii::$app->helper->apiService('POST', 'audit_info', $this->auditDetails);   
+                     
                      $responseInfo['status'] = 200;
                      $responseInfo['message'] = 'notification';
                      $responseInfo['info'] = 'Entered OTP is correct';
                      return $this->asJson($responseInfo);
                     }
                     else{ 
+                        $this->auditDetails['master_audit_activity_id'] = array_search("Login Failure",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                        $this->auditDetails['master_audit_log_type'] = array_search("LEA Activity Log",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                        $this->auditDetails['user_id'] = $session->get('userId');
+                        $this->auditDetails['master_user_type'] = $session->get('master_user_type');
+                        $this->auditDetails['description'] = "timeout";
+                        $this->auditDetails['user_agent'] = $this->browserInfo;
+                        $this->auditDetails['ip_address'] = Yii::$app->request->userIP;
+                        $responses = Yii::$app->helper->apiService('POST', 'audit_info', $this->auditDetails);
+                        
                         $responseInfo['status'] = 422;
                         $responseInfo['message'] = 'failed';
                         $responseInfo['info'] = 'Timeout';
@@ -266,13 +306,31 @@ class AuthController extends Controller
                 }
                 else if($otp_response->statusCode == 200 && count($otp_response->data['records']) == 0)
                 { 
-                   $responseInfo['status'] = 422;
+                    $this->auditDetails['master_audit_activity_id'] = array_search("Login Failure",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails['master_audit_log_type'] = array_search("LEA Activity Log",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails['user_id'] = $session->get('userId');
+                    $this->auditDetails['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails['description'] = "entered wrong otp ".Yii::$app->request->get('otp');
+                    $this->auditDetails['user_agent'] = $this->browserInfo;
+                    $this->auditDetails['ip_address'] = Yii::$app->request->userIP;
+                    $responses = Yii::$app->helper->apiService('POST', 'audit_info', $this->auditDetails);
+                   
+                    $responseInfo['status'] = 422;
                    $responseInfo['message'] = 'failed';
                    $responseInfo['info'] = 'IOTP Tidak Sah';
                    return $this->asJson($responseInfo);
                 }     
              else if($otp_response->statusCode != 200)
              {  
+                $this->auditDetails['master_audit_activity_id'] = array_search("Login Failure",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails['master_audit_log_type'] = array_search("LEA Activity Log",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails['user_id'] = $session->get('userId');
+                $this->auditDetails['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails['description'] = "entered wrong otp ".Yii::$app->request->get('otp');
+                $this->auditDetails['user_agent'] = $this->browserInfo;
+                $this->auditDetails['ip_address'] = Yii::$app->request->userIP;
+                $responses = Yii::$app->helper->apiService('POST', 'audit_info', $this->auditDetails);
+                
                 $responseInfo['status'] = 422;
                 $responseInfo['message'] = 'failed';
                 $responseInfo['info'] = 'OTP Tidak Sah';
@@ -281,9 +339,7 @@ class AuthController extends Controller
         }   
         else
         {
-        return $this->render('validationCode', [
-        'model' => $model,'email' => $session->get('email')
-        ]);
+        return $this->render('validationCode', ['model' => $model,'email' => Yii::$app->session->getFlash('email'),'userId' => Yii::$app->session->getFlash('userId')]);
         }
     }
 
