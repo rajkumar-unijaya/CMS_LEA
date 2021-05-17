@@ -84,4 +84,13 @@ return array (
       '@yii/bootstrap4' => $vendorDir . '/yiisoft/yii2-bootstrap4/src',
     ),
   ),
+  'miloschuman/yii2-highcharts-widget' => 
+  array (
+    'name' => 'miloschuman/yii2-highcharts-widget',
+    'version' => '9.0.0.0',
+    'alias' => 
+    array (
+      '@miloschuman/highcharts' => $vendorDir . '/miloschuman/yii2-highcharts-widget/src',
+    ),
+  ),
 );
