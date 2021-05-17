@@ -44,7 +44,8 @@ DashboardAsset::register($this);
                         <a target="__blank" class="dropdown-item" href="../permohonan/guidelines">Garis Panduan</a>
                         <a class="dropdown-item" href="../permohonan/lea-edit">Lihat Profil</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="../auth/logout">Log Keluar</a>
+                        <!--<a class="dropdown-item" href="../auth/logout">Log Keluar</a>-->
+                        <button type="button" class="dropdown-item" data-toggle="modal" data-target="#cancelModel">Log Keluar</button>
                     </div>
                     
             </ul>
@@ -97,7 +98,12 @@ DashboardAsset::register($this);
                                 </nav>
                             </nav>
                         </div> 
-                        <a class="nav-link" href="../statistik/index"><i class="fa fa-bar-chart "></i>	&nbsp;&nbsp;Statistik/Laporan</a>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                            <div class="sb-nav-link-icon"><i class="fa fa-bar-chart"></i>	</div>
+                            Statistik/Laporan
+                            <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+                        </a>
+                        
                     </div>
 
                 </div>
@@ -138,7 +144,26 @@ DashboardAsset::register($this);
     </div>
 
 
-
+<!-- popup cancel button -->
+<div class="modal fade" id="cancelModel" tabindex="-1" role="dialog" aria-labelledby="cancelModel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Log keluar </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      Adakah anda pasti mahu keluar?</div>
+      <div class="modal-footer">
+      <a href="../auth/logout"><button type="button" class="btn btn-primary">Ya</button></a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
 
 <?php $this->endBody() ?>
 
