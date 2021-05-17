@@ -1,6 +1,5 @@
 <?php
 
-
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
@@ -10,7 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
                             <?php
                             if (Yii::$app->session->hasFlash('success')) {
-                                echo "<div class='alert alert-success'>" . Yii::$app->session->getFlash('success')[0] . "</div>";
+                               echo "<div class='alert alert-success'>" . Yii::$app->session->getFlash('success')[0] . "</div>";
                             }
                             ?>        
                         <h3 class="mt-4"><?= Html::encode($this->title) ?></h3>

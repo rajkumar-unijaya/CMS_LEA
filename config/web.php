@@ -13,6 +13,7 @@ $config = [
         '@basePath' => "@app",
         '@guidelines' => "@app/web/uploads/guidelines/",
     ],
+
     'defaultRoute' => 'auth/login',
     'on beforeAction' => function($event)
     { 
@@ -27,6 +28,7 @@ $config = [
                \yii::$app->response->redirect('../dashboard/index');
             }                  
     },
+
     'components' => [
         'session' => [
             'timeout' => 1800,
