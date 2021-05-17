@@ -60,6 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <input class="form-control" onclick="this.select()" name="validationCode[]" id="validation5" type="text" />
                                             <input class="form-control" onclick="this.select()" name="validationCode[]" id="validation6" type="text" />
                                             <input class="form-control" onclick="this.select()" name="email" id="email" value="<?= $email;?>" type="hidden" />
+                                            <input class="form-control" onclick="this.select()" name="userId" id="userId" value="<?= $userId;?>" type="hidden" />
                                             </div>
                                             
                                             <div class="p-3 mb-2 bg-secondary text-white mt-4 ">
@@ -146,7 +147,7 @@ $('form').submit(function(ev){
       document.getElementById("demo").innerHTML = this.responseText;
     }
   };
-  var params = "?email="+$('#email').val()+"&otp="+otpCode;
+  var params = "?email="+$('#email').val()+"&otp="+otpCode+"&userId="+$('#userId').val();
   xhttp.open("GET", "../auth/validation-code"+params, true);
   
   xhttp.send();

@@ -36,6 +36,8 @@ class PermohonanController extends Controller
     private $_FileTrashFolderBlockRequestSuratRasmi = null;
     private $_FileTrashFolderBlockRequestLaporanPolice = null;
     private $_urlCrawler = null;
+    private $auditDetails = array();
+    private $browserInfo = null;
 
     /**
      * {@inheritdoc}
@@ -43,9 +45,9 @@ class PermohonanController extends Controller
     public function behaviors()
     {
         $this->_url = Yii::$app->params['DreamFactoryContextURL'];
-        $this->_urlCrawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
+        //$this->_urlCrawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
         $this->_url_procedure = Yii::$app->params['DreamFactoryContextURLProcedures'];
-        $this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
+        //$this->_url_crawler = Yii::$app->params['DreamFactoryContextURLCrawler'];
         $this->_url_files = Yii::$app->params['DreamFactoryContextURLFiles'];
         $this->_DFHeaderKey = Yii::$app->params['DreamFactoryHeaderKey'];
         $this->_DFHeaderPass = Yii::$app->params['DreamFactoryHeaderPass'];
@@ -54,8 +56,10 @@ class PermohonanController extends Controller
         $this->_FileDownload = Yii::$app->params['FILE_DOWNLOAD'];
         $this->_FileTrashFolderSuratRasmi = Yii::$app->params['FILE_TRASH_SURAT_RASMI'];
         $this->_FileTrashFolderLaporanPolice = Yii::$app->params['FILE_TRASH_LAPORAN_POLIS'];
-        $this->_FileTrashFolderBlockRequestSuratRasmi = Yii::$app->params['FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI'];;
-        $this->_FileTrashFolderBlockRequestLaporanPolice = Yii::$app->params['FILE_TRASH_BLOCK_REQUEST_LAPORAN_POLIS'];;
+        $this->_FileTrashFolderBlockRequestSuratRasmi = Yii::$app->params['FILE_TRASH_BLOCK_REQUEST_SURAT_RASMI'];
+        $this->_FileTrashFolderBlockRequestLaporanPolice = Yii::$app->params['FILE_TRASH_BLOCK_REQUEST_LAPORAN_POLIS'];
+        $ua = $this->getBrowser();
+        $this->browserInfo =  $ua['name'] . " " . $ua['version'] . " on " .$ua['platform'];
         
         return [
             'access' => [
@@ -150,12 +154,7 @@ class PermohonanController extends Controller
         /******
          * Get offence master data from the offence table using api service.
          */
-        $tipOffNoResponse = $client->createRequest()
-                ->setFormat(Client::FORMAT_URLENCODED)
-                ->setMethod('GET')
-                ->setUrl($this->_url.'tipoff?include=id,tipoff_no')
-                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->send();
+                $tipOffNoResponse = Yii::$app->helper->apiService('GET', 'tipoff?include=id,tipoff_no', []);
                
                 if(isset($tipOffNoResponse->data['records']) && count($tipOffNoResponse->data['records']) > 0)
                 {
@@ -259,10 +258,42 @@ class PermohonanController extends Controller
             ->send(); 
             if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
                 { 
+                    $this->auditDetails[0]['master_audit_activity_id'] = array_search("Case Created",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[0]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[0]['user_id'] = $session->get('userId');
+                    $this->auditDetails[0]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[0]['description'] = "Add new case information";
+                    $this->auditDetails[0]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[0]['ip_address'] = Yii::$app->request->userIP;
+                   
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/mntl-list');
                 }
                 else{
+                    $this->auditDetails[0]['master_audit_activity_id'] = array_search("Case Create fails",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[0]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[0]['user_id'] = $session->get('userId');
+                    $this->auditDetails[0]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[0]['description'] = "Case information creation fails";
+                    $this->auditDetails[0]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[0]['ip_address'] = Yii::$app->request->userIP;
+                    
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
@@ -283,17 +314,9 @@ class PermohonanController extends Controller
         $client = new Client();
         $session = Yii::$app->session;
         $mediaSocialResponse = array();
-        $session->get('userId');
         $case_status_values = "";
         $case_status_values .= array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Rejected",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Closed",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.'1'.'&filter=case_status,in,1,2,3,33&filter=master_case_info_type_id,eq,1&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,1&join=master_status&order=id,desc')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,1&join=master_status&order=id,desc', []);    
         $mediaSocialResponse = $responses->data['records'];
         return $this->render('mediasosial', ['mediaSocialResponse' => $mediaSocialResponse]);
     }
@@ -334,13 +357,7 @@ class PermohonanController extends Controller
         /******
          * Get offence master data from the offence table using api service.
          */
-        $offenceResponse = $client->createRequest()
-                ->setFormat(Client::FORMAT_URLENCODED)
-                ->setMethod('GET')
-                ->setUrl($this->_url.'offence?include=id,name')
-                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->send();
-               
+                $offenceResponse = Yii::$app->helper->apiService('GET', 'offence?include=id,name', []);      
                 if(isset($offenceResponse->data['records']) && count($offenceResponse->data['records']) > 0)
                 {
                     foreach($offenceResponse->data['records'] as $key => $value)
@@ -416,9 +433,17 @@ class PermohonanController extends Controller
                 }
                 $i++;
                 }
-                
-                
             }
+
+            $this->auditDetails[0]['master_audit_activity_id'] = array_search("Add Suspek/Saksi",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+            $this->auditDetails[0]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+            $this->auditDetails[0]['user_id'] = $session->get('userId');
+            $this->auditDetails[0]['master_user_type'] = $session->get('master_user_type');
+            $this->auditDetails[0]['description'] = "Adding suspek/saksi information";
+            $this->auditDetails[0]['user_agent'] = $this->browserInfo;
+            $this->auditDetails[0]['ip_address'] = Yii::$app->request->userIP;
+            //echo"<pre>";print_r($this->auditDetails);exit;
+
         }
         
         if(!empty($data['PermohonanUrl']))
@@ -435,6 +460,13 @@ class PermohonanController extends Controller
                     
                 }
             }
+            $this->auditDetails[1]['master_audit_activity_id'] = array_search("URL Request",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+            $this->auditDetails[1]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+            $this->auditDetails[1]['user_id'] = $session->get('userId');
+            $this->auditDetails[1]['master_user_type'] = $session->get('master_user_type');
+            $this->auditDetails[1]['description'] = "Add URL information";
+            $this->auditDetails[1]['user_agent'] = $this->browserInfo;
+            $this->auditDetails[1]['ip_address'] = Yii::$app->request->userIP;
                 
         }
             $offences = $data['PermohonanForm']['offence'];
@@ -449,10 +481,10 @@ class PermohonanController extends Controller
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('POST')
             ->setUrl($this->_url_procedure.'case_info')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
             ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"caseInvolvedURL" => json_encode($caseInvolvedURL),"offences" => json_encode($offences)])
             ->send(); 
-            if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
+            if($caseInfoResponse->statusCode == 200 || $caseInfoResponse->statusCode == 400 /* count($caseInfoResponse->data['records']) > */)
                 { 
                     if(!empty($model->surat_rasmi))
                     { 
@@ -465,6 +497,13 @@ class PermohonanController extends Controller
                     ->addFile('files',$suratRasmiDFFileName)
                     ->send();
                     //unlink($suratRasmiDFFileName);
+                    $this->auditDetails[2]['master_audit_activity_id'] = array_search("Document Upload",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[2]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[2]['user_id'] = $session->get('userId');
+                    $this->auditDetails[2]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[2]['description'] = "Upload attachment";
+                    $this->auditDetails[2]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[2]['ip_address'] = Yii::$app->request->userIP;
                     }
                     if(!empty($model->laporan_polis))
                     {
@@ -478,10 +517,39 @@ class PermohonanController extends Controller
                     ->send();
                    // unlink($loparaPoliceDFFileName);
                     }
+                    $this->auditDetails[3]['master_audit_activity_id'] = array_search("Case Created",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[3]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[3]['user_id'] = $session->get('userId');
+                    $this->auditDetails[3]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[3]['description'] = "Adding new case information";
+                    $this->auditDetails[3]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[3]['ip_address'] = Yii::$app->request->userIP;
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/mediasosial');
                 }
                 else{
+                    $this->auditDetails[4]['master_audit_activity_id'] = array_search("Case Create fails",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[4]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[4]['user_id'] = $session->get('userId');
+                    $this->auditDetails[4]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[4]['description'] = "Case information creation fails";
+                    $this->auditDetails[4]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[4]['ip_address'] = Yii::$app->request->userIP;
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send();
                     Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
@@ -523,13 +591,7 @@ class PermohonanController extends Controller
         /******
          * Get offence master data from the offence table using api service.
          */
-        $offenceResponse = $client->createRequest()
-                ->setFormat(Client::FORMAT_URLENCODED)
-                ->setMethod('GET')
-                ->setUrl($this->_url.'offence?include=id,name')
-                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->send();
-               
+                $offenceResponse = Yii::$app->helper->apiService('GET', 'offence?include=id,name', []);           
                 if(isset($offenceResponse->data['records']) && count($offenceResponse->data['records']) > 0)
                 {
                     foreach($offenceResponse->data['records'] as $key => $value)
@@ -544,7 +606,6 @@ class PermohonanController extends Controller
            *  */     
           if ($model->load(Yii::$app->request->post()) && $model->validate()) { 
             $data = Yii::$app->request->post();
-//echo"<pre>";print_r($data);exit;
             $lastCaseInfoResponse = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('POST')
@@ -610,6 +671,13 @@ class PermohonanController extends Controller
                     $caseInvolvedURL[$socialMedia]["created_by"]  = $session->get('userId');
                     $socialMedia++; 
                 }
+                $this->auditDetails[0]['master_audit_activity_id'] = array_search("URL Request",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[0]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[0]['user_id'] = $session->get('userId');
+                $this->auditDetails[0]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[0]['description'] = "Added $socialMedia URL information";
+                $this->auditDetails[0]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[0]['ip_address'] = Yii::$app->request->userIP;
             }
             
             $offences = $data['BlockRequestForm']['offence'];
@@ -622,7 +690,6 @@ class PermohonanController extends Controller
             $caseInfoResponse = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('POST')
-            //->setUrl($this->_url_procedure.'crud-api-procedures/case_info')//local
             ->setUrl($this->_url_procedure.'case_info')
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
             ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"caseInvolvedURL" => json_encode($caseInvolvedURL),"offences" => json_encode($offences)])
@@ -641,6 +708,13 @@ class PermohonanController extends Controller
                     ->addFile('files',$suratRasmiDFFileName)
                     ->send();
                     //unlink($suratRasmiDFFileName);
+                    $this->auditDetails[1]['master_audit_activity_id'] = array_search("Document Upload",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[1]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[1]['user_id'] = $session->get('userId');
+                    $this->auditDetails[1]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[1]['description'] = "Surat rasmi attachment uploaded";
+                    $this->auditDetails[1]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[1]['ip_address'] = Yii::$app->request->userIP;
                     }
                     if(!empty($model->laporan_polis))
                     {
@@ -653,11 +727,50 @@ class PermohonanController extends Controller
                     ->addFile('files',$loparaPoliceDFFileName)
                     ->send();
                     //unlink($loparaPoliceDFFileName);
+                    $this->auditDetails[2]['master_audit_activity_id'] = array_search("Document Upload",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[2]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[2]['user_id'] = $session->get('userId');
+                    $this->auditDetails[2]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[2]['description'] = "Laporan polis attachment uploaded";
+                    $this->auditDetails[2]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[2]['ip_address'] = Yii::$app->request->userIP;
                     }
+                    $this->auditDetails[3]['master_audit_activity_id'] = array_search("Case Created",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[3]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[3]['user_id'] = $session->get('userId');
+                    $this->auditDetails[3]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[3]['description'] = "Add New case information";
+                    $this->auditDetails[3]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[3]['ip_address'] = Yii::$app->request->userIP;
+                    $client = new Client();
+                    
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/block-request-list');
                 }
                 else{
+                    $this->auditDetails[1]['master_audit_activity_id'] = array_search("Case Create fails",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[1]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[1]['user_id'] = $session->get('userId');
+                    $this->auditDetails[1]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[1]['description'] = "Case information creation fails";
+                    $this->auditDetails[1]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[1]['ip_address'] = Yii::$app->request->userIP;
+                    $client = new Client();
+                    
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
@@ -703,45 +816,41 @@ class PermohonanController extends Controller
         $newOffences = array();
         $newSelectedOffences = array();
         $prevDeletedOffences = array();
+        $prevDeletedSuspekSaksi = array();
+        $prevUnDeletedSuspekSaksi = array();
+        $prevDeletedSuspekSaksi = array();
+        $prevDeletedURL = array();
 
         $prevSelectedOffences = array();
         $removePrevSelectedOffences = array();
         $offencesListRes = array();
-
+        $newStatusSuspek = array();
         $prevSuspekSakhi = array();
         //$newSuspekSakhi = array();
         $newSelectedSuspekSakhi = array();
-        //$prevDeletedSuspekSakhi = array();
+        $prevDeletedSuspekSakhi = array();
+        $newURL = array();
+        $prevURL = array();
+        $prevUnDeletedUrls = array();
+        $prevDeletedUrls = array();
 
         /******
          * Get offence master data from the offence table using api service.
          */
-        $offenceResponse = $client->createRequest()
-                ->setFormat(Client::FORMAT_URLENCODED)
-                ->setMethod('GET')
-                ->setUrl($this->_url.'offence?include=id,name')
-                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->send();
-               
+                $offenceResponse = Yii::$app->helper->apiService('GET', 'offence?include=id,name', []);
                 if(isset($offenceResponse->data['records']) && count($offenceResponse->data['records']) > 0)
                 {
                     foreach($offenceResponse->data['records'] as $key => $value)
-                {
+                    {
                     $filterOffenceResponse[$value['id']] = $value['name'];
-                }
+                    }
                 }
         $client = new Client();
         $session = Yii::$app->session;
         $mediaSocialResponse = array();
         $session->get('userId');
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
-            
+        //.'&filter=case_status,in,'.$case_status_values.
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc', []);   
 
         /*********
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
@@ -749,17 +858,39 @@ class PermohonanController extends Controller
            *  */     
           if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
             $data = Yii::$app->request->post();
-            //echo"<pre>";print_r($data);exit;
-            if(count($responses->data['records']) > 0)
+            if(count($responses->data['records']) > 0 && count($responses->data['records'][0]['case_offence']) > 0)
             {
                foreach($responses->data['records'][0]['case_offence'] as $offenceVal):
-                $prevOffences[] = $offenceVal['offence_id'];
+                $prevOffences[] = $offenceVal['offence_id']['id'];
                endforeach; 
+               
             }
+            
+            
             $newOffences = $data['PermohonanForm']['offence'];
             $newSelectedOffences = array_values(array_diff($newOffences,$prevOffences));
             $prevDeletedOffences = array_values(array_diff($prevOffences,$newOffences));
-            
+            if(count($newSelectedOffences) > 0)
+                {
+                $this->auditDetails[0]['master_audit_activity_id'] = array_search("Add New Offences",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[0]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[0]['user_id'] = $session->get('userId');
+                $this->auditDetails[0]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[0]['description'] = "Added ".count($newSelectedOffences)." offences";
+                $this->auditDetails[0]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[0]['ip_address'] = Yii::$app->request->userIP;
+                }
+                if(count($prevDeletedSuspekSaksi) > 0)
+                {
+                $this->auditDetails[1]['master_audit_activity_id'] = array_search("Delete Existing Offences",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[1]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[1]['user_id'] = $session->get('userId');
+                $this->auditDetails[1]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[1]['description'] = "Deleted ".implode(',',$prevDeletedOffences)." offences";
+                $this->auditDetails[1]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[1]['ip_address'] = Yii::$app->request->userIP;
+                }
+                        
             $this->_FileUploadSuratRasmi = Yii::$app->params['FILE_UPLOAD_SURAT_RASMI']."permohonan/surat_rasmi/";
             $this->_FileUploadLaporanPolice = Yii::$app->params['FILE_UPLOAD_LAPORAN_POLIS']."permohonan/laporan_polis/";
             
@@ -810,35 +941,18 @@ class PermohonanController extends Controller
             $caseInfo['purpose_of_application_info'] = $data['PermohonanForm']['application_purpose_info'];
             }
 
-            $socialMedia = 0;
-            $newSocialMedia = 0;
-            if(isset($data['PermohonanUrl']) && count($data['PermohonanUrl']) > 0)
+            
+            if(count($responses->data['records']) > 0 && count($responses->data['records'][0]['case_info_status_suspek']) > 0)
             {
-                foreach($data['PermohonanUrl'] as $key => $val)
-                { 
-                    if(!empty($val['master_social_media_id']) && !empty($val['url']) && !empty($val['caseInfoURLInvolvedId']))
-                    {
-                        $caseInvolvedURL[$socialMedia]["case_info_url_involved_id"]  = $val['caseInfoURLInvolvedId'];
-                        $caseInvolvedURL[$socialMedia]["master_social_media_id"]  = $val['master_social_media_id'];
-                        $caseInvolvedURL[$socialMedia]["url"]  = $val['url'];
-                        $caseInvolvedURL[$socialMedia]["updated_by"]  = $session->get('userId');
-                        $socialMedia++; 
-                    }
-                    if(!empty($val['master_social_media_id']) && !empty($val['url']) && empty($val['caseInfoURLInvolvedId']))
-                    {
-                        $newCaseInvolvedURL[$newSocialMedia]["case_info_id"]  = $data['PermohonanForm']['id'];
-                        $newCaseInvolvedURL[$newSocialMedia]["master_social_media_id"]  = $val['master_social_media_id'];
-                        $newCaseInvolvedURL[$newSocialMedia]["url"]  = $val['url'];
-                        $newCaseInvolvedURL[$newSocialMedia]["created_by"]  = $session->get('userId');
-                        $newSocialMedia++; 
-                    }
-                }
+                foreach($responses->data['records'][0]['case_info_status_suspek'] as $statusSuspek):
+                $prevSuspekSakhi[] = $statusSuspek['id'];
+                endforeach; 
             }
             
-            $suspekSaksi = 0;
-            $newSuspekSaksi = 0;
             if(isset($data['PermohonanStatusSuspekSaksi']) && count($data['PermohonanStatusSuspekSaksi']) > 0)
             { 
+                $newSuspekSaksi = 0;
+                $suspekSaksi = 0;
                 foreach($data['PermohonanStatusSuspekSaksi'] as $val)
                 { 
                     if(!empty($val['caseInfoID']) && !empty($val['caseInfoStatusSuspekID']) && !empty($val['master_status_suspect_or_saksi_id']) && !empty($val['master_status_status_suspek_id'])  && !empty($val['ic']) && !empty($val['name']))
@@ -857,6 +971,10 @@ class PermohonanController extends Controller
                                 $caseStatusSuspek[$suspekSaksi]['others']  = $val['others'];
                             }
                             $suspekSaksi++;
+                            if(in_array ( $val['caseInfoStatusSuspekID'], $prevSuspekSakhi))
+                            {
+                                array_push($prevUnDeletedSuspekSaksi,$val['caseInfoStatusSuspekID']);
+                            }
                     }
 
                     if(empty($val['caseInfoID']) && empty($val['caseInfoStatusSuspekID']) && !empty($val['master_status_suspect_or_saksi_id']) && !empty($val['master_status_status_suspek_id'])  && !empty($val['ic']) && !empty($val['name']))
@@ -876,7 +994,95 @@ class PermohonanController extends Controller
                     }
                 
                 }
+                $prevDeletedSuspekSaksi = array_values(array_diff($prevSuspekSakhi,$prevUnDeletedSuspekSaksi));
+
+                if($newSuspekSaksi > 0)
+                {
+                $this->auditDetails[2]['master_audit_activity_id'] = array_search("Add Suspek/Saksi",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[2]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[2]['user_id'] = $session->get('userId');
+                $this->auditDetails[2]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[2]['description'] = "Added $newSuspekSaksi suspek/saksi infomation";
+                $this->auditDetails[2]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[2]['ip_address'] = Yii::$app->request->userIP;
+                }
+                if(count($prevDeletedSuspekSaksi) > 0)
+                {
+                $this->auditDetails[3]['master_audit_activity_id'] = array_search("Delete Suspek/Saksi",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[3]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[3]['user_id'] = $session->get('userId');
+                $this->auditDetails[3]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[3]['description'] = "Deleted ".implode(',',$prevDeletedSuspekSaksi)." suspek/saksi information";
+                $this->auditDetails[3]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[3]['ip_address'] = Yii::$app->request->userIP;
+                }
+
+                //echo "Audit trail<pre>";print_r($this->auditDetails);exit;
                 
+            }
+
+            
+            if(count($responses->data['records']) > 0 && count($responses->data['records'][0]['case_info_url_involved']) > 0)
+            {
+               foreach($responses->data['records'][0]['case_info_url_involved'] as $urlVal):
+                $prevURL[] = $urlVal['id'];
+               endforeach; 
+            }
+
+            if(isset($data['PermohonanUrl']) && count($data['PermohonanUrl']) > 0)
+            {
+                $socialMedia = 0;
+                $newSocialMedia = 0;
+                foreach($data['PermohonanUrl'] as $key => $val)
+                { 
+                    if(!empty($val['master_social_media_id']) && !empty($val['url']) && !empty($val['caseInfoURLInvolvedId']))
+                    {
+                        $caseInvolvedURL[$socialMedia]["case_info_url_involved_id"]  = $val['caseInfoURLInvolvedId'];
+                        $caseInvolvedURL[$socialMedia]["master_social_media_id"]  = $val['master_social_media_id'];
+                        $caseInvolvedURL[$socialMedia]["url"]  = $val['url'];
+                        $caseInvolvedURL[$socialMedia]["updated_by"]  = $session->get('userId');
+                        if(in_array ( $val['caseInfoURLInvolvedId'], $prevURL))
+                        {
+                            array_push($prevUnDeletedUrls,$val['caseInfoURLInvolvedId']);
+                        }
+                        $socialMedia++; 
+                    }
+                    if(!empty($val['master_social_media_id']) && !empty($val['url']) && empty($val['caseInfoURLInvolvedId']))
+                    {
+                        $newCaseInvolvedURL[$newSocialMedia]["case_info_id"]  = $data['PermohonanForm']['id'];
+                        $newCaseInvolvedURL[$newSocialMedia]["master_social_media_id"]  = $val['master_social_media_id'];
+                        $newCaseInvolvedURL[$newSocialMedia]["url"]  = $val['url'];
+                        $newCaseInvolvedURL[$newSocialMedia]["created_by"]  = $session->get('userId');
+                        $newSocialMedia++; 
+                    }
+                }
+                $prevDeletedUrls = array_values(array_diff($prevURL,$prevUnDeletedUrls));
+                /*echo "old<pre>";print_r($caseInvolvedURL);
+                echo "new<pre>";print_r($newCaseInvolvedURL);
+                echo "deleted<pre>";print_r($prevDeletedUrls);exit;*/
+
+
+                if($newSocialMedia > 0)
+                {
+                $this->auditDetails[4]['master_audit_activity_id'] = array_search("URL Request",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[4]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[4]['user_id'] = $session->get('userId');
+                $this->auditDetails[4]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[4]['description'] = "Add $newSocialMedia  URL information";
+                $this->auditDetails[4]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[4]['ip_address'] = Yii::$app->request->userIP;
+                }
+                if(count($prevDeletedUrls) > 0)
+                {
+                $this->auditDetails[5]['master_audit_activity_id'] = array_search("Delete Suspek/Saksi",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[5]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[5]['user_id'] = $session->get('userId');
+                $this->auditDetails[5]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[5]['description'] = "Delete ".implode(',',$prevDeletedUrls)." URL information";
+                $this->auditDetails[5]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[5]['ip_address'] = Yii::$app->request->userIP;
+                }
+
             }
             
             //$offences = $data['PermohonanForm']['offence'];
@@ -884,8 +1090,10 @@ class PermohonanController extends Controller
             //echo json_encode($caseInfo).'<br>';
             //echo json_encode($caseStatusSuspek).'<br>';
             //echo json_encode($newSelectedSuspekSakhi).'<br>';
+            //echo json_encode($prevDeletedSuspekSaksi).'<br>';
             //echo json_encode($caseInvolvedURL).'<br>';
             //echo json_encode($newCaseInvolvedURL).'<br>';
+            //echo json_encode($prevDeletedUrls).'<br>';
             //echo json_encode($newSelectedOffences).'<br>';
             //echo json_encode($prevDeletedOffences).'<br>';
             //exit;
@@ -894,10 +1102,10 @@ class PermohonanController extends Controller
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('POST')
             ->setUrl($this->_url_procedure.'case_info_edit')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
-            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"newCaseStatusSuspek" => json_encode($newSelectedSuspekSakhi),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newCaseInvolvedURL" => json_encode($newCaseInvolvedURL),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
+            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
+            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"newCaseStatusSuspek" => json_encode($newSelectedSuspekSakhi),"deleteCaseStatusSuspek" =>json_encode($prevDeletedSuspekSaksi),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newCaseInvolvedURL" => json_encode($newCaseInvolvedURL),"deleteCaseInvolvedURL" =>json_encode($prevDeletedUrls),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
             ->send(); 
-            if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
+            if($caseInfoResponse->statusCode == 200 || $caseInfoResponse->statusCode == 400 /*&& count($caseInfoResponse->data['records']) > 0*/)
                 { 
                     if(!empty($model->surat_rasmi))
                     { 
@@ -910,6 +1118,13 @@ class PermohonanController extends Controller
                     ->addFile('files',$suratRasmiDFFileName)
                     ->send();
                     //unlink($suratRasmiDFFileName);
+                    $this->auditDetails[6]['master_audit_activity_id'] = array_search("Document Upload",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[6]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[6]['user_id'] = $session->get('userId');
+                    $this->auditDetails[6]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[6]['description'] = "Surat rasmi attachment uploaded";
+                    $this->auditDetails[6]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[6]['ip_address'] = Yii::$app->request->userIP;
                     }
                     if(!empty($model->laporan_polis))
                     {
@@ -922,11 +1137,49 @@ class PermohonanController extends Controller
                     ->addFile('files',$loparaPoliceDFFileName)
                     ->send();
                    // unlink($loparaPoliceDFFileName);
+                    $this->auditDetails[7]['master_audit_activity_id'] = array_search("Document Upload",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[7]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[7]['user_id'] = $session->get('userId');
+                    $this->auditDetails[7]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[7]['description'] = "Laporan polis attachment uploaded";
+                    $this->auditDetails[7]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[7]['ip_address'] = Yii::$app->request->userIP;
                     }
+                    $this->auditDetails[8]['master_audit_activity_id'] = array_search("Update Case",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[8]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[8]['user_id'] = $session->get('userId');
+                    $this->auditDetails[8]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[8]['description'] = "Existing case updated successfully";
+                    $this->auditDetails[8]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[8]['ip_address'] = Yii::$app->request->userIP;
+                    $client = new Client();
+                    
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/mediasosial');
                 }
                 else{
+                    $this->auditDetails[8]['master_audit_activity_id'] = array_search("Update Case",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[8]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[8]['user_id'] = $session->get('userId');
+                    $this->auditDetails[8]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[8]['description'] = "Existing case update failed";
+                    $this->auditDetails[8]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[8]['ip_address'] = Yii::$app->request->userIP;
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
@@ -939,21 +1192,23 @@ class PermohonanController extends Controller
             $modelUrl = [new PermohonanUrl];
             if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialResponse['case_info_status_suspek']) > 0)
             {  
-                $newSuspekSaksiModels= 0;
+                $newSuspekSaksiModels= 0;//echo"<pre>";print_r($mediaSocialResponse['case_info_status_suspek']);exit;
                 foreach($mediaSocialResponse['case_info_status_suspek'] as $key => $val):
-                    if($newSuspekSaksiModels > 0)
+                    if($newSuspekSaksiModels > 0 )
                     {
                         $modelStatusSuspekSaksi[$key] = new PermohonanStatusSuspekSaksi();
                     }
-                    $modelStatusSuspekSaksi[$key]['master_status_suspect_or_saksi_id'] = $val['master_status_suspect_or_saksi_id'];
-                    $modelStatusSuspekSaksi[$key]['master_status_status_suspek_id'] = $val['master_status_status_suspek_id'];
-                    $modelStatusSuspekSaksi[$key]['ic'] = $val['ic'];
-                    $modelStatusSuspekSaksi[$key]['name'] = $val['name'];
-                    $modelStatusSuspekSaksi[$key]['others'] = $val['others'];
-                    $modelStatusSuspekSaksi[$key]['id'] = $val['id'];
+                        $modelStatusSuspekSaksi[$key]['master_status_suspect_or_saksi_id'] = $val['master_status_suspect_or_saksi_id'];
+                        $modelStatusSuspekSaksi[$key]['master_status_status_suspek_id'] = $val['master_status_status_suspek_id'];
+                        $modelStatusSuspekSaksi[$key]['ic'] = $val['ic'];
+                        $modelStatusSuspekSaksi[$key]['name'] = $val['name'];
+                        $modelStatusSuspekSaksi[$key]['others'] = $val['others'];
+                        $modelStatusSuspekSaksi[$key]['id'] = $val['id'];
+                        
+                    $newSuspekSaksiModels++;   
                     
-                $newSuspekSaksiModels++;   
                 endforeach;
+                //echo"<pre>";print_r($modelStatusSuspekSaksi);exit;
             }
             
             if(isset($mediaSocialResponse['case_info_url_involved']) && count($mediaSocialResponse['case_info_url_involved']) > 0)
@@ -965,22 +1220,29 @@ class PermohonanController extends Controller
                     {
                         $modelUrl[$key] = new PermohonanUrl();
                     }
-                    $modelUrl[$key]['master_social_media_id'] = $val['master_social_media_id'];
-                    $modelUrl[$key]['url'] = $val['url'];
-                    $modelUrl[$key]['id'] = $val['id'];
                     
-                $newModels++;   
+                        $modelUrl[$key]['master_social_media_id'] = $val['master_social_media_id'];
+                        $modelUrl[$key]['url'] = $val['url'];
+                        $modelUrl[$key]['id'] = $val['id'];
+                        
+                    $newModels++;
+                   
+                       
                 endforeach;
             }
+            
             foreach($mediaSocialResponse['case_offence'] as $key => $offenceInfo):
                     
-                if(array_key_exists($offenceInfo['offence_id']['id'], $filterOffenceResponse))
+                if($offenceInfo['is_deleted'] == 82)
                 {
-                  $prevSelectedOffences[$offenceInfo['offence_id']['id']] = $filterOffenceResponse[$offenceInfo['offence_id']['id']];
-                  $offencesListRes[$offenceInfo['offence_id']['id']] = array("selected"=>true);
+                    if(array_key_exists($offenceInfo['offence_id']['id'], $filterOffenceResponse))
+                    {
+                      $prevSelectedOffences[$offenceInfo['offence_id']['id']] = $filterOffenceResponse[$offenceInfo['offence_id']['id']];
+                      $offencesListRes[$offenceInfo['offence_id']['id']] = array("selected"=>true);
+                    }
                 }
+                
               endforeach;
-
               foreach($filterOffenceResponse as $key => $offenceInfo):
                   if(array_key_exists($key, $prevSelectedOffences))
                   {
@@ -1220,13 +1482,7 @@ class PermohonanController extends Controller
         /******
          * Get offence master data from the offence table using api service.
          */
-        $offenceResponse = $client->createRequest()
-                ->setFormat(Client::FORMAT_URLENCODED)
-                ->setMethod('GET')
-                ->setUrl($this->_url.'offence?include=id,name')
-                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->send();
-               
+                $offenceResponse = Yii::$app->helper->apiService('GET', 'offence?include=id,name', []);  
                 if(isset($offenceResponse->data['records']) && count($offenceResponse->data['records']) > 0)
                 {
                     foreach($offenceResponse->data['records'] as $key => $value)
@@ -1238,14 +1494,7 @@ class PermohonanController extends Controller
         $session = Yii::$app->session;
         $mediaSocialResponse = array();
         $session->get('userId');
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
-            
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc', []);    
         /*********
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
            * 
@@ -1285,8 +1534,8 @@ class PermohonanController extends Controller
                 $i = 0;
                 foreach($data['PermohonanStatusSuspekSaksi'] as $permohonanStatusSuspekSaksi)
                 {
-                    if(!empty($permohonanStatusSuspekSaksi['master_status_suspect_or_saksi_id']) && !empty($permohonanStatusSuspekSaksi['master_status_status_suspek_id']))
-                    {
+                    //if(!empty($permohonanStatusSuspekSaksi['master_status_suspect_or_saksi_id']) && !empty($permohonanStatusSuspekSaksi['master_status_status_suspek_id']))
+                    //{
                     $caseStatusSuspek[$i]['master_status_suspect_or_saksi_id']  = $permohonanStatusSuspekSaksi['master_status_suspect_or_saksi_id'];
                     $caseStatusSuspek[$i]['master_status_status_suspek_id']  = $permohonanStatusSuspekSaksi['master_status_status_suspek_id'];
                     $caseStatusSuspek[$i]['ic']  = $permohonanStatusSuspekSaksi['ic'];
@@ -1297,9 +1546,17 @@ class PermohonanController extends Controller
                         $caseStatusSuspek[$i]['others']  = $permohonanStatusSuspekSaksi['others'];
                     }
                     $i++;
-                    }
-                    
-                    
+                    //}
+                }
+                if($caseStatusSuspek > 0)
+                {
+                $this->auditDetails[0]['master_audit_activity_id'] = array_search("Add Suspek/Saksi",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[0]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[0]['user_id'] = $session->get('userId');
+                $this->auditDetails[0]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[0]['description'] = "Added ".count($caseStatusSuspek)." suspek/saksi info";
+                $this->auditDetails[0]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[0]['ip_address'] = Yii::$app->request->userIP;
                 }
             }
             
@@ -1316,6 +1573,17 @@ class PermohonanController extends Controller
                         $j++;
                         
                     }
+                }
+
+                if(count($caseInvolvedURL) > 0)
+                {
+                $this->auditDetails[1]['master_audit_activity_id'] = array_search("URL Request",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[1]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[1]['user_id'] = $session->get('userId');
+                $this->auditDetails[1]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[1]['description'] = "Added ".count($caseInvolvedURL)." URL";
+                $this->auditDetails[1]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[1]['ip_address'] = Yii::$app->request->userIP;
                 }
                     
             }
@@ -1337,10 +1605,43 @@ class PermohonanController extends Controller
              
             if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
                 { 
+                    $this->auditDetails[2]['master_audit_activity_id'] = array_search("Case Created",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[2]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[2]['user_id'] = $session->get('userId');
+                    $this->auditDetails[2]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[2]['description'] = "Adding new case information";
+                    $this->auditDetails[2]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[2]['ip_address'] = Yii::$app->request->userIP;
+                   
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
+
                     Yii::$app->session->addFlash('success','Successfully reopen case infomation.');
                     return $this->redirect('../permohonan/mediasosial');
                 }
-                else{
+                else{ 
+                    $this->auditDetails[3]['master_audit_activity_id'] = array_search("Case Create fails",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[3]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[3]['user_id'] = $session->get('userId');
+                    $this->auditDetails[3]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[3]['description'] = "Case information creation fails";
+                    $this->auditDetails[3]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[3]['ip_address'] = Yii::$app->request->userIP;
+                    
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('failed','Reopen case infomation not inserted successfully.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
@@ -1417,21 +1718,9 @@ class PermohonanController extends Controller
     {  
         $this->layout =  'main';
         $session = Yii::$app->session;
-        
-
-      
-        $client = new Client();
-        $session = Yii::$app->session;
         $mediaSocialResponse = array();
         $session->get('userId');
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek,master_status&join=case_info_url_involved,master_status&order=id,desc')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
-            
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek,master_status&join=case_info_url_involved,master_status&order=id,desc', []);       
         if(count($responses->data['records']) > 0)
         {
             $mediaSocialResponse = $responses->data['records'][0];
@@ -1454,13 +1743,7 @@ class PermohonanController extends Controller
         $session->get('userId');
         $case_status_values = "";
         $case_status_values .= array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Rejected",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Closed",Yii::$app->mycomponent->getMasterData('master_status_status')).",".array_search("Reopen",Yii::$app->mycomponent->getMasterData('master_status_status'));
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3')
-            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,2&join=master_status&order=id,desc')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,2&join=master_status&order=id,desc', []);           
         $mediaSocialResponse = $responses->data['records'];
         //return $this->render('tplist', ['responses' => $responses]);
         return $this->render('blockrequest/blockrequestlist', ['mediaSocialResponse' => $mediaSocialResponse]);
@@ -1500,17 +1783,14 @@ class PermohonanController extends Controller
         $prevSelectedOffences = array();
         $removePrevSelectedOffences = array();
         $offencesListRes = array();
+        $prevURL = array();
+        $prevUnDeletedUrls = array();
+        $prevDeletedUrls = array();
 
         /******
          * Get offence master data from the offence table using api service.
          */
-        $offenceResponse = $client->createRequest()
-                ->setFormat(Client::FORMAT_URLENCODED)
-                ->setMethod('GET')
-                ->setUrl($this->_url.'offence?include=id,name')
-                ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-                ->send();
-               
+                $offenceResponse = Yii::$app->helper->apiService('GET', 'offence?include=id,name', []);
                 if(isset($offenceResponse->data['records']) && count($offenceResponse->data['records']) > 0)
                 {
                     foreach($offenceResponse->data['records'] as $key => $value)
@@ -1522,13 +1802,7 @@ class PermohonanController extends Controller
         $session = Yii::$app->session;
         $mediaSocialResponse = array();
         $session->get('userId');
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_url_involved&order=id,desc')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_url_involved&order=id,desc', []);
             
         /*********
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
@@ -1536,15 +1810,36 @@ class PermohonanController extends Controller
            *  */     
           if ($model->load(Yii::$app->request->post()) && $model->validate()) {  
             $data = Yii::$app->request->post();
-            if(count($responses->data['records']) > 0)
-            {
+            if(count($responses->data['records']) > 0  && count($responses->data['records'][0]['case_offence']) > 0)
+            { 
                foreach($responses->data['records'][0]['case_offence'] as $offenceVal):
-                $prevOffences[] = $offenceVal['offence_id']; 
+                $prevOffences[] = $offenceVal['offence_id']['id']; 
                endforeach; 
             }
             $newOffences = $data['BlockRequestForm']['offence'];
             $newSelectedOffences = array_values(array_diff($newOffences,$prevOffences));
             $prevDeletedOffences = array_values(array_diff($prevOffences,$newOffences));
+            
+                if(count($newSelectedOffences) > 0)
+                {
+                $this->auditDetails[0]['master_audit_activity_id'] = array_search("Add New Offences",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[0]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[0]['user_id'] = $session->get('userId');
+                $this->auditDetails[0]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[0]['description'] = "Added ".count($newSelectedOffences)." offences";
+                $this->auditDetails[0]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[0]['ip_address'] = Yii::$app->request->userIP;
+                }
+                if(count($prevDeletedOffences) > 0)
+                {
+                $this->auditDetails[1]['master_audit_activity_id'] = array_search("Delete Existing Offences",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[1]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[1]['user_id'] = $session->get('userId');
+                $this->auditDetails[1]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[1]['description'] = "Delete ".implode(',',$prevDeletedOffences)." offences";
+                $this->auditDetails[1]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[1]['ip_address'] = Yii::$app->request->userIP;
+                }
             //echo"123<pre>";print_r($newSelectedOffences);
             //echo"456<pre>";print_r($prevDeletedOffences);exit;
             
@@ -1577,6 +1872,7 @@ class PermohonanController extends Controller
             $caseInvolvedURL = array();
             $offences = array();
             $newSelectedSuspekSakhi = array();
+            $prevDeletedSuspekSaksi = array();
             $newCaseInvolvedURL = array();
             //$newSelectedOffences = array();
             //$prevDeletedOffences = array();
@@ -1593,43 +1889,76 @@ class PermohonanController extends Controller
             $caseInfo['case_status'] = array_search("Pending",Yii::$app->mycomponent->getMasterData('master_status_status'));
             
             //$caseInfo['created_by'] = $session->get('userId');
-            $socialMedia = 0;
-            $newSocialMedia = 0;
-            foreach($data['PermohonanUrl'] as $key => $val)
+            if(count($responses->data['records']) > 0 && count($responses->data['records'][0]['case_info_url_involved']) > 0)
             { 
-                if(!empty($val['master_social_media_id']) && !empty($val['url']) && !empty($val['caseInfoURLInvolvedId']))
-                {
-                    $caseInvolvedURL[$socialMedia]["case_info_url_involved_id"]  = $val['caseInfoURLInvolvedId'];
-                    $caseInvolvedURL[$socialMedia]["master_social_media_id"]  = $val['master_social_media_id'];
-                    $caseInvolvedURL[$socialMedia]["url"]  = $val['url'];
-                    $caseInvolvedURL[$socialMedia]["created_by"]  = $session->get('userId');
-                    $caseInvolvedURL[$socialMedia]["updated_by"]  = $session->get('userId');
-                    $socialMedia++; 
-                }
-                if(!empty($val['master_social_media_id']) && !empty($val['url']) && empty($val['caseInfoURLInvolvedId']))
-                {
-                    $newCaseInvolvedURL[$newSocialMedia]["case_info_id"]  = $data['BlockRequestForm']['id'] ? $data['BlockRequestForm']['id'] : 0;
-                    $newCaseInvolvedURL[$newSocialMedia]["master_social_media_id"]  = $val['master_social_media_id'];
-                    $newCaseInvolvedURL[$newSocialMedia]["url"]  = $val['url'];
-                    $newCaseInvolvedURL[$newSocialMedia]["created_by"]  = $session->get('userId');
-                    $newSocialMedia++; 
+               foreach($responses->data['records'][0]['case_info_url_involved'] as $urlVal):
+                $prevURL[] = $urlVal['id'];
+               endforeach; 
+            }
+            if(isset($data['PermohonanUrl']) && count($data['PermohonanUrl']) > 0)
+            { 
+                $socialMedia = 0;
+                $newSocialMedia = 0;
+                foreach($data['PermohonanUrl'] as $key => $val)
+                { 
+                    if(!empty($val['master_social_media_id']) && !empty($val['url']) && !empty($val['caseInfoURLInvolvedId']))
+                    { 
+                        $caseInvolvedURL[$socialMedia]["case_info_url_involved_id"]  = $val['caseInfoURLInvolvedId'];
+                        $caseInvolvedURL[$socialMedia]["master_social_media_id"]  = $val['master_social_media_id'];
+                        $caseInvolvedURL[$socialMedia]["url"]  = $val['url'];
+                        $caseInvolvedURL[$socialMedia]["created_by"]  = $session->get('userId');
+                        $caseInvolvedURL[$socialMedia]["updated_by"]  = $session->get('userId');
+                        $socialMedia++; 
+                    }
+                    if(!empty($val['master_social_media_id']) && !empty($val['url']) && empty($val['caseInfoURLInvolvedId']))
+                    {
+                        $newCaseInvolvedURL[$newSocialMedia]["case_info_id"]  = $data['BlockRequestForm']['id'] ? $data['BlockRequestForm']['id'] : 0;
+                        $newCaseInvolvedURL[$newSocialMedia]["master_social_media_id"]  = $val['master_social_media_id'];
+                        $newCaseInvolvedURL[$newSocialMedia]["url"]  = $val['url'];
+                        $newCaseInvolvedURL[$newSocialMedia]["created_by"]  = $session->get('userId');
+                        $newSocialMedia++; 
+                    }
                 }
             }
+            $prevDeletedUrls = array_values(array_diff($prevURL,$prevUnDeletedUrls));
+                if($newSocialMedia > 0)
+                {
+                $this->auditDetails[2]['master_audit_activity_id'] = array_search("URL Request",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[2]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[2]['user_id'] = $session->get('userId');
+                $this->auditDetails[2]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[2]['description'] = "Added $newSocialMedia URL information";
+                $this->auditDetails[2]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[2]['ip_address'] = Yii::$app->request->userIP;
+                }
+                if(count($prevDeletedUrls) > 0)
+                {
+                $this->auditDetails[3]['master_audit_activity_id'] = array_search("Delete Suspek/Saksi",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[3]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[3]['user_id'] = $session->get('userId');
+                $this->auditDetails[3]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[3]['description'] = "Deleted ".implode(',',$prevDeletedUrls)." URL info";
+                $this->auditDetails[3]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[3]['ip_address'] = Yii::$app->request->userIP;
+                }
             //echo json_encode($caseInfo).'<br>';
             //echo json_encode($caseStatusSuspek).'<br>';
             //echo json_encode($newSelectedSuspekSakhi).'<br>';
+            //echo json_encode($prevDeletedSuspekSaksi).'<br>';
             //echo json_encode($caseInvolvedURL).'<br>';
             //echo json_encode($newCaseInvolvedURL).'<br>';
+            //echo json_encode($prevDeletedUrls).'<br>';
             //echo json_encode($newSelectedOffences).'<br>';
-           // echo json_encode($prevDeletedOffences).'<br>';exit;
+            //echo json_encode($prevDeletedOffences).'<br>';exit;
+
+           
             
             $caseInfoResponse = $client->createRequest()
             ->setFormat(Client::FORMAT_URLENCODED)
             ->setMethod('POST')
             ->setUrl($this->_url_procedure.'case_info_edit') 
             ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
-            //->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
-            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"newCaseStatusSuspek" => json_encode($newSelectedSuspekSakhi),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newCaseInvolvedURL" => json_encode($newCaseInvolvedURL),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
+            ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"newCaseStatusSuspek" => json_encode($newSelectedSuspekSakhi),"deleteCaseStatusSuspek" =>json_encode($prevDeletedSuspekSaksi),"caseInvolvedURL" => json_encode($caseInvolvedURL),"newCaseInvolvedURL" => json_encode($newCaseInvolvedURL),"deleteCaseInvolvedURL" =>json_encode($prevDeletedUrls),"newOffences" => json_encode($newSelectedOffences),"deleteOffences" => json_encode($prevDeletedOffences)])
             ->send(); 
             if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
                 { 
@@ -1644,6 +1973,13 @@ class PermohonanController extends Controller
                     ->addFile('files',$suratRasmiDFFileName)
                     ->send();
                     //unlink($suratRasmiDFFileName);
+                    $this->auditDetails[4]['master_audit_activity_id'] = array_search("Document Upload",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[4]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[4]['user_id'] = $session->get('userId');
+                    $this->auditDetails[4]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[4]['description'] = "Surat rasmi attachment uploaded";
+                    $this->auditDetails[4]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[4]['ip_address'] = Yii::$app->request->userIP;
                     }
                     if(!empty($model->laporan_polis))
                     {
@@ -1656,11 +1992,48 @@ class PermohonanController extends Controller
                     ->addFile('files',$loparaPoliceDFFileName)
                     ->send();
                    // unlink($loparaPoliceDFFileName);
+                    $this->auditDetails[5]['master_audit_activity_id'] = array_search("Document Upload",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[5]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[5]['user_id'] = $session->get('userId');
+                    $this->auditDetails[5]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[5]['description'] = "Laporan polis attachment uploaded";
+                    $this->auditDetails[5]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[5]['ip_address'] = Yii::$app->request->userIP;
                     }
+                    $this->auditDetails[6]['master_audit_activity_id'] = array_search("Update Case",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[6]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[6]['user_id'] = $session->get('userId');
+                    $this->auditDetails[6]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[6]['description'] = "Existing case updated successfully";
+                    $this->auditDetails[6]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[6]['ip_address'] = Yii::$app->request->userIP;
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('success','Maklumat kes baru berjaya dimasukkan.');
                     return $this->redirect('../permohonan/block-request-list');
                 }
                 else{
+                    $this->auditDetails[4]['master_audit_activity_id'] = array_search("Update Case",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[4]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[4]['user_id'] = $session->get('userId');
+                    $this->auditDetails[4]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[4]['description'] = "Existing case update failed";
+                    $this->auditDetails[4]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[4]['ip_address'] = Yii::$app->request->userIP;
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('failed','Maklumat kes baru tidak berjaya dimasukkan.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
@@ -1720,28 +2093,14 @@ class PermohonanController extends Controller
     {  
         $this->layout =  'main';
         $session = Yii::$app->session;
-        
-
-      
-        $client = new Client();
-        $session = Yii::$app->session;
         $mediaSocialResponse = array();
         $session->get('userId');
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek,master_status&join=case_info_url_involved,master_status&order=id,desc')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
-            
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek,master_status&join=case_info_url_involved,master_status&order=id,desc', []);  
         if(count($responses->data['records']) > 0)
         {
             $mediaSocialResponse = $responses->data['records'][0];
         }
         return $this->render('blockrequest/viewblockrequest', ["mediaSocialResponse" => $mediaSocialResponse,"id" => $id]);
-       
-        
     }
 
 
@@ -1971,14 +2330,7 @@ class PermohonanController extends Controller
         $session = Yii::$app->session;
         $mediaSocialResponse = array();
         $session->get('userId');
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
-            
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=id,eq,'.$id.'&join=case_offence,offence&join=case_info_status_suspek&join=case_info_url_involved&order=id,desc', []);    
         /*********
            * once validation is success then set the data as an array and convert these data into json object and then pass it to stored procedure as a arguments
            * 
@@ -1997,6 +2349,7 @@ class PermohonanController extends Controller
             $newCaseInvolvedURL = array();
             $newSelectedOffences = array();
             $prevDeletedOffences = array();
+
             $caseInfo['master_case_info_type_id'] = $data['BlockRequestForm']['master_case_info_type_id'];
             $caseInfo['requestor_ref'] = $session->get('userId');
             $caseInfo['id'] = $data['BlockRequestForm']['id'];
@@ -2018,6 +2371,17 @@ class PermohonanController extends Controller
                     $socialMedia++; 
                 }
                 $incrementVal++;
+
+                if(count($caseInvolvedURL) > 0)
+                {
+                $this->auditDetails[0]['master_audit_activity_id'] = array_search("URL Request",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails[0]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                $this->auditDetails[0]['user_id'] = $session->get('userId');
+                $this->auditDetails[0]['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails[0]['description'] = "Added ".count($caseInvolvedURL)." URL";
+                $this->auditDetails[0]['user_agent'] = $this->browserInfo;
+                $this->auditDetails[0]['ip_address'] = Yii::$app->request->userIP;
+                }
             }
             //echo json_encode($caseInfo).'<br>';
             //echo json_encode($caseStatusSuspek).'<br>';
@@ -2033,11 +2397,43 @@ class PermohonanController extends Controller
             ->setData(["caseInfo" => json_encode($caseInfo),"caseStatusSuspek" => json_encode($caseStatusSuspek),"caseInvolvedURL" => json_encode($caseInvolvedURL),"offences" => json_encode($newOffences)])
             ->send(); 
             if($caseInfoResponse->statusCode == 200 && count($caseInfoResponse->data['records']) > 0)
-                { 
+                {
+                    $this->auditDetails[1]['master_audit_activity_id'] = array_search("Case Created",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[1]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[1]['user_id'] = $session->get('userId');
+                    $this->auditDetails[1]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[1]['description'] = "Adding New Case Information";
+                    $this->auditDetails[1]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[1]['ip_address'] = Yii::$app->request->userIP;
+                   
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send();  
                     Yii::$app->session->addFlash('success','Successfully created reopend case infomation.');
                     return $this->redirect('../permohonan/block-request-list');
                 }
                 else{
+                    $this->auditDetails[1]['master_audit_activity_id'] = array_search("Case Create fails",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                    $this->auditDetails[1]['master_audit_log_type'] = array_search("Case Management",Yii::$app->mycomponent->getMasterData('audit_log_type'));
+                    $this->auditDetails[1]['user_id'] = $session->get('userId');
+                    $this->auditDetails[1]['master_user_type'] = $session->get('master_user_type');
+                    $this->auditDetails[1]['description'] = "Case Information Creation Fails";
+                    $this->auditDetails[1]['user_agent'] = $this->browserInfo;
+                    $this->auditDetails[1]['ip_address'] = Yii::$app->request->userIP;
+                    
+                    $client = new Client();
+                    $audit_response = $client->createRequest()
+                    ->setFormat(Client::FORMAT_URLENCODED)
+                    ->setMethod('POST')
+                    ->setUrl($this->_url_procedure.'audit_info')//live
+                    ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass,"Accept" => "*/*"])
+                    ->setData(["data" => json_encode(array_values($this->auditDetails))])
+                    ->send(); 
                     Yii::$app->session->addFlash('failed','Reopen case infomation not inserted successfully.');
                     return $this->redirect(Yii::$app->request->referrer);
                 }
@@ -2090,6 +2486,7 @@ class PermohonanController extends Controller
     {
         $client = new Client();
         $model = new SearchForm();
+        $session = Yii::$app->session;
         $telcoResponse = array();
         $MntlResponse = array();
         $returnResponse = array();
@@ -2104,6 +2501,14 @@ class PermohonanController extends Controller
                 ->setUrl($this->_urlCrawler . 'func.telco.php?search=' . $data['SearchForm']['phone_number'] . '&mnp=nomnp')
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
+                $this->auditDetails['master_audit_activity_id'] = array_search("Phone Number Request",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails['master_audit_log_type'] = array_search("External API Call",Yii::$app->mycomponent->getMasterData('master_audit_activity'));
+                $this->auditDetails['user_id'] = $session->get('userId');
+                $this->auditDetails['master_user_type'] = $session->get('master_user_type');
+                $this->auditDetails['description'] = "Phone number request to MNTL";
+                $this->auditDetails['user_agent'] = $this->browserInfo;
+                $this->auditDetails['ip_address'] = Yii::$app->request->userIP;
+                $responses = Yii::$app->helper->apiService('POST', 'audit_info', $this->auditDetails);            
             if(isset($telcoResponse->data) && count($telcoResponse->data) > 0)
             {
                 $MntlResponse = $client->createRequest()
@@ -2150,12 +2555,7 @@ class PermohonanController extends Controller
         $client = new Client();
         $thisyear = date("Y");
         $returnResultInfo = array();
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            ->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,3&join=case_info_mntl,tipoff&order=id,desc')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,'.$case_status_values.'&filter=master_case_info_type_id,eq,3&join=case_info_mntl,tipoff&order=id,desc', []);
          if(count($responses->data['records']) > 0)
         {
             $returnResultInfo = $responses->data['records'];
@@ -2189,13 +2589,7 @@ class PermohonanController extends Controller
         $masterState = Yii::$app->mycomponent->getMasterData('master_state');
         $masterDistrict = Yii::$app->mycomponent->getMasterData('master_district');
         $masterPostcode = Yii::$app->mycomponent->getMasterData('master_postcode');
-        $response = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            //->setUrl($this->_url . 'case_info?filter=requestor_ref,eq,'.$session->get('userId').'&filter=case_status,in,1,2,3&join=master_status&order=id,desc')
-            ->setUrl($this->_url . 'user?filter=id,eq,'.$session->get('userId'))
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
+        $response = Yii::$app->helper->apiService('GET', 'user?filter=id,eq,'.$session->get('userId'), []);
         if(isset($response) && count($response->data['records']) > 0)
         {
             $userResponse = $response->data['records'][0];
@@ -2301,12 +2695,7 @@ class PermohonanController extends Controller
         $data = Yii::$app->request->post();
         //echo $data['laporan_police'];exit;
         $client = new Client();
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            ->setUrl($this->_url . 'case_info?filter=report_no,eq,'.$data['laporan_police'].'&size=1')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
+        $responses = Yii::$app->helper->apiService('GET', 'case_info?filter=report_no,eq,'.$data['laporan_police'].'&size=1', []);
         if(count($responses->data['records']) > 0){ $laporanPoliceNoCount = count($responses->data['records']);}
         $response = array();
         if($laporanPoliceNoCount > 0)
@@ -2338,12 +2727,7 @@ class PermohonanController extends Controller
         $domain = $this->find_occurence_from_end($data['email'], ".", 2);
         //echo $data['laporan_police'];exit;
         $client = new Client();
-        $responses = $client->createRequest()
-            ->setFormat(Client::FORMAT_URLENCODED)
-            ->setMethod('GET')
-            ->setUrl($this->_url . 'email_domain_whitelist?filter=name,eq,'.$domain.'&size=1')
-            ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
-            ->send();
+        $responses = Yii::$app->helper->apiService('GET', 'email_domain_whitelist?filter=name,eq,'.$domain.'&size=1', []);
         if(count($responses->data['records']) > 0){ $domainCount = count($responses->data['records']);}
         $response = array();
         //echo "123<pre>";print_r($responses->data['records']);exit;

@@ -1,5 +1,4 @@
 <?php
-
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
@@ -80,6 +79,9 @@ $config = [
         'mycomponent' => [
             'class' => 'app\components\MasterDataComponent',
          ],
+         'helper' => [
+            'class' => 'app\controllers\Helper',
+        ]
         
     ],
     'timeZone' => 'GMT',
