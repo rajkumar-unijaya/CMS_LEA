@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e53ac167d7dea7175f0a27dbdccdabcf",
+    "content-hash": "316a6a17bad31eb48068782472a81a98",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -25,6 +25,24 @@
             "type": "bower-asset",
             "license": [
                 "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/highcharts",
+            "version": "v9.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/highcharts/highcharts-dist.git",
+                "reference": "180cb5a90b97c79180544f2e0979e834bb066243"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/highcharts/highcharts-dist/zipball/180cb5a90b97c79180544f2e0979e834bb066243",
+                "reference": "180cb5a90b97c79180544f2e0979e834bb066243"
+            },
+            "type": "bower-asset",
+            "license": [
+                "https://www.highcharts.com/license"
             ]
         },
         {
@@ -388,6 +406,59 @@
                 "source": "https://github.com/ezyang/htmlpurifier/tree/master"
             },
             "time": "2020-06-29T00:56:53+00:00"
+        },
+        {
+            "name": "miloschuman/yii2-highcharts-widget",
+            "version": "v9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/miloschuman/yii2-highcharts.git",
+                "reference": "33fd2e82bfebafb76a55ff175ddd8c9cc886c02b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/miloschuman/yii2-highcharts/zipball/33fd2e82bfebafb76a55ff175ddd8c9cc886c02b",
+                "reference": "33fd2e82bfebafb76a55ff175ddd8c9cc886c02b",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/highcharts": "^9.0",
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.4"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "miloschuman\\highcharts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Milo Schuman",
+                    "email": "miloschuman@gmail.com"
+                }
+            ],
+            "description": "Highcharts widget for Yii 2 Framework.",
+            "homepage": "https://github.com/miloschuman/yii2-highcharts",
+            "keywords": [
+                "extension",
+                "highcharts",
+                "highmaps",
+                "highstock",
+                "widget",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/miloschuman/yii2-highcharts/issues",
+                "source": "https://github.com/miloschuman/yii2-highcharts/tree/v9.0"
+            },
+            "time": "2021-03-04T19:36:12+00:00"
         },
         {
             "name": "npm-asset/bootstrap",

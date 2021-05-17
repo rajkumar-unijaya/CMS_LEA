@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'ab1e005d96cc5d780c7e3020c0c683db9178da88',
+    'reference' => '5fce9ce330222eadfd47f2121e5903d6415ae52f',
     'name' => 'yiisoft/yii2-app-basic',
   ),
   'versions' => 
@@ -28,6 +28,15 @@
       array (
       ),
       'reference' => '68b0d231a13201eb14acd3dc84e51543d16e5f7e',
+    ),
+    'bower-asset/highcharts' => 
+    array (
+      'pretty_version' => 'v9.1.0',
+      'version' => '9.1.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '180cb5a90b97c79180544f2e0979e834bb066243',
     ),
     'bower-asset/inputmask' => 
     array (
@@ -226,6 +235,15 @@
       array (
       ),
       'reference' => '35ea11d335fd638b5882ff1725228b3d35496ab1',
+    ),
+    'miloschuman/yii2-highcharts-widget' => 
+    array (
+      'pretty_version' => 'v9.0',
+      'version' => '9.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '33fd2e82bfebafb76a55ff175ddd8c9cc886c02b',
     ),
     'myclabs/deep-copy' => 
     array (
@@ -779,7 +797,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'ab1e005d96cc5d780c7e3020c0c683db9178da88',
+      'reference' => '5fce9ce330222eadfd47f2121e5903d6415ae52f',
     ),
     'yiisoft/yii2-bootstrap' => 
     array (
