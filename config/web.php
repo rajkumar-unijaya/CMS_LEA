@@ -14,19 +14,19 @@ $config = [
         '@basePath' => "@app",
         '@guidelines' => "@app/web/uploads/guidelines/",
     ],
-    'on beforeAction' => function($event)
-    { 
-        $session = Yii::$app->session;
-        $expTime = 0;
-        if(empty($session->get('userId')) && !($event->action->controller->id == 'auth' && $event->action->id == 'login'))
-        { 
-           \yii::$app->response->redirect('../auth/login')->send();
-        }
-        else if(!empty($session->get('userId')) && ($event->action->controller->id == 'auth' && $event->action->id == 'login'))
-            {
-               \yii::$app->response->redirect('../dashboard/index');
-            }                  
-    },
+    // 'on beforeAction' => function($event)
+    // { 
+    //     $session = Yii::$app->session;
+    //     $expTime = 0;
+    //     if(empty($session->get('userId')) && !($event->action->controller->id == 'auth' && $event->action->id == 'login'))
+    //     { 
+    //        \yii::$app->response->redirect('../auth/login')->send();
+    //     }
+    //     else if(!empty($session->get('userId')) && ($event->action->controller->id == 'auth' && $event->action->id == 'login'))
+    //         {
+    //            \yii::$app->response->redirect('../dashboard/index');
+    //         }                  
+    // },
     'components' => [
         'session' => [
             'timeout' => 1800,

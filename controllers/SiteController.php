@@ -12,7 +12,7 @@ use app\models\ContactForm;
 use app\models\SignupForm;
 use app\models\PasswordResetRequestForm;
 
-class SiteController extends Controller
+class StatistikController extends Controller
 {
     /**
      * {@inheritdoc}
