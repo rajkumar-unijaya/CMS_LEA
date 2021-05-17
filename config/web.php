@@ -13,6 +13,7 @@ $config = [
         '@basePath' => "@app",
         '@guidelines' => "@app/web/uploads/guidelines/",
     ],
+    'defaultRoute' => 'auth/login',
     'on beforeAction' => function($event)
     { 
         $session = Yii::$app->session;
