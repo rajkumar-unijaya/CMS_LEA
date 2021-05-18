@@ -104,7 +104,9 @@ class AuthController extends Controller
                 ->setHeaders([$this->_DFHeaderKey => $this->_DFHeaderPass])
                 ->send();
                  //check if user entered telegram id is exists in database or not, If exists then proceed with next business logic
-
+                 /*if(count($emailResponse->data['records']) > 0)
+                 { 
+                     if(isset($emailResponse->data['records'][0]['telegram_id']) && !empty($emailResponse->data['records'][0]['telegram_id']))
                     {
                         $telegramResponse = $client->createRequest()
                         ->setFormat(Client::FORMAT_URLENCODED)
@@ -131,7 +133,7 @@ class AuthController extends Controller
                         //Yii::$app->session->addFlash('failed','telegram id is not correct');
                         //return $this->refresh();
                     //}
-                }
+                }*/
 
                 // check if user entered mobile number is exists in database or not, If exists then proceed with next business logic
 
@@ -220,10 +222,8 @@ class AuthController extends Controller
                 return $this->refresh();
 
                 }  
-        }
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+            }
+        return $this->render('login', ['model' => $model]);
     }
 
     
