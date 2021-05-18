@@ -98,11 +98,8 @@ DashboardAsset::register($this);
                                 </nav>
                             </nav>
                         </div> 
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                            <div class="sb-nav-link-icon"><i class="fa fa-bar-chart"></i>	</div>
-                            Statistik/Laporan
-                            <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
-                        </a>
+                        <a class="nav-link" href="../statistik/index"><i class="fa fa-bar-chart "></i>	&nbsp;&nbsp;Statistik / Laporan</a>
+                       
                         
                     </div>
 
