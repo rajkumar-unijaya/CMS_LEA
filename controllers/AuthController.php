@@ -135,7 +135,6 @@ class AuthController extends Controller
                 }*/
 
                 // check if user entered mobile number is exists in database or not, If exists then proceed with next business logic
-
                 /*if(isset($emailResponse->data['records'][0]['mobile']) && !empty($emailResponse->data['records'][0]['mobile']))
                 { 
                     $mobileNo = "60".$emailResponse->data['records'][0]['mobile'];
