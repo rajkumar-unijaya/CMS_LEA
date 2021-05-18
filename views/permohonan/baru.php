@@ -166,7 +166,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
                         
                         <div class="pull-right">
                             <button type="button" class="add-item btn btn-success btn-xs"><i class="fa fa-plus"></i></button>
-                            <button type="button" class="remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
+                            <button type="button" class="remove-item btn btn-danger btn-xs" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-minus"></i></button>
+                            
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -341,12 +342,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             <div class="text-right">
                                 <div class="form-group">
                                      <?= Html::submitButton('Hantar', ['class' => 'btn btn-success']) ?>
-                                     <a href="../permohonan/mediasosial"
-                                    class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
-                                    data-placement="left" title=""
-                                    data-original-title="Click to cancel and back to the main page"><i
-                                        class="ti-close"></i>
-                                    Batal</a>
+                                     <button type="button" class="btn waves-effect-light btn-danger btn-sm" data-toggle="modal" data-target="#cancelModel">
+                                    Batal
+                                    </button> 
                                  </div>
                             </div>
                         </div>
@@ -358,7 +356,48 @@ use wbraganca\dynamicform\DynamicFormWidget;
        
     </div>
 </div>
+<!-- popup cancel button -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"> </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      Sekiranya anda BATAL sebelum menyimpan, Maklumat yang diisi akan hilang.</div>
+      <div class="modal-footer">
+      <!--<a href="../permohonan/block-request-list"><button type="button" class="btn btn-primary">Ya</button></a>-->
+        <button type="button" class="btn btn-secondary ya" data-dismiss="modal">Ya</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- popup cancel button -->
+<div class="modal fade" id="cancelModel" tabindex="-1" role="dialog" aria-labelledby="cancelModel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"> </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      Sekiranya anda BATAL sebelum menyimpan, Maklumat yang diisi akan hilang.</div>
+      <div class="modal-footer">
+      <a href="../permohonan/mediasosial"><button type="button" class="btn btn-primary">Ya</button></a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
 <?php
 //echo"<pre>";print_r($masterSocialMedia);
 $script = <<< JS
@@ -532,10 +571,17 @@ $('#permohonanstatussuspeksaksi-4-master_status_status_suspek_id').change(functi
 });
 
 $(".dynamicform_wrapper").on("beforeDelete", function(e, item) {
-    if (! confirm("Anda Pasti Ingin Memadam Data ini?")) {
+   /*if (! confirm("Anda Pasti Ingin Memadam Data ini?")) {
         return false;
     }
-    return true;
+    return true;*/
+     $( ".ya" ).click(function() { alert(34343434); 
+      return false;
+  
+  
+});
+return true;
+
 });
 
 $(".dynamicform_wrapper").on("afterDelete", function(e) {

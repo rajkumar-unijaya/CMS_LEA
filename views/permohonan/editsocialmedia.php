@@ -346,12 +346,9 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
                 <div class="col-md-12 col-12">
                     <div class="text-right">
                     <?= Html::submitButton('Hantar', ['class' => 'btn  waves-effect-light btn-info btn-sm btnSave']) ?>
-                        <a href="../permohonan/mediasosial"
-                            class="btn waves-effect-light btn-danger btn-sm" data-toggle="tooltip"
-                            data-placement="left" title=""
-                            data-original-title="Click to cancel and back to the main page"><i
-                                class="ti-close"></i>
-                            Batal</a>
+                    <button type="button" class="btn waves-effect-light btn-danger btn-sm" data-toggle="modal" data-target="#cancelModel">
+                                    Batal
+                                    </button>
                             
                     </div>
                 </div>
@@ -362,6 +359,26 @@ if(isset($mediaSocialResponse['case_info_status_suspek']) && count($mediaSocialR
         </div>
     </div>
 
+<!-- popup cancel button -->
+<div class="modal fade" id="cancelModel" tabindex="-1" role="dialog" aria-labelledby="cancelModel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle"> </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      Sekiranya anda BATAL sebelum menyimpan, Maklumat yang diisi akan hilang.</div>
+      <div class="modal-footer">
+      <a href="../permohonan/mediasosial"><button type="button" class="btn btn-primary">Ya</button></a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+        
+      </div>
+    </div>
+  </div>
+</div>
 <?php
 $purposeOfApplicationIdValInfo = "";
 $isSuratRasmiExists =  0;
